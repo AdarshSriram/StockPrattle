@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import * as firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import { config } from '../utils/config'
-import { admin, db } from '../utils/admin'
-
-firebase.initializeApp(config)
+import fire from '../utils/config.js';
 
 export default class PopUp extends Component {
     constructor(props) {
         super(props);
-        this.state = { type: props.type, func: props.func }
+        this.state = {type: props.type}
         //this.done = this.done.bind(this);
     }
 
     handleSignUp(userInfo) {
-        firebase.auth().
-            createUserWithEmailAndPassword(email, password)
+        const inputs = document.getElementsByName("inputs"); var params=[]; var val;
+        for (var obj of inputs){
+            val = obj.value;
+            if (val === ''){val = null}
+            params.push(val);
+        }
+        fire.auth().
+            createUserWithEmailAndPassword(params[0], params[1])
             .then(() => {
-                db.doc(`/user/${newUser.username}`).set(userInfo)
-                    .then(() => {
-                        console.log('successfully signed up')
-                    })
-                    .catch((err) => console.log(err))
+                // db.doc(`/user/${params[0]}`).set({})
+                //     .then(() => {
+                //         console.log('successfully signed up')
+                //     })
+                //     .catch((err) => console.log(err))
             })
             .catch(function (error) {
                 console.log(error.code)
@@ -32,17 +32,23 @@ export default class PopUp extends Component {
     }
 
     handleSignIn() {
-        firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
-                console.log('how did u do this')
-            } else {
-                firebase.auth().signInWithEmailAndPassword(email, password)
+        const inputs = document.getElementsByName("inputs"); var params=[]; var val;
+        for (var obj of inputs){
+            val = obj.value;
+            if (val === ''){val = null}
+            params.push(val);
+        }
+        // fire.auth().onAuthStateChanged(function (user) {
+        //     if (user) {
+        //         console.log('how did u do this')
+        //     } else {
+                fire.auth().signInWithEmailAndPassword(params[0], params[1])
                     .catch(function (error) {
                         console.log(error.code)
-                        cosnole.log(error.message)
+                        console.log(error.message)
                     });
-            }
-        });
+        //     }
+        // });
     }
 
     subMouseIn(but) {
@@ -56,18 +62,22 @@ export default class PopUp extends Component {
     render() {
         var ls = []; var txt;
         if (this.state.type === "Login") {
-            ls.push(<input id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
-            ls.push(<input id="passwordField" type="password" minLength={8}
+            ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
+            ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
                 placeholder={"Password"} style={popUpStyle.inputs} />)
         } else {
-
+            ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
+            ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
+                placeholder={"Password"} style={popUpStyle.inputs} />)
+            ls.push(<input name="inputs" id="userNameField" type="text" placeholder={"Unique User Name"} style={popUpStyle.inputs} />)
+            ls.push(<input name="inputs" id="fullNameField" type="text" placeholder={"Full Name"} style={popUpStyle.inputs} />)
         }
         return (
             <div style={popUpStyle.wholeScreen}>
                 <div id="popUpBox" style={popUpStyle.popUpBox}>
                     <form id="popUpForm" onSubmit={(event) => {
                         event.preventDefault();
-                        this.state.func();
+                        this.handleSignIn();
                     }}
                         style={popUpStyle.form}>
                         {ls.map(item => (item))}

@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import {Link, useHistory} from "react-router-dom";
 import PopUp from './popUp.jsx';
 
-function buttonPress(func=null, type=null){
+function buttonPress(type=null){
     var elem = document.getElementById("popUpContainer");
-    ReactDOM.render(<PopUp func={func} type={type}/>, elem);
+    ReactDOM.render(<PopUp type={type}/>, elem);
     document.getElementById("wholeScreen").addEventListener('click', reversePress);
     document.getElementById("header").style.filter = "blur(4px)";
     document.getElementById("footer").style.filter = "blur(4px)";
@@ -26,9 +26,7 @@ function reversePress(event){
 export default class LandingPage extends Component{
     constructor(props){
         super(props);
-        this.login = this.login.bind(this);
     }
-
 
     loginMouseIn(but){
         but.target.style.textDecoration = "underline";
@@ -44,10 +42,6 @@ export default class LandingPage extends Component{
 
     joinMouseOut(but){
         but.target.style.background = "#FFFFFF";
-    }
-
-    login(){
-        this.props.history.push("/userPage")
     }
 
     render(){
@@ -74,9 +68,9 @@ export default class LandingPage extends Component{
             </ul>
             <div id="header" style={startStyle.header}>
                 <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                onMouseLeave={this.loginMouseOut} onClick={(event)=>{buttonPress(this.login, "Login")}}>Login</button>
+                onMouseLeave={this.loginMouseOut} onClick={(event)=>{buttonPress("Login")}}>Login</button>
                 <button style={startStyle.joinButtonTwo} onMouseOver={this.joinMouseIn}
-                onMouseLeave={this.joinMouseOut}>Join Now</button>
+                onMouseLeave={this.joinMouseOut} onClick={(event)=>{buttonPress("Join Now")}}>Join Now</button>
             </div>
             <div id="centerDiv" style={startStyle.centerDiv}>
                 <div style={startStyle.textDiv}>
@@ -87,7 +81,7 @@ export default class LandingPage extends Component{
                     <p style={startStyle.subText}>Invest Better. Every Rupee Counts.</p>
                     <div style={{width:"100%", marginTop: "20px"}}>
                     <button style={startStyle.joinButton} onMouseOver={this.joinMouseIn}
-                    onMouseLeave={this.joinMouseOut}>Join Now</button>
+                    onMouseLeave={this.joinMouseOut} onClick={(event)=>{buttonPress("Join Now")}}>Join Now</button>
                     </div>
                 </div>
             </div>

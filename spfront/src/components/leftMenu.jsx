@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import fire from '../utils/config.js';
 
 export default class LeftMenu extends Component{
     constructor(props){
@@ -21,7 +22,9 @@ export default class LeftMenu extends Component{
     }
 
     logOut(){
-        if (window.confirm("Are you sure you want to log out?")) this.props.history.push("");
+        if (window.confirm("Are you sure you want to log out?")){
+            fire.auth().signOut();
+        }
     }
 
     render(){
