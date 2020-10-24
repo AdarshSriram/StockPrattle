@@ -25,18 +25,14 @@ export default class PopUp extends Component {
                     .get()
                     .then((doc) => {
                         if (!doc.exists) {
-                            userCollection.where('email', '==', params[0])
-                                .get()
-                                .then((snap) => {
-                                    userCollection.doc(params[2])
-                                        .set({
-                                            username: params[2],
-                                            email: params[1],
-                                            fullName: params[3]
-                                        })
-                                        .then(() => console.log(`User logged in successfully`))
-                                        .catch((err) => console.log(err))
+                            userCollection.doc(params[2])
+                                .set({
+                                    username: params[2],
+                                    email: params[0],
+                                    fullName: params[3]
                                 })
+                                .then(() => console.log(`User signed up successfully`))
+                                .catch((err) => console.log(err))
                         }
                         else {
                             console.log('User with this username already exists')
@@ -61,8 +57,7 @@ export default class PopUp extends Component {
                 console.log(error.code)
                 console.log(error.message)
             });
-        //     }
-        // });
+
     }
 
     subMouseIn(but) {
