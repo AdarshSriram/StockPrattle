@@ -2,28 +2,46 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
 
+const userCollection = fire.firestore().collection('user')
+
 export default class PopUp extends Component {
     constructor(props) {
         super(props);
-        this.state = {type: props.type}
+        this.state = { type: props.type }
         //this.done = this.done.bind(this);
     }
 
-    handleSignUp(userInfo) {
-        const inputs = document.getElementsByName("inputs"); var params=[]; var val;
-        for (var obj of inputs){
+    handleSignUp() {
+        const inputs = document.getElementsByName("inputs"); var params = []; var val;
+        for (var obj of inputs) {
             val = obj.value;
-            if (val === ''){val = null}
+            if (val === '') { val = null }
             params.push(val);
         }
         fire.auth().
             createUserWithEmailAndPassword(params[0], params[1])
             .then(() => {
-                // db.doc(`/user/${params[0]}`).set({})
-                //     .then(() => {
-                //         console.log('successfully signed up')
-                //     })
-                //     .catch((err) => console.log(err))
+                userCollection.doc(params[1])
+                    .get()
+                    .then((doc) => {
+                        if (!doc.exists) {
+                            userCollection.where('email', '==', params[0])
+                                .get()
+                                .then((snap) => {
+                                    userCollection.doc(params[2])
+                                        .set({
+                                            username: params[2],
+                                            email: params[1],
+                                            fullName: params[3]
+                                        })
+                                        .then(() => console.log(`User logged in successfully`))
+                                        .catch((err) => console.log(err))
+                                })
+                        }
+                        else {
+                            console.log('User with this username already exists')
+                        }
+                    })
             })
             .catch(function (error) {
                 console.log(error.code)
@@ -32,21 +50,17 @@ export default class PopUp extends Component {
     }
 
     handleSignIn() {
-        const inputs = document.getElementsByName("inputs"); var params=[]; var val;
-        for (var obj of inputs){
+        const inputs = document.getElementsByName("inputs"); var params = []; var val;
+        for (var obj of inputs) {
             val = obj.value;
-            if (val === ''){val = null}
+            if (val === '') { val = null }
             params.push(val);
         }
-        // fire.auth().onAuthStateChanged(function (user) {
-        //     if (user) {
-        //         console.log('how did u do this')
-        //     } else {
-                fire.auth().signInWithEmailAndPassword(params[0], params[1])
-                    .catch(function (error) {
-                        console.log(error.code)
-                        console.log(error.message)
-                    });
+        fire.auth().signInWithEmailAndPassword(params[0], params[1])
+            .catch(function (error) {
+                console.log(error.code)
+                console.log(error.message)
+            });
         //     }
         // });
     }
@@ -77,7 +91,12 @@ export default class PopUp extends Component {
                 <div id="popUpBox" style={popUpStyle.popUpBox}>
                     <form id="popUpForm" onSubmit={(event) => {
                         event.preventDefault();
-                        this.handleSignIn();
+                        if (this.state.type === 'Login') {
+                            this.handleSignIn();
+                        }
+                        else {
+                            this.handleSignUp()
+                        }
                     }}
                         style={popUpStyle.form}>
                         {ls.map(item => (item))}
