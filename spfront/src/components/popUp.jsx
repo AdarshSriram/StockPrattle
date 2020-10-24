@@ -1,136 +1,97 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+import { config } from '../utils/config'
+import { admin, db } from '../utils/admin'
 
-export default class PopUp extends Component{
-    constructor(props){
+firebase.initializeApp(config)
+
+export default class PopUp extends Component {
+    constructor(props) {
         super(props);
-        this.state = {type: props.type, func: props.func}
+        this.state = { type: props.type, func: props.func }
         //this.done = this.done.bind(this);
     }
-    //
-    // done(){
-    //     if(this.props.type==="changeDetails"){
-    //         var inputs = document.getElementsByName("inputField"); var obj; var params = []; var val;
-    //         var inp;
-    //         for (obj of inputs){
-    //             val = obj.value;
-    //             if (val === ''){inp = null}
-    //             else {
-    //                 inp = isNaN(val) ? String(val) : Number(val);
-    //                 if (typeof(inp)== "number" && inp<=0){return;}
-    //             }
-    //             params.push(inp);
-    //         }
-    //         this.state.func(params[0], params[1], params[2], params[3]);
-    //         document.getElementById("navBar").style.filter = "none";
-    //         document.getElementById("restDisplay").style.filter = "none";
-    //         document.getElementById("GUIButtonList").style.filter = "none";
-    //         document.getElementById("restButtonList").style.filter = "none";
-    //     } else {
-    //         var inputs = document.getElementsByName("inputField"); var obj; var params = [];
-    //         var typeInput = document.getElementById("inputType"); var inp;
-    //         for (obj of inputs){
-    //             if (obj.value === ''){return;}
-    //             inp = isNaN(obj.value) ? String(obj.value) : Number(obj.value);
-    //             if (typeof(inp)== "number" && inp<=0){return;}
-    //             params.push(inp);
-    //         }
-    //         if (typeInput != null){params.push(typeInput.value);}
-    //         if (this.props.type==="addChairs"){
-    //             this.state.func(params[0],params[1],params[2],params[3])
-    //             document.getElementById("navBar").style.filter = "none";
-    //             document.getElementById("restDisplay").style.filter = "none";
-    //             document.getElementById("GUIButtonList").style.filter = "none";
-    //             document.getElementById("restButtonList").style.filter = "none";
-    //             document.getElementById("rightDiv").style.filter = "none";
-    //             document.getElementById("leftDiv").style.filter = "none";
-    //         } else if(this.props.type==="addTables"){
-    //             this.state.func(params[0],params[1],params[2],params[3], params[4])
-    //             document.getElementById("navBar").style.filter = "none";
-    //             document.getElementById("restDisplay").style.filter = "none";
-    //             document.getElementById("GUIButtonList").style.filter = "none";
-    //             document.getElementById("restButtonList").style.filter = "none";
-    //             document.getElementById("rightDiv").style.filter = "none";
-    //             document.getElementById("leftDiv").style.filter = "none";
-    //         } else if(this.props.type==="changePassword"){
-    //             if (params[0]!==this.state.details){alert("Current Password is Incorrect!"); return;}
-    //             if (params[1]!==params[2]){alert("Passwords don't match!"); return;}
-    //             this.state.func(params[1])
-    //             document.getElementById("navBar").style.filter = "none";
-    //             document.getElementById("restDisplay").style.filter = "none";
-    //             document.getElementById("GUIButtonList").style.filter = "none";
-    //             document.getElementById("restButtonList").style.filter = "none";
-    //             document.getElementById("rightDiv").style.filter = "none";
-    //             document.getElementById("leftDiv").style.filter = "none";
-    //         } else if(this.props.type==="handleWalkIn"){
-    //             if (!(9999999999>=params[2] && params[2]>=1000000000)){alert("Mobile Number is Invalid!"); return;}
-    //             this.state.func(params[0], params[1], params[2])
-    //             document.getElementById("navBar").style.filter = "none";
-    //             document.getElementById("restDisplay").style.filter = "none";
-    //             document.getElementById("GUIButtonList").style.filter = "none";
-    //             document.getElementById("restButtonList").style.filter = "none";
-    //             document.getElementById("rightDiv").style.filter = "none";
-    //             document.getElementById("leftDiv").style.filter = "none";
-    //         } else if(this.props.type==="login"){
-    //             this.state.func(params[0],params[1])
-    //             document.getElementById("rightDiv").style.filter = "none";
-    //             document.getElementById("leftDiv").style.filter = "none";
-    //         } else if(this.props.type==="createRest"){
-    //             this.state.func(params[0], params[1], params[2], params[3])
-    //             document.getElementById("rightDiv").style.filter = "none";
-    //             document.getElementById("leftDiv").style.filter = "none";
-    //         }
-    //     }
-    //     ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
-    //     document.getElementById("wholeScreen").removeEventListener('click', reversePress);
-    // }
 
-    subMouseIn(but){
+    handleSignUp(userInfo) {
+        firebase.auth().
+            createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                db.doc(`/user/${newUser.username}`).set(userInfo)
+                    .then(() => {
+                        console.log('successfully signed up')
+                    })
+                    .catch((err) => console.log(err))
+            })
+            .catch(function (error) {
+                console.log(error.code)
+                console.log(error.message)
+            });
+    }
+
+    handleSignIn() {
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                console.log('how did u do this')
+            } else {
+                firebase.auth().signInWithEmailAndPassword(email, password)
+                    .catch(function (error) {
+                        console.log(error.code)
+                        cosnole.log(error.message)
+                    });
+            }
+        });
+    }
+
+    subMouseIn(but) {
         but.target.style.textDecoration = "underline";
     }
 
-    subMouseOut(but){
+    subMouseOut(but) {
         but.target.style.textDecoration = "none";
     }
 
-    render(){
+    render() {
         var ls = []; var txt;
-        if (this.state.type==="Login"){
-            ls.push(<input id="emailField" type="email" placeholder = {"Email"} style={popUpStyle.inputs}/>)
+        if (this.state.type === "Login") {
+            ls.push(<input id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
             ls.push(<input id="passwordField" type="password" minLength={8}
-                    placeholder = {"Password"} style={popUpStyle.inputs}/>)
+                placeholder={"Password"} style={popUpStyle.inputs} />)
         } else {
 
         }
         return (
             <div style={popUpStyle.wholeScreen}>
-            <div id="popUpBox" style={popUpStyle.popUpBox}>
-            <form id="popUpForm" onSubmit={(event)=>{
-                event.preventDefault();
-                this.state.func();
-            }}
-            style={popUpStyle.form}>
-                {ls.map(item => (item))}
-                <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type}/>
-            </form>
-            <div id="subLayer" style={popUpStyle.subLayer}>
-                <p id="subText" style={popUpStyle.subText}>Already have an account?</p>
-                <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.subMouseIn}
-                onMouseLeave={this.subMouseOut} >{this.state.type==="Login" ? "Sign Up" : "Login"}</button>
-            </div>
-            </div>
+                <div id="popUpBox" style={popUpStyle.popUpBox}>
+                    <form id="popUpForm" onSubmit={(event) => {
+                        event.preventDefault();
+                        this.state.func();
+                    }}
+                        style={popUpStyle.form}>
+                        {ls.map(item => (item))}
+                        <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type} />
+                    </form>
+                    <div id="subLayer" style={popUpStyle.subLayer}>
+                        <p id="subText" style={popUpStyle.subText}>Already have an account?</p>
+                        <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.subMouseIn}
+                            onMouseLeave={this.subMouseOut} >{this.state.type === "Login" ? "Sign Up" : "Login"}</button>
+                    </div>
+                </div>
             </div>
         )
     }
 }
 
-const popUpStyle = {wholeScreen:{
+const popUpStyle = {
+    wholeScreen: {
         position: "absolute",
-        display:"flex",
-        top:"0",
-        left:"0",
+        display: "flex",
+        top: "0",
+        left: "0",
         height: "100%",
-        width:"100%",
+        width: "100%",
         alignItems: "center",
         justifyContent: "center"
     }, popUpBox: {
@@ -146,12 +107,12 @@ const popUpStyle = {wholeScreen:{
         justifyContent: "center",
         alignItems: "center",
     }, form: {
-        display:'flex',
+        display: 'flex',
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         gap: "16px",
-    }, inputs:{
+    }, inputs: {
         width: "404px",
         height: "45px",
         paddingLeft: "10px",
@@ -179,7 +140,7 @@ const popUpStyle = {wholeScreen:{
         outline: "none"
     }, subLayer: {
         width: "100%",
-        display:'flex',
+        display: 'flex',
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
