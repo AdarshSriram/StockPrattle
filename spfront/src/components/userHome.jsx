@@ -95,7 +95,7 @@ export default class UserPage extends Component{
         } else {
             item= <UserFeed />
         }
-    return (
+        return (
         <div id="wholeScreen" style={userHomeStyle.mainDiv}>
             <NavBar />
             <div id="body" style={userHomeStyle.body}>
