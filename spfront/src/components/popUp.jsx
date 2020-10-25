@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
+import axios from 'axios'
 
 const userCollection = fire.firestore().collection('user')
 
@@ -31,8 +32,28 @@ export default class PopUp extends Component {
                                     email: params[0],
                                     fullName: params[3]
                                 })
-                                .then(() => console.log(`User signed up successfully`))
+                                .then(() => {
+                                    console.log(`User signed up successfully`)
+                                    firebase.auth().onAuthStateChanged(function (user) {
+                                        if (user) {
+                                            user.updateProfile({
+                                                displayName: params[2]
+                                            })
+                                                .then(function () {
+                                                    console.log("User profile successfully created")
+                                                }).catch(function (error) {
+                                                    console.log("User profile could not be created. Try again :(")
+                                                });
+                                            // TODO: Get me the user photo 
+                                            var storageRef = fire.storage().ref(user + '/profilePhoto/' + file.name)
+                                            var task = storageRef.put(file);
+                                        } else {
+                                            console.log('Please try again')
+                                        }
+                                    });
+                                })
                                 .catch((err) => console.log(err))
+
                         }
                         else {
                             console.log('User with this username already exists')
