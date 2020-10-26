@@ -25,6 +25,8 @@ const messageBoxStyle= { centerDiv: {
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none",
-        overflow: "scroll"
+        overflow: "scroll",
+        margin: "10px",
+        borderRadius: "10px"
     }
 }

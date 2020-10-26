@@ -107,7 +107,7 @@ const navBarStyle= { header: {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        //border: "thick solid black",
+        // border: "thick solid black",
         boxSizing: "border-box",
         background: "none"
     },logo: {

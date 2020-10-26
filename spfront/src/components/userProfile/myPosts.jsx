@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import Post from '../post.jsx';
 
 export default class MyPosts extends Component{
     constructor(props){
@@ -9,7 +10,7 @@ export default class MyPosts extends Component{
     render(){
         return(
         <div style={myPostsStyle.mainDiv}>
-        Your Posts Will Go Here!
+        <Post text="Hi! I just joined Stock Prattle!"/>
         </div>
         )
     }
@@ -25,6 +26,6 @@ const myPostsStyle= { mainDiv: {
         // border: "thick solid black",
         boxSizing: "border-box",
         background: "none",
-        overflow: "scroll"
+        overflow: "none"
     }
 }

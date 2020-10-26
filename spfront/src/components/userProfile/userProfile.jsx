@@ -14,7 +14,7 @@ export default class UserProfile extends Component{
     render(){
     return (
         <div style={userProfileStyle.centerDiv}>
-            <div style={userProfileStyle.topDiv}>
+            <div id="top" style={userProfileStyle.topDiv}>
                 <ProfilePic image={null}/>
                 <div style={userProfileStyle.details}>
                     <EditableText text="Full Name"/>
@@ -28,9 +28,7 @@ export default class UserProfile extends Component{
                 </div>
                 <SocialDetails />
             </div>
-            <div style={userProfileStyle.bottomDiv}>
-                <MyPosts />
-            </div>
+            <MyPosts />
         </div>
         )
     }
@@ -42,12 +40,15 @@ const userProfileStyle= { centerDiv: {
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         alignItems: "center",
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none",
-        overflow: "scroll"
+        overflow: "scroll",
+        margin: "10px",
+        background: "rgba(229, 229, 229, 0.6)",
+        borderRadius: "10px"
     },topDiv: {
         height: "150px",
         width: "100%",
@@ -55,9 +56,10 @@ const userProfileStyle= { centerDiv: {
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
-        //border: "thick solid black",
+        border: "thin solid lightGray",
         boxSizing: "border-box",
-        background: "none",
+        background: "#FFFFFF",
+        borderRadius: "10px"
         // overflow: "scroll"
     },bottomDiv: {
         height: "100%",

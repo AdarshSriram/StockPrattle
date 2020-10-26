@@ -97,8 +97,6 @@ export default class PopUp extends Component {
             ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
                 placeholder={"Password"} style={popUpStyle.inputs} />)
-            ls.push(<input name="inputs" id="userNameField" type="text" placeholder={"Unique User Name"} style={popUpStyle.inputs} />)
-            ls.push(<input name="inputs" id="fullNameField" type="text" placeholder={"Full Name"} style={popUpStyle.inputs} />)
         }
         return (
             <div style={popUpStyle.wholeScreen}>
