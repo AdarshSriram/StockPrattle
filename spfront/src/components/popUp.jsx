@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
-import axios from 'axios'
+
 
 const userCollection = fire.firestore().collection('user')
 
@@ -34,7 +34,7 @@ export default class PopUp extends Component {
                                 })
                                 .then(() => {
                                     console.log(`User signed up successfully`)
-                                    firebase.auth().onAuthStateChanged(function (user) {
+                                    fire.auth().onAuthStateChanged(function (user) {
                                         if (user) {
                                             user.updateProfile({
                                                 displayName: params[2]
@@ -45,8 +45,6 @@ export default class PopUp extends Component {
                                                     console.log("User profile could not be created. Try again :(")
                                                 });
                                             // TODO: Get me the user photo 
-                                            var storageRef = fire.storage().ref(user + '/profilePhoto/' + file.name)
-                                            var task = storageRef.put(file);
                                         } else {
                                             console.log('Please try again')
                                         }

@@ -1,43 +1,44 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {penSvg} from '../svgs.jsx';
+import { penSvg } from '../svgs.jsx';
 import EditableText from './editableText.jsx';
 import MyPosts from './myPosts.jsx';
 import ProfilePic from './profilePic.jsx';
 import SocialDetails from './socialDetails.jsx';
 
-export default class UserProfile extends Component{
-    constructor(props){
+export default class UserProfile extends Component {
+    constructor(props) {
         super(props);
     }
 
-    render(){
-    return (
-        <div style={userProfileStyle.centerDiv}>
-            <div style={userProfileStyle.topDiv}>
-                <ProfilePic image={null}/>
-                <div style={userProfileStyle.details}>
-                    <EditableText text="Full Name"/>
-                    <EditableText text="User Name"/>
-                    <EditableText text="Current Title"/>
+    render() {
+        return (
+            <div style={userProfileStyle.centerDiv}>
+                <div style={userProfileStyle.topDiv}>
+                    <ProfilePic image={null} />
+                    <div style={userProfileStyle.details}>
+                        <EditableText text="Full Name" />
+                        <EditableText text="User Name" />
+                        <EditableText text="Current Title" />
+                    </div>
+                    <div style={userProfileStyle.details}>
+                        <EditableText text="Date of Birth" />
+                        <EditableText text="Industry" />
+                        <EditableText text="Education" />
+                    </div>
+                    <SocialDetails />
                 </div>
-                <div style={userProfileStyle.details}>
-                    <EditableText text="Date of Birth"/>
-                    <EditableText text="Industry"/>
-                    <EditableText text="Education"/>
+                <div style={userProfileStyle.bottomDiv}>
+                    <MyPosts />
                 </div>
-                <SocialDetails />
             </div>
-            <div style={userProfileStyle.bottomDiv}>
-                <MyPosts />
-            </div>
-        </div>
         )
     }
 }
 
 
-const userProfileStyle= { centerDiv: {
+const userProfileStyle = {
+    centerDiv: {
         height: "100%",
         width: "100%",
         display: "flex",
@@ -48,7 +49,7 @@ const userProfileStyle= { centerDiv: {
         boxSizing: "border-box",
         background: "none",
         overflow: "scroll"
-    },topDiv: {
+    }, topDiv: {
         height: "150px",
         width: "100%",
         display: "flex",
@@ -59,7 +60,7 @@ const userProfileStyle= { centerDiv: {
         boxSizing: "border-box",
         background: "none",
         // overflow: "scroll"
-    },bottomDiv: {
+    }, bottomDiv: {
         height: "100%",
         width: "100%",
         display: "flex",
@@ -70,7 +71,7 @@ const userProfileStyle= { centerDiv: {
         boxSizing: "border-box",
         background: "none",
         // overflow: "scroll"
-    },details: {
+    }, details: {
         height: "100%",
         width: "100%",
         gap: "20px",
