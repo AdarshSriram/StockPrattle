@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
+<<<<<<< HEAD
 
+=======
+//import axios from 'axios'
+>>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
 
 const userCollection = fire.firestore().collection('user')
 
@@ -44,7 +48,11 @@ export default class PopUp extends Component {
                                                 }).catch(function (error) {
                                                     console.log("User profile could not be created. Try again :(")
                                                 });
+<<<<<<< HEAD
                                             // TODO: Get me the user photo 
+=======
+                                            // TODO: Get me the user photo
+>>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
                                         } else {
                                             console.log('Please try again')
                                         }
@@ -97,8 +105,6 @@ export default class PopUp extends Component {
             ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
                 placeholder={"Password"} style={popUpStyle.inputs} />)
-            ls.push(<input name="inputs" id="userNameField" type="text" placeholder={"Unique User Name"} style={popUpStyle.inputs} />)
-            ls.push(<input name="inputs" id="fullNameField" type="text" placeholder={"Full Name"} style={popUpStyle.inputs} />)
         }
         return (
             <div style={popUpStyle.wholeScreen}>

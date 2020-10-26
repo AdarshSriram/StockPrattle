@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import Post from "./post.jsx"
 
 export default class UserFeed extends Component{
     constructor(props){
@@ -9,7 +10,7 @@ export default class UserFeed extends Component{
     render(){
     return (
         <div style={userFeedStyle.centerDiv}>
-        Feed
+            <Post text="Feed is coming soon!"/>
         </div>
         )
     }
@@ -22,9 +23,11 @@ const userFeedStyle= { centerDiv: {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        //border: "thick solid black",
+        margin: "10px",
+        // border: "thick solid black",
         boxSizing: "border-box",
-        background: "none",
-        overflow: "scroll"
+        background: "rgba(229, 229, 229, 0.6)",
+        overflow: "scroll",
+        borderRadius: "10px"
     }
 }

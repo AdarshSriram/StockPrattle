@@ -11,6 +11,7 @@ export default class UserProfile extends Component {
         super(props);
     }
 
+<<<<<<< HEAD
     render() {
         return (
             <div style={userProfileStyle.centerDiv}>
@@ -27,11 +28,27 @@ export default class UserProfile extends Component {
                         <EditableText text="Education" />
                     </div>
                     <SocialDetails />
+=======
+    render(){
+    return (
+        <div style={userProfileStyle.centerDiv}>
+            <div id="top" style={userProfileStyle.topDiv}>
+                <ProfilePic image={null}/>
+                <div style={userProfileStyle.details}>
+                    <EditableText text="Full Name"/>
+                    <EditableText text="User Name"/>
+                    <EditableText text="Current Title"/>
+>>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
                 </div>
                 <div style={userProfileStyle.bottomDiv}>
                     <MyPosts />
                 </div>
             </div>
+<<<<<<< HEAD
+=======
+            <MyPosts />
+        </div>
+>>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
         )
     }
 }
@@ -43,22 +60,31 @@ const userProfileStyle = {
         width: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         alignItems: "center",
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none",
+<<<<<<< HEAD
         overflow: "scroll"
     }, topDiv: {
+=======
+        overflow: "scroll",
+        margin: "10px",
+        background: "rgba(229, 229, 229, 0.6)",
+        borderRadius: "10px"
+    },topDiv: {
+>>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
         height: "150px",
         width: "100%",
         display: "flex",
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
-        //border: "thick solid black",
+        border: "thin solid lightGray",
         boxSizing: "border-box",
-        background: "none",
+        background: "#FFFFFF",
+        borderRadius: "10px"
         // overflow: "scroll"
     }, bottomDiv: {
         height: "100%",
