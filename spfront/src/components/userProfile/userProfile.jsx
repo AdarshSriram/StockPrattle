@@ -18,8 +18,7 @@ export default class UserProfile extends Component {
                 <div id="top" style={userProfileStyle.topDiv}>
                     <ProfilePic image={null} />
                     <div style={userProfileStyle.details}>
-                        <EditableText text="Full Name" onSubmit={{ func: updateProfile, field: 'name' }} />
-                        <EditableText text="User Name" onSubmit={{ func: updateProfile, field: 'username' }} />
+                        <EditableText text="Full Name" onSubmit={{ func: updateProfile, field: 'fullName' }} />
                         <EditableText text="Current Title" onSubmit={{ func: updateProfile, field: 'title' }} />
                     </div>
                     <div style={userProfileStyle.details}>

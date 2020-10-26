@@ -78,10 +78,65 @@ export const SignUp = (params) => {
 }
 
 export const SignIn = (params) => {
-  firebase.auth().signInWithEmailAndPassword(params[0], params[1])
+  const email = params[0]
+  const password = params[1]
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(() => console.log('Signed in !'))
     .catch(function (error) {
       console.log(error.code)
       console.log(error.message)
     });
+}
 
+export const getUserInfo = (username) => {
+  const userCollection = firebase.firestore().collection('users')
+  userCollection.doc(username)
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        console.log('No user found')
+      }
+      else {
+        return doc.data()
+      }
+    })
+    .catch((err) => console.log(err))
+}
+
+export const setUserInfo = (username, update) => {
+  const userCollection = firebase.firestore().collection('users')
+  userCollection.doc(username)
+    .update(update)
+    .then(() => console.log("User set"))
+    .catch((err) => console.log(err))
+}
+
+export const getCurrentUserInfo = () => {
+  const userCollection = firebase.firestore().collection('users')
+  var user = firebase.auth().currentUser;
+  if (user != null) {
+    userCollection.doc(user.displayName)
+      .get()
+      .then((doc) => {
+        if (!doc.exists) {
+          console.log('No user found')
+        }
+        else {
+          return doc.data()
+        }
+      })
+      .catch((err) => console.log(err))
+  }
+  else {
+    console.log('error occured, try again')
+  }
+}
+
+export const setCurrentUserInfo = (info) => {
+  const userCollection = firebase.firestore().collection('users')
+  const user = firebase.auth().currentUser;
+  userCollection.doc(user.displayName)
+    .update(info)
+    .then(() => console.log("User set"))
+    .catch((err) => console.log(err))
 }

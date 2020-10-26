@@ -21,49 +21,6 @@ export default class PopUp extends Component {
             params.push(val);
         }
         SignUp(params)
-        /* fire.auth().
-            createUserWithEmailAndPassword(params[0], params[1])
-            .then(() => {
-                userCollection.doc(params[1])
-                    .get()
-                    .then((doc) => {
-                        if (!doc.exists) {
-                            userCollection.doc(params[2])
-                                .set({
-                                    username: params[2],
-                                    email: params[0],
-                                    fullName: params[3]
-                                })
-                                .then(() => {
-                                    console.log(`User signed up successfully`)
-                                    fire.auth().onAuthStateChanged(function (user) {
-                                        if (user) {
-                                            user.updateProfile({
-                                                displayName: params[2]
-                                            })
-                                                .then(function () {
-                                                    console.log("User profile successfully created")
-                                                }).catch(function (error) {
-                                                    console.log("User profile could not be created. Try again :(")
-                                                });
-                                            // TODO: Get me the user photo
-                                        } else {
-                                            console.log('Please try again')
-                                        }
-                                    });
-                                })
-                                .catch((err) => console.log(err))
-
-                        }
-                        else {
-                            console.log('User with this username already exists')
-                        }
-                    })
-            })
-            .catch(function (error) {
-                console.log(error.code)
-                console.log(error.message)
-            }); */
     }
 
     handleSignIn() {
@@ -74,12 +31,6 @@ export default class PopUp extends Component {
             params.push(val);
         }
         SignIn(params)
-        /* fire.auth().signInWithEmailAndPassword(params[0], params[1])
-            .catch(function (error) {
-                console.log(error.code)
-                console.log(error.message)
-            }); */
-
     }
 
     subMouseIn(but) {
