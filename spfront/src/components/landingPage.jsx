@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {Link, useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import PopUp from './popUp.jsx';
 
-function buttonPress(type=null){
+function buttonPress(type = null) {
     var elem = document.getElementById("popUpContainer");
-    ReactDOM.render(<PopUp type={type}/>, elem);
+    ReactDOM.render(<PopUp type={type} />, elem);
     document.getElementById("wholeScreen").addEventListener('click', reversePress);
     document.getElementById("header").style.filter = "blur(4px)";
     document.getElementById("footer").style.filter = "blur(4px)";
     document.getElementById("centerDiv").style.filter = "blur(4px)";
 }
 
-function reversePress(event){
+function reversePress(event) {
     const exclusions = ["emailField", "passwordField", "popUpBox", "popUpForm",
-                    "submitButton", "subLayer", "subText", "subButton"];
-    if (exclusions.includes(event.target.id)){return;}
+        "submitButton", "subLayer", "subText", "subButton", "usernameField"];
+    if (exclusions.includes(event.target.id)) { return; }
     ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
     document.getElementById("wholeScreen").removeEventListener('click', reversePress);
     document.getElementById("header").style.filter = "none";
@@ -23,87 +23,89 @@ function reversePress(event){
     document.getElementById("centerDiv").style.filter = "none";
 }
 
-export default class LandingPage extends Component{
-    constructor(props){
+export default class LandingPage extends Component {
+    constructor(props) {
         super(props);
     }
 
-    loginMouseIn(but){
+    loginMouseIn(but) {
         but.target.style.textDecoration = "underline";
     }
 
-    loginMouseOut(but){
+    loginMouseOut(but) {
         but.target.style.textDecoration = "none";
     }
 
-    joinMouseIn(but){
+    joinMouseIn(but) {
         but.target.style.background = 'lightgray';
     }
 
-    joinMouseOut(but){
+    joinMouseOut(but) {
         but.target.style.background = "#FFFFFF";
     }
 
-    render(){
+    render() {
         var ls = []; var baseRadius = 100; var numCircles = 20;
-        for (var i=1; i<=numCircles; i++){
+        for (var i = 1; i <= numCircles; i++) {
             ls.push(
-                <div style={{position: 'absolute',
-                top: ""+window.innerHeight/2-baseRadius/2*i+"px",
-                left: ""+window.innerWidth/2-baseRadius/2*i+"px",
-                width: ""+baseRadius*i+"px",
-                height: ""+baseRadius*i+"px",
-                borderColor: "rgba(120, 202, 210, 0.2)",
-                borderStyle: "solid",
-                borderWidth: "10px",
-                borderRadius: "50%",
-                boxSizing: "border-box",
-            }}/>
+                <div style={{
+                    position: 'absolute',
+                    top: "" + window.innerHeight / 2 - baseRadius / 2 * i + "px",
+                    left: "" + window.innerWidth / 2 - baseRadius / 2 * i + "px",
+                    width: "" + baseRadius * i + "px",
+                    height: "" + baseRadius * i + "px",
+                    borderColor: "rgba(120, 202, 210, 0.2)",
+                    borderStyle: "solid",
+                    borderWidth: "10px",
+                    borderRadius: "50%",
+                    boxSizing: "border-box",
+                }} />
             )
         }
-    return (
-        <div id="wholeScreen" style={startStyle.mainDiv}>
-            <ul id = "ellipseList" style={startStyle.ellipseList}>
-                {ls.map(item => (<li key={ls.indexOf(item)}>{item}</li>))}
-            </ul>
-            <div id="header" style={startStyle.header}>
-                <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                onMouseLeave={this.loginMouseOut} onClick={(event)=>{buttonPress("Login")}}>Login</button>
-                <button style={startStyle.joinButtonTwo} onMouseOver={this.joinMouseIn}
-                onMouseLeave={this.joinMouseOut} onClick={(event)=>{buttonPress("Join Now")}}>Join Now</button>
-            </div>
-            <div id="centerDiv" style={startStyle.centerDiv}>
-                <div style={startStyle.textDiv}>
-                    <img src={require("./Logo.png")} alt="Stock Prattle Logo" style={startStyle.image}/>
+        return (
+            <div id="wholeScreen" style={startStyle.mainDiv}>
+                <ul id="ellipseList" style={startStyle.ellipseList}>
+                    {ls.map(item => (<li key={ls.indexOf(item)}>{item}</li>))}
+                </ul>
+                <div id="header" style={startStyle.header}>
+                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                        onMouseLeave={this.loginMouseOut} onClick={(event) => { buttonPress("Login") }}>Login</button>
+                    <button style={startStyle.joinButtonTwo} onMouseOver={this.joinMouseIn}
+                        onMouseLeave={this.joinMouseOut} onClick={(event) => { buttonPress("Join Now") }}>Join Now</button>
                 </div>
-                <div style={startStyle.textDiv}>
-                    <p style={startStyle.text}>India’s Stock Community Platform</p>
-                    <p style={startStyle.subText}>Invest Better. Every Rupee Counts.</p>
-                    <div style={{width:"100%", marginTop: "20px"}}>
-                    <button style={startStyle.joinButton} onMouseOver={this.joinMouseIn}
-                    onMouseLeave={this.joinMouseOut} onClick={(event)=>{buttonPress("Join Now")}}>Join Now</button>
+                <div id="centerDiv" style={startStyle.centerDiv}>
+                    <div style={startStyle.textDiv}>
+                        <img src={require("./Logo.png")} alt="Stock Prattle Logo" style={startStyle.image} />
+                    </div>
+                    <div style={startStyle.textDiv}>
+                        <p style={startStyle.text}>India’s Stock Community Platform</p>
+                        <p style={startStyle.subText}>Invest Better. Every Rupee Counts.</p>
+                        <div style={{ width: "100%", marginTop: "20px" }}>
+                            <button style={startStyle.joinButton} onMouseOver={this.joinMouseIn}
+                                onMouseLeave={this.joinMouseOut} onClick={(event) => { buttonPress("Join Now") }}>Join Now</button>
+                        </div>
                     </div>
                 </div>
+                <div id="footer" style={startStyle.footer}>
+                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                        onMouseLeave={this.loginMouseOut}>FAQ</button>
+                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                        onMouseLeave={this.loginMouseOut}>About</button>
+                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                        onMouseLeave={this.loginMouseOut}>Support</button>
+                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                        onMouseLeave={this.loginMouseOut}>Feedback</button>
+                </div>
+                <div id="popUpContainer" style={{ top: "100%", left: "100%" }} />
             </div>
-            <div id="footer" style={startStyle.footer}>
-                <button style={startStyle.loginButton}onMouseOver={this.loginMouseIn}
-                onMouseLeave={this.loginMouseOut}>FAQ</button>
-                <button style={startStyle.loginButton}onMouseOver={this.loginMouseIn}
-                onMouseLeave={this.loginMouseOut}>About</button>
-                <button style={startStyle.loginButton}onMouseOver={this.loginMouseIn}
-                onMouseLeave={this.loginMouseOut}>Support</button>
-                <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                onMouseLeave={this.loginMouseOut}>Feedback</button>
-            </div>
-        <div id="popUpContainer" style={{top:"100%", left:"100%"}}/>
-        </div>
         );
     }
 }
 
-const startStyle = { mainDiv:{
-        width:"100vw",
-        height:"100vh",
+const startStyle = {
+    mainDiv: {
+        width: "100vw",
+        height: "100vh",
         overflow: "none",
         backgroundColor: "#00B140",
     }, centerDiv: {
@@ -115,8 +117,8 @@ const startStyle = { mainDiv:{
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        width: window.innerWidth+"px",
-        height: window.innerHeight-200+"px",
+        width: window.innerWidth + "px",
+        height: window.innerHeight - 200 + "px",
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none"
@@ -128,8 +130,8 @@ const startStyle = { mainDiv:{
         flexDirection: "row",
         justifyContent: "flex-end",
         alignItems: "center",
-        width: window.innerWidth+"px",
-        height: 100+"px",
+        width: window.innerWidth + "px",
+        height: 100 + "px",
         boxSizing: "border-box",
         background: "none"
     }, footer: {
@@ -140,8 +142,8 @@ const startStyle = { mainDiv:{
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        width: window.innerWidth+"px",
-        height: 100+"px",
+        width: window.innerWidth + "px",
+        height: 100 + "px",
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none"
@@ -151,8 +153,8 @@ const startStyle = { mainDiv:{
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        width: window.innerWidth+"px",
-        height: window.innerHeight-200+"px",
+        width: window.innerWidth + "px",
+        height: window.innerHeight - 200 + "px",
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none"
@@ -223,7 +225,7 @@ const startStyle = { mainDiv:{
         cursor: "pointer"
     }, ellipseList: {
         position: 'relative',
-        listStyleType:'none',
+        listStyleType: 'none',
         margin: 0,
         padding: 0,
         overflow: "hidden",

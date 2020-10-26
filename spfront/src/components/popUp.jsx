@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
 import { SignIn, SignUp } from '../firebase_functions'
-//import axios from 'axios'
+
 
 const userCollection = fire.firestore().collection('users')
 
@@ -97,6 +97,7 @@ export default class PopUp extends Component {
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
                 placeholder={"Password"} style={popUpStyle.inputs} />)
         } else {
+            ls.push(<input name="inputs" id="usernameField" type="text" placeholder={"Username"} style={popUpStyle.inputs} />)
             ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
                 placeholder={"Password"} style={popUpStyle.inputs} />)

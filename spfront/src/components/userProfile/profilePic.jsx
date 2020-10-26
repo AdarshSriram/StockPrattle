@@ -1,47 +1,51 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {penSvg, nopicSvg} from '../svgs.jsx';
+import { penSvg, nopicSvg } from '../svgs.jsx';
 
-export default class ProfilePic extends Component{
-    constructor(props){
+export default class ProfilePic extends Component {
+    constructor(props) {
         super(props);
-        this.state = {image: props.image}
+        this.state = { image: props.image }
+    }
+    beginEdit(input) {
+
     }
 
-    handleIn(event){
+    handleIn(event) {
         const elem = document.getElementById("ProfilePicEdit")
         elem.style.visibility = "visible"
         elem.enable = true
     }
 
-    handleOut(event){
+    handleOut(event) {
         const elem = document.getElementById("ProfilePicEdit")
         elem.style.visibility = "hidden"
         elem.enable = false
     }
 
-    editIn(event){
+    editIn(event) {
         event.target.style.background = "lightGray"
     }
 
-    editOut(event){
+    editOut(event) {
         event.target.style.background = "#FFFFFF"
     }
 
-    render(){
-        return(
-        <div style={propicStyle.mainDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
-            {nopicSvg}
-            <button id="ProfilePicEdit" style={propicStyle.editButton} enable={false} onClick={this.beginEdit}
-            onMouseOver={this.editIn} onMouseLeave={this.editOut}>
-                {penSvg}
-            </button>
-        </div>
+    render() {
+        return (
+            <div style={propicStyle.mainDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
+                {nopicSvg}
+                <button id="ProfilePicEdit" style={propicStyle.editButton} enable={false} onClick={this.beginEdit}
+                    onMouseOver={this.editIn} onMouseLeave={this.editOut}>
+                    {penSvg}
+                </button>
+            </div>
         )
     }
 }
 
-const propicStyle = {mainDiv: {
+const propicStyle = {
+    mainDiv: {
         width: "200px",
         height: "100%",
         // border: "thick solid black",

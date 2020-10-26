@@ -2,55 +2,56 @@ import firebase from './utils/config'
 
 // Update user profle details 
 export const updateProfile = (fieldName, detail) => {
-  firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-      const username = user.displayName
-      const userCollection = firebase.firestore().collection('users')
-      userCollection.doc(username)
-        .update({
-          fieldName: detail
-        })
-        .then(() => console.log(`${fieldName} updated to ${detail}`))
-        .catch((err) => console.log(err))
+  var user = firebase.auth().currentUser;
+  if (user != null) {
+    const username = user.displayName
+    const dict = {}
+    dict[fieldName] = detail
+    const userCollection = firebase.firestore().collection('users')
+    userCollection.doc(username)
+      .update(dict)
+      .then(() => console.log(`${fieldName} updated to ${detail}`))
+      .catch((err) => console.log(err))
 
-      if (fieldName === 'username') {
-        user.updateProfile({
-          displayName: username
+    if (fieldName === 'username') {
+      user.updateProfile({
+        displayName: username
+      })
+        .then(function () {
+          console.log("User profile updated ")
+        }).catch(function (error) {
+          console.log("User profile could not be updated. Try again")
         })
-          .then(function () {
-            console.log("User profile updated ")
-          }).catch(function (error) {
-            console.log("User profile could not be updated. Try again")
-          })
-      }
-    } else {
-      console.log('Please try again')
     }
-  })
+  } else {
+    console.log('Please try again')
+  }
 }
 
 // SignUp User
 export const SignUp = (params) => {
+  const username = params[0]
+  const email = params[1]
+  const password = params[2]
   const userCollection = firebase.firestore().collection('users')
   firebase.auth().
-    createUserWithEmailAndPassword(params[0], params[1])
+    createUserWithEmailAndPassword(email, password)
     .then(() => {
-      userCollection.doc(params[1])
+      userCollection.doc(username)
         .get()
         .then((doc) => {
           if (!doc.exists) {
-            userCollection.doc(params[2])
+            userCollection.doc(username)
               .set({
-                username: params[2],
-                email: params[0],
-                fullName: params[3]
+                username: username,
+                email: email,
               })
               .then(() => {
                 console.log(`User signed up successfully`)
                 firebase.auth().onAuthStateChanged(function (user) {
                   if (user) {
                     user.updateProfile({
-                      displayName: params[2]
+                      displayName: username
                     })
                       .then(function () {
                         console.log("User profile successfully created")

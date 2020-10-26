@@ -18,7 +18,7 @@ export default class EditableText extends Component {
             elem.contentEditable = false
             elem.style.border = "none"
             this.setState({ text: String(elem.innerHTML), editing: false })
-            this.state.onSubmit.func(this.state.onSubmit.field, this.state.text)
+            this.state.onSubmit.func(this.state.onSubmit.field, String(elem.innerHTML))
         } else {
             elem.contentEditable = true
             elem.style.border = "thin solid gray"
@@ -39,7 +39,7 @@ export default class EditableText extends Component {
     }
 
     editIn(event) {
-        event.target.style.background = "#FFFFFF"
+        event.target.style.background = "lightGray"
     }
 
     editOut(event) {
