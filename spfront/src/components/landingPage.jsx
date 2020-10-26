@@ -191,7 +191,8 @@ const startStyle = { mainDiv:{
         fontWeight: "bold",
         fontSize: "24px",
         color: "#00B140",
-        outline: "none"
+        outline: "none",
+        cursor: "pointer"
     }, joinButtonTwo: {
         width: "100px",
         height: "50px",
@@ -204,7 +205,8 @@ const startStyle = { mainDiv:{
         fontWeight: "600px",
         fontSize: "18px",
         color: "#00B140",
-        outline: "none"
+        outline: "none",
+        cursor: "pointer"
     }, loginButton: {
         background: "none",
         width: "100px",
@@ -217,7 +219,8 @@ const startStyle = { mainDiv:{
         fontStyle: "normal",
         fontWeight: "600px",
         fontSize: "18px",
-        outline: "none"
+        outline: "none",
+        cursor: "pointer"
     }, ellipseList: {
         position: 'relative',
         listStyleType:'none',

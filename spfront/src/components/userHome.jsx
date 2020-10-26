@@ -5,7 +5,7 @@ import PopUp from './popUp.jsx';
 import NavBar from './navBar.jsx';
 import UserFeed from './userFeed.jsx';
 import MessageBox from './messageBox.jsx';
-import UserProfile from './userProfile.jsx';
+import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';

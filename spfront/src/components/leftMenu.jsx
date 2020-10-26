@@ -96,7 +96,8 @@ const leftMenuStyle= { mainDiv: {
         fontStyle: "normal",
         fontWeight: "bold",
         fontSize: "18px",
-        outline: "none"
+        outline: "none",
+        cursor: "pointer"
     }, logOutButton: {
         marginTop: "5px",
         background: "none",
@@ -109,8 +110,9 @@ const leftMenuStyle= { mainDiv: {
         fontStyle: "normal",
         fontWeight: "bold",
         fontSize: "15px",
-        outline: "none"
-    },newsText:{
+        outline: "none",
+        cursor: "pointer"
+    }, newsText:{
         fontFamily: "Dosis",
         fontStyle: "normal",
         fontWeight: "bold",

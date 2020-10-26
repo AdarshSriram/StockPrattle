@@ -147,7 +147,8 @@ const popUpStyle = {
         fontWeight: "bold",
         fontSize: "24px",
         filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1))",
-        outline: "none"
+        outline: "none",
+        cursor: "pointer"
     }, subLayer: {
         width: "100%",
         display: 'flex',
@@ -173,6 +174,7 @@ const popUpStyle = {
         fontStyle: "normal",
         fontWeight: "bold",
         fontSize: "18px",
-        outline: "none"
+        outline: "none",
+        cursor: "pointer"
     }
 }
