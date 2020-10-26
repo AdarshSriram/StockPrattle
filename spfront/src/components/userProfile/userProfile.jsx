@@ -4,51 +4,33 @@ import { penSvg } from '../svgs.jsx';
 import EditableText from './editableText.jsx';
 import MyPosts from './myPosts.jsx';
 import ProfilePic from './profilePic.jsx';
-import SocialDetails from './socialDetails.jsx';
+import SocialDetails from './socialDetails.jsx'
+import { updateProfile } from '../../firebase_functions'
 
 export default class UserProfile extends Component {
     constructor(props) {
         super(props);
     }
 
-<<<<<<< HEAD
     render() {
         return (
             <div style={userProfileStyle.centerDiv}>
-                <div style={userProfileStyle.topDiv}>
+                <div id="top" style={userProfileStyle.topDiv}>
                     <ProfilePic image={null} />
                     <div style={userProfileStyle.details}>
-                        <EditableText text="Full Name" />
-                        <EditableText text="User Name" />
-                        <EditableText text="Current Title" />
+                        <EditableText text="Full Name" onSubmit={{ func: updateProfile, field: 'name' }} />
+                        <EditableText text="User Name" onSubmit={{ func: updateProfile, field: 'username' }} />
+                        <EditableText text="Current Title" onSubmit={{ func: updateProfile, field: 'title' }} />
                     </div>
                     <div style={userProfileStyle.details}>
-                        <EditableText text="Date of Birth" />
-                        <EditableText text="Industry" />
-                        <EditableText text="Education" />
+                        <EditableText text="Date of Birth" onSubmit={{ func: updateProfile, field: 'dob' }} />
+                        <EditableText text="Industry" onSubmit={{ func: updateProfile, field: 'industry' }} />
+                        <EditableText text="Education" onSubmit={{ func: updateProfile, field: 'education' }} />
                     </div>
                     <SocialDetails />
-=======
-    render(){
-    return (
-        <div style={userProfileStyle.centerDiv}>
-            <div id="top" style={userProfileStyle.topDiv}>
-                <ProfilePic image={null}/>
-                <div style={userProfileStyle.details}>
-                    <EditableText text="Full Name"/>
-                    <EditableText text="User Name"/>
-                    <EditableText text="Current Title"/>
->>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
                 </div>
-                <div style={userProfileStyle.bottomDiv}>
-                    <MyPosts />
-                </div>
+                <MyPosts />
             </div>
-<<<<<<< HEAD
-=======
-            <MyPosts />
-        </div>
->>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
         )
     }
 }
@@ -65,16 +47,11 @@ const userProfileStyle = {
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none",
-<<<<<<< HEAD
-        overflow: "scroll"
-    }, topDiv: {
-=======
         overflow: "scroll",
         margin: "10px",
         background: "rgba(229, 229, 229, 0.6)",
         borderRadius: "10px"
-    },topDiv: {
->>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
+    }, topDiv: {
         height: "150px",
         width: "100%",
         display: "flex",

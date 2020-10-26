@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
-<<<<<<< HEAD
-
-=======
+import { SignIn, SignUp } from '../firebase_functions'
 //import axios from 'axios'
->>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
 
-const userCollection = fire.firestore().collection('user')
+const userCollection = fire.firestore().collection('users')
 
 export default class PopUp extends Component {
     constructor(props) {
@@ -23,7 +20,8 @@ export default class PopUp extends Component {
             if (val === '') { val = null }
             params.push(val);
         }
-        fire.auth().
+        SignUp(params)
+        /* fire.auth().
             createUserWithEmailAndPassword(params[0], params[1])
             .then(() => {
                 userCollection.doc(params[1])
@@ -48,11 +46,7 @@ export default class PopUp extends Component {
                                                 }).catch(function (error) {
                                                     console.log("User profile could not be created. Try again :(")
                                                 });
-<<<<<<< HEAD
-                                            // TODO: Get me the user photo 
-=======
                                             // TODO: Get me the user photo
->>>>>>> cfd4ce3eebda241c16c5f82592c51146390da821
                                         } else {
                                             console.log('Please try again')
                                         }
@@ -69,7 +63,7 @@ export default class PopUp extends Component {
             .catch(function (error) {
                 console.log(error.code)
                 console.log(error.message)
-            });
+            }); */
     }
 
     handleSignIn() {
@@ -79,11 +73,12 @@ export default class PopUp extends Component {
             if (val === '') { val = null }
             params.push(val);
         }
-        fire.auth().signInWithEmailAndPassword(params[0], params[1])
+        SignIn(params)
+        /* fire.auth().signInWithEmailAndPassword(params[0], params[1])
             .catch(function (error) {
                 console.log(error.code)
                 console.log(error.message)
-            });
+            }); */
 
     }
 

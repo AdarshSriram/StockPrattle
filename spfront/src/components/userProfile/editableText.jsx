@@ -5,10 +5,11 @@ import { penSvg, tickSvg } from "../svgs.jsx"
 export default class EditableText extends Component {
     constructor(props) {
         super(props);
-        this.state = { text: props.text, editing: false }
+        this.state = { text: props.text, editing: false, onSubmit: this.props.onSubmit }
         this.handleIn = this.handleIn.bind(this)
         this.beginEdit = this.beginEdit.bind(this)
         this.handleOut = this.handleOut.bind(this)
+
     }
 
     beginEdit(event) {
@@ -17,6 +18,7 @@ export default class EditableText extends Component {
             elem.contentEditable = false
             elem.style.border = "none"
             this.setState({ text: String(elem.innerHTML), editing: false })
+            this.state.onSubmit.func(this.state.onSubmit.field, this.state.text)
         } else {
             elem.contentEditable = true
             elem.style.border = "thin solid gray"
