@@ -1,29 +1,64 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
+import axios from 'axios'
+
+const userCollection = fire.firestore().collection('user')
 
 export default class PopUp extends Component {
     constructor(props) {
         super(props);
-        this.state = {type: props.type}
+        this.state = { type: props.type }
         //this.done = this.done.bind(this);
     }
 
-    handleSignUp(userInfo) {
-        const inputs = document.getElementsByName("inputs"); var params=[]; var val;
-        for (var obj of inputs){
+    handleSignUp() {
+        const inputs = document.getElementsByName("inputs"); var params = []; var val;
+        for (var obj of inputs) {
             val = obj.value;
-            if (val === ''){val = null}
+            if (val === '') { val = null }
             params.push(val);
         }
         fire.auth().
             createUserWithEmailAndPassword(params[0], params[1])
             .then(() => {
-                // db.doc(`/user/${params[0]}`).set({})
-                //     .then(() => {
-                //         console.log('successfully signed up')
-                //     })
-                //     .catch((err) => console.log(err))
+                userCollection.doc(params[1])
+                    .get()
+                    .then((doc) => {
+                        if (!doc.exists) {
+                            userCollection.doc(params[2])
+                                .set({
+                                    username: params[2],
+                                    email: params[0],
+                                    fullName: params[3]
+                                })
+                                .then(() => {
+                                    console.log(`User signed up successfully`)
+                                    firebase.auth().onAuthStateChanged(function (user) {
+                                        if (user) {
+                                            user.updateProfile({
+                                                displayName: params[2]
+                                            })
+                                                .then(function () {
+                                                    console.log("User profile successfully created")
+                                                }).catch(function (error) {
+                                                    console.log("User profile could not be created. Try again :(")
+                                                });
+                                            // TODO: Get me the user photo 
+                                            var storageRef = fire.storage().ref(user + '/profilePhoto/' + file.name)
+                                            var task = storageRef.put(file);
+                                        } else {
+                                            console.log('Please try again')
+                                        }
+                                    });
+                                })
+                                .catch((err) => console.log(err))
+
+                        }
+                        else {
+                            console.log('User with this username already exists')
+                        }
+                    })
             })
             .catch(function (error) {
                 console.log(error.code)
@@ -32,23 +67,18 @@ export default class PopUp extends Component {
     }
 
     handleSignIn() {
-        const inputs = document.getElementsByName("inputs"); var params=[]; var val;
-        for (var obj of inputs){
+        const inputs = document.getElementsByName("inputs"); var params = []; var val;
+        for (var obj of inputs) {
             val = obj.value;
-            if (val === ''){val = null}
+            if (val === '') { val = null }
             params.push(val);
         }
-        // fire.auth().onAuthStateChanged(function (user) {
-        //     if (user) {
-        //         console.log('how did u do this')
-        //     } else {
-                fire.auth().signInWithEmailAndPassword(params[0], params[1])
-                    .catch(function (error) {
-                        console.log(error.code)
-                        console.log(error.message)
-                    });
-        //     }
-        // });
+        fire.auth().signInWithEmailAndPassword(params[0], params[1])
+            .catch(function (error) {
+                console.log(error.code)
+                console.log(error.message)
+            });
+
     }
 
     subMouseIn(but) {
@@ -77,7 +107,12 @@ export default class PopUp extends Component {
                 <div id="popUpBox" style={popUpStyle.popUpBox}>
                     <form id="popUpForm" onSubmit={(event) => {
                         event.preventDefault();
-                        this.handleSignIn();
+                        if (this.state.type === 'Login') {
+                            this.handleSignIn();
+                        }
+                        else {
+                            this.handleSignUp()
+                        }
                     }}
                         style={popUpStyle.form}>
                         {ls.map(item => (item))}
