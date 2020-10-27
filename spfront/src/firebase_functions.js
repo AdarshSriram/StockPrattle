@@ -37,8 +37,6 @@ export const SignUp = (params) => {
   const email = params[1]
   const password = params[2]
 
-
-
   userCollection.doc(email).get().then((doc) => {
     if (!doc.exists) {
       userCollection.where('username', '==', username).get().then((snap) => {

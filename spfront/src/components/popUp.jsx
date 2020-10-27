@@ -4,8 +4,6 @@ import fire from '../utils/config.js';
 import { SignIn, SignUp } from '../firebase_functions'
 
 
-const userCollection = fire.firestore().collection('users')
-
 export default class PopUp extends Component {
     constructor(props) {
         super(props);
