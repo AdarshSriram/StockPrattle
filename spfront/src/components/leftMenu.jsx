@@ -2,54 +2,55 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
 
-export default class LeftMenu extends Component{
-    constructor(props){
+export default class LeftMenu extends Component {
+    constructor(props) {
         super(props);
-        this.logOut= this.logOut.bind(this);
-        this.mouseOut= this.mouseOut.bind(this);
+        this.logOut = this.logOut.bind(this);
+        this.mouseOut = this.mouseOut.bind(this);
     }
 
-    mouseIn(but){
+    mouseIn(but) {
         but.target.style.background = '#00B140';
         but.target.style.color = '#FFFFFF';
     }
 
-    mouseOut(but){
+    mouseOut(but) {
         if (!but.target.id.includes(this.props.pageState)) {
             but.target.style.background = 'none';
             but.target.style.color = '#00B140';
         }
     }
 
-    logOut(){
-        if (window.confirm("Are you sure you want to log out?")){
+    logOut() {
+        if (window.confirm("Are you sure you want to log out?")) {
             fire.auth().signOut();
         }
     }
 
-    render(){
-    return (
-        <div style={leftMenuStyle.mainDiv}>
-            <div style={leftMenuStyle.buttonDiv}>
-                <button id="profileButton" style={leftMenuStyle.button} onMouseOver={this.mouseIn}
-                onMouseLeave={this.mouseOut} onClick={this.props.buttonClickFunctions[0]}>Profile</button>
-                <button id="feedButton" style={leftMenuStyle.button} onMouseOver={this.mouseIn}
-                onMouseLeave={this.mouseOut} onClick={this.props.buttonClickFunctions[1]}>Feed</button>
-                <button id="exploreButton" style={leftMenuStyle.button} onMouseOver={this.mouseIn}
-                onMouseLeave={this.mouseOut} onClick={this.props.buttonClickFunctions[2]}>Explore</button>
-                <button id="messagesButton" style={leftMenuStyle.button} onMouseOver={this.mouseIn}
-                onMouseLeave={this.mouseOut} onClick={this.props.buttonClickFunctions[3]}>Messages</button>
+    render() {
+        return (
+            <div style={leftMenuStyle.mainDiv}>
+                <div style={leftMenuStyle.buttonDiv}>
+                    <button id="profileButton" style={leftMenuStyle.button} onMouseOver={this.mouseIn}
+                        onMouseLeave={this.mouseOut} onClick={this.props.buttonClickFunctions[0]}>Profile</button>
+                    <button id="feedButton" style={leftMenuStyle.button} onMouseOver={this.mouseIn}
+                        onMouseLeave={this.mouseOut} onClick={this.props.buttonClickFunctions[1]}>Feed</button>
+                    <button id="exploreButton" style={leftMenuStyle.button} onMouseOver={this.mouseIn}
+                        onMouseLeave={this.mouseOut} onClick={this.props.buttonClickFunctions[2]}>Explore</button>
+                    <button id="messagesButton" style={leftMenuStyle.button} onMouseOver={this.mouseIn}
+                        onMouseLeave={this.mouseOut} onClick={this.props.buttonClickFunctions[3]}>Messages</button>
+                </div>
+                <div style={leftMenuStyle.newsDiv}>
+                    <p style={leftMenuStyle.newsText}>News</p>
+                </div>
+                <button style={leftMenuStyle.logOutButton} onClick={this.logOut}>Log Out</button>
             </div>
-            <div style={leftMenuStyle.newsDiv}>
-                <p style={leftMenuStyle.newsText}>News</p>
-            </div>
-            <button style={leftMenuStyle.logOutButton} onClick={this.logOut}>Log Out</button>
-        </div>
         )
     }
 }
 
-const leftMenuStyle= { mainDiv: {
+const leftMenuStyle = {
+    mainDiv: {
         height: "100%",
         width: "200px",
         display: "flex",
@@ -112,7 +113,7 @@ const leftMenuStyle= { mainDiv: {
         fontSize: "15px",
         outline: "none",
         cursor: "pointer"
-    }, newsText:{
+    }, newsText: {
         fontFamily: "Dosis",
         fontStyle: "normal",
         fontWeight: "bold",

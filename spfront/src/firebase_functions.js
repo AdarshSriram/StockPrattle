@@ -1,30 +1,33 @@
 import firebase from './utils/config'
 
+const userCollection = firebase.firestore().collection('users')
+
 // Update user profle details 
 export const updateProfile = (fieldName, detail) => {
   var user = firebase.auth().currentUser;
   if (user != null) {
-    const username = user.displayName
+    const email = user.email
     const dict = {}
     dict[fieldName] = detail
     const userCollection = firebase.firestore().collection('users')
-    userCollection.doc(username)
+    userCollection.doc(email)
       .update(dict)
       .then(() => console.log(`${fieldName} updated to ${detail}`))
       .catch((err) => console.log(err))
 
     if (fieldName === 'username') {
-      user.updateProfile({
-        displayName: username
-      })
-        .then(function () {
-          console.log("User profile updated ")
-        }).catch(function (error) {
-          console.log("User profile could not be updated. Try again")
-        })
+      userCollection.where('username', '==', detail).get().then(
+        (snap) => {
+          if (snap.empty) {
+            user.updateProfile({ displayName: detail })
+              .then(() => { console.log("User profile updated ") })
+              .catch((error) => console.log("User profile could not be updated. Try again"))
+          }
+          else console.log('username taken')
+        }
+      )
     }
-  } else {
-    console.log('Please try again')
+
   }
 }
 
@@ -33,19 +36,18 @@ export const SignUp = (params) => {
   const username = params[0]
   const email = params[1]
   const password = params[2]
-  const userCollection = firebase.firestore().collection('users')
-  firebase.auth().
-    createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      userCollection.doc(username)
-        .get()
-        .then((doc) => {
-          if (!doc.exists) {
-            userCollection.doc(username)
-              .set({
-                username: username,
-                email: email,
-              })
+
+
+
+  userCollection.doc(email).get().then((doc) => {
+    if (!doc.exists) {
+      userCollection.where('username', '==', username).get().then((snap) => {
+        if (snap.empty) {
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(userCollection.doc(email).set({
+              username: username,
+              email: email,
+            })
               .then(() => {
                 console.log(`User signed up successfully`)
                 firebase.auth().onAuthStateChanged(function (user) {
@@ -55,7 +57,8 @@ export const SignUp = (params) => {
                     })
                       .then(function () {
                         console.log("User profile successfully created")
-                      }).catch(function (error) {
+                      })
+                      .catch(function (error) {
                         console.log("User profile could not be created. Try again :(")
                       });
                   } else {
@@ -63,18 +66,21 @@ export const SignUp = (params) => {
                   }
                 });
               })
-              .catch((err) => console.log(err))
+              .catch((err) => console.log(err)
+              )
+            )
+            .catch((err) => console.log(err))
+        }
+        else {
+          console.log("Username is taken")
+        }
+      })
 
-          }
-          else {
-            console.log('User with this username already exists')
-          }
-        })
-    })
-    .catch(function (error) {
-      console.log(error.code)
-      console.log(error.message)
-    });
+    }
+    else {
+      console.log('User with this email already exists')
+    }
+  })
 }
 
 export const SignIn = (params) => {
@@ -88,9 +94,8 @@ export const SignIn = (params) => {
     });
 }
 
-export const getUserInfo = (username) => {
-  const userCollection = firebase.firestore().collection('users')
-  userCollection.doc(username)
+export const getUserInfo = (email) => {
+  userCollection.doc(email)
     .get()
     .then((doc) => {
       if (!doc.exists) {
@@ -103,19 +108,17 @@ export const getUserInfo = (username) => {
     .catch((err) => console.log(err))
 }
 
-export const setUserInfo = (username, update) => {
-  const userCollection = firebase.firestore().collection('users')
-  userCollection.doc(username)
+export const setUserInfo = (email, update) => {
+  userCollection.doc(email)
     .update(update)
     .then(() => console.log("User set"))
     .catch((err) => console.log(err))
 }
 
 export const getCurrentUserInfo = () => {
-  const userCollection = firebase.firestore().collection('users')
   var user = firebase.auth().currentUser;
   if (user != null) {
-    userCollection.doc(user.displayName)
+    userCollection.doc(user.email)
       .get()
       .then((doc) => {
         if (!doc.exists) {
@@ -133,10 +136,10 @@ export const getCurrentUserInfo = () => {
 }
 
 export const setCurrentUserInfo = (info) => {
-  const userCollection = firebase.firestore().collection('users')
   const user = firebase.auth().currentUser;
-  userCollection.doc(user.displayName)
+  userCollection.doc(user.email)
     .update(info)
     .then(() => console.log("User set"))
     .catch((err) => console.log(err))
 }
+
