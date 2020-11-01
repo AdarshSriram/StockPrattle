@@ -1,6 +1,7 @@
 import firebase from './utils/config'
 
 const userCollection = firebase.firestore().collection('users')
+var storageRef = firebase.storage().ref();
 
 // Update user profle details 
 export const updateProfile = (fieldName, detail) => {
@@ -142,9 +143,20 @@ export const setCurrentUserInfo = (info) => {
 }
 
 export const uploadPhoto = (photo) => {
-  var storageRef = firebase.storage().ref();
   storageRef.child('profilePhoto' + photo.name)
     .put(file)
     .then((snap) => console.log('pic upload'))
     .catch((err) => console.log(err))
+}
+
+export const getPhoto = (email) = {
+  storageRef.child('profilePhoto/email.jpg')
+    .getDownloadURL()
+    .then((url) => {
+      // Or inserted into an <img> element:
+      var img = document.getElementById('myimg');
+      img.src = url;
+    }).catch(function (error) {
+      console.log(error)
+    })
 }
