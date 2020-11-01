@@ -141,3 +141,10 @@ export const setCurrentUserInfo = (info) => {
     .catch((err) => console.log(err))
 }
 
+export const uploadPhoto = (photo) => {
+  var storageRef = firebase.storage().ref();
+  storageRef.child('profilePhoto' + photo.name)
+    .put(file)
+    .then((snap) => console.log('pic upload'))
+    .catch((err) => console.log(err))
+}
