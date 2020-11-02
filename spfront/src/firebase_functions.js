@@ -3,7 +3,18 @@ import firebase from './utils/config'
 const userCollection = firebase.firestore().collection('users')
 var storageRef = firebase.storage().ref();
 
-// Update user profle details 
+// Demo user object:
+//  {
+//      email: demo@demo.com,
+//      username: demo,
+//      fullname: demo demo
+//      birthday: dd/mm/yyyy
+//      title: Demo at demo firm
+//      industry: Demo
+//      education: uptil demo years
+// }
+
+// Update user profle details
 export const updateProfile = (fieldName, detail) => {
   var user = firebase.auth().currentUser;
   if (user != null) {
@@ -28,7 +39,6 @@ export const updateProfile = (fieldName, detail) => {
         }
       )
     }
-
   }
 }
 
@@ -74,7 +84,6 @@ export const SignUp = (params) => {
           console.log("Username is taken")
         }
       })
-
     }
     else {
       console.log('User with this email already exists')
@@ -85,8 +94,9 @@ export const SignUp = (params) => {
 export const SignIn = (params) => {
   const email = params[0]
   const password = params[1]
+  console.log(params)
   firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(() => console.log('Signed in !'))
+    .then(() => console.log('Signed in!'))
     .catch(function (error) {
       console.log(error.code)
       console.log(error.message)
@@ -115,23 +125,18 @@ export const setUserInfo = (email, update) => {
 }
 
 export const getCurrentUserInfo = () => {
-  var user = firebase.auth().currentUser;
-  if (user != null) {
-    userCollection.doc(user.email)
-      .get()
-      .then((doc) => {
+    var user = firebase.auth().currentUser;
+    if (user != null) {
+        userCollection.doc(user.email)
+        .get().then((doc) => {
         if (!doc.exists) {
-          console.log('No user found')
-        }
-        else {
+            console.log('No user found')
+        } else {
           return doc.data()
-        }
-      })
-      .catch((err) => console.log(err))
-  }
-  else {
-    console.log('error occured, try again')
-  }
+        }}).catch((err) => console.log(err))
+    } else {
+        console.log('error occured, try again')
+    }
 }
 
 export const setCurrentUserInfo = (info) => {

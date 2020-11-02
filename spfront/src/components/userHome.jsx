@@ -9,23 +9,30 @@ import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
+import {getCurrentUserInfo, setCurrentUserInfo} from '../firebase_functions.js'
 
 export default class UserPage extends Component{
     constructor(props){
         super(props);
-        this.state = {current: null}
+        this.state = {current: null, user: getCurrentUserInfo()}
+        console.log(this.state.user)
         this.profileButtonClick = this.profileButtonClick.bind(this);
         this.feedButtonClick = this.feedButtonClick.bind(this);
         this.messagesButtonClick = this.messagesButtonClick.bind(this);
         this.exploreButtonClick = this.exploreButtonClick.bind(this);
+        this.updateUserInfo = this.updateUserInfo.bind(this);
     }
 
     componentDidMount(){
-        console.log("trace")
         const but = document.getElementById("feedButton");
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
         this.setState({current: "feed"});
+    }
+
+    updateUserInfo(obj){
+        setCurrentUserInfo(obj)
+        this.setState({user: getCurrentUserInfo()})
     }
 
     profileButtonClick(){
@@ -87,7 +94,7 @@ export default class UserPage extends Component{
     render(){
         var item;
         if (this.state.current=="profile"){
-            item= <UserProfile />
+            item= <UserProfile user={this.state.user} setUser={this.updateUserInfo}/>
         } else if (this.state.current=="explore"){
             item= <ExplorePage />
         } else if (this.state.current=="messages"){

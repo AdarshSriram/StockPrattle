@@ -18,9 +18,8 @@ class App extends Component {
 
     authListener() {
         fire.auth().onAuthStateChanged((user) => {
-            console.log(user);
             if (user) {
-                this.setState({ user });
+                this.setState({user: user});
                 localStorage.setItem('user', user.uid);
             } else {
                 this.setState({ user: null });
@@ -32,7 +31,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                {this.state.user ? <UserPage/> : <LandingPage/>}
+                {this.state.user ? <UserPage /> : <LandingPage/>}
             </div>
         )
     }

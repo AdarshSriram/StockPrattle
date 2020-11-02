@@ -5,11 +5,16 @@ import EditableText from './editableText.jsx';
 import MyPosts from './myPosts.jsx';
 import ProfilePic from './profilePic.jsx';
 import SocialDetails from './socialDetails.jsx'
-import { updateProfile } from '../../firebase_functions'
 
 export default class UserProfile extends Component {
     constructor(props) {
         super(props);
+        this.state = {user: props.user, setUser: props.setUser}
+        this.updateProfile = this.updateProfile.bind(this)
+    }
+
+    updateProfile(obj){
+        this.state.setUser(obj)
     }
 
     render() {
@@ -18,14 +23,14 @@ export default class UserProfile extends Component {
                 <div id="top" style={userProfileStyle.topDiv}>
                     <ProfilePic image={null} />
                     <div style={userProfileStyle.details}>
-                        <EditableText text="username" onSubmit={{ func: updateProfile, field: 'username' }} />
-                        <EditableText text="Full Name" onSubmit={{ func: updateProfile, field: 'fullName' }} />
-                        <EditableText text="Current Title" onSubmit={{ func: updateProfile, field: 'title' }} />
+                        <EditableText type={'Username'} setUser={this.updateProfile} user={this.state.user}/>
+                        <EditableText type={'Full Name'} setUser={this.updateProfile} user={this.state.user}/>
+                        <EditableText type={'Birthday'} setUser={this.updateProfile} user={this.state.user}/>
                     </div>
                     <div style={userProfileStyle.details}>
-                        <EditableText text="Date of Birth" onSubmit={{ func: updateProfile, field: 'dob' }} />
-                        <EditableText text="Industry" onSubmit={{ func: updateProfile, field: 'industry' }} />
-                        <EditableText text="Education" onSubmit={{ func: updateProfile, field: 'education' }} />
+                        <EditableText type={'Title'} setUser={this.updateProfile} user={this.state.user}/>
+                        <EditableText type={'Industry'} setUser={this.updateProfile} user={this.state.user}/>
+                        <EditableText type={'Education'} setUser={this.updateProfile} user={this.state.user}/>
                     </div>
                     <SocialDetails />
                 </div>

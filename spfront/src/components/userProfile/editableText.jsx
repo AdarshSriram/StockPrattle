@@ -5,7 +5,8 @@ import { penSvg, tickSvg } from "../svgs.jsx"
 export default class EditableText extends Component {
     constructor(props) {
         super(props);
-        this.state = { text: props.text, editing: false, onSubmit: this.props.onSubmit }
+        this.state = {editing: false, user: props.user, setUser: this.props.setUser,
+            type: props.type.split(" ").join("").toLowerCase()}
         this.handleIn = this.handleIn.bind(this)
         this.beginEdit = this.beginEdit.bind(this)
         this.handleOut = this.handleOut.bind(this)
@@ -13,12 +14,13 @@ export default class EditableText extends Component {
     }
 
     beginEdit(event) {
-        const elem = document.getElementById(this.state.text)
+        const elem = document.getElementById(this.state.type)
         if (this.state.editing) {
             elem.contentEditable = false
             elem.style.border = "none"
-            this.setState({ text: String(elem.innerHTML), editing: false })
-            this.state.onSubmit.func(this.state.onSubmit.field, String(elem.innerHTML))
+            this.state.user[this.state.type]= String(elem.innerHTML)
+            this.setState({editing: false })
+            this.state.setUser(this.state.user)
         } else {
             elem.contentEditable = true
             elem.style.border = "thin solid gray"
@@ -27,13 +29,13 @@ export default class EditableText extends Component {
     }
 
     handleIn(event) {
-        const elem = document.getElementsByName(this.state.text)[0]
+        const elem = document.getElementsByName(this.state.type)[0]
         elem.style.visibility = "visible"
         elem.enable = true
     }
 
     handleOut(event) {
-        const elem = document.getElementsByName(this.state.text)[0]
+        const elem = document.getElementsByName(this.state.type)[0]
         elem.style.visibility = "hidden"
         elem.enable = false
     }
@@ -47,10 +49,16 @@ export default class EditableText extends Component {
     }
 
     render() {
+        var text;
+        if (this.state.type == "username") {
+            text = "@"+this.state.user[this.state.type]
+        } else {
+            text = this.state.user[this.state.type] == null ? this.props.type : this.state.user[this.state.type]
+        }
         return (
             <div style={editStyle.editableTextDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
-                <p id={this.state.text} style={editStyle.textStyle}>{this.state.text}</p>
-                <button name={this.state.text} style={editStyle.editButton} enable={false} onClick={this.beginEdit}
+                <p id={this.state.type} style={editStyle.textStyle}>{text}</p>
+                <button name={this.state.type} style={editStyle.editButton} enable={false} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
                     {(this.state.editing) ? tickSvg : penSvg}
                 </button>
