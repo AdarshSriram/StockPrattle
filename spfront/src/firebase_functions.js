@@ -124,16 +124,10 @@ export const setUserInfo = (email, update) => {
     .catch((err) => console.log(err))
 }
 
-export const getCurrentUserInfo = () => {
+export function getCurrentUserInfo(){
     var user = firebase.auth().currentUser;
     if (user != null) {
-        userCollection.doc(user.email)
-        .get().then((doc) => {
-        if (!doc.exists) {
-            console.log('No user found')
-        } else {
-          return doc.data()
-        }}).catch((err) => console.log(err))
+        return userCollection.doc(user.email).get()
     } else {
         console.log('error occured, try again')
     }
@@ -141,10 +135,7 @@ export const getCurrentUserInfo = () => {
 
 export const setCurrentUserInfo = (info) => {
   const user = firebase.auth().currentUser;
-  userCollection.doc(user.email)
-    .update(info)
-    .then(() => console.log("User set"))
-    .catch((err) => console.log(err))
+  return userCollection.doc(user.email).update(info)
 }
 
 export const uploadPhoto = (photo) => {

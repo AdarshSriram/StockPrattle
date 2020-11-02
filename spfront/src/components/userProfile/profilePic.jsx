@@ -15,13 +15,13 @@ export default class ProfilePic extends Component {
     handleIn(event) {
         const elem = document.getElementById("ProfilePicEdit")
         elem.style.visibility = "visible"
-        elem.enable = true
+        elem.disabled = false
     }
 
     handleOut(event) {
         const elem = document.getElementById("ProfilePicEdit")
         elem.style.visibility = "hidden"
-        elem.enable = false
+        elem.disabled = true
     }
 
     editIn(event) {
@@ -36,7 +36,7 @@ export default class ProfilePic extends Component {
         return (
             <div style={propicStyle.mainDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
                 {nopicSvg}
-                <button id="ProfilePicEdit" style={propicStyle.editButton} enable={false} onClick={this.beginEdit}
+                <button id="ProfilePicEdit" style={propicStyle.editButton} disabled={true} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
                     {penSvg}
                 </button>

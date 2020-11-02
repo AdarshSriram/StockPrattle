@@ -10,7 +10,6 @@ export default class EditableText extends Component {
         this.handleIn = this.handleIn.bind(this)
         this.beginEdit = this.beginEdit.bind(this)
         this.handleOut = this.handleOut.bind(this)
-
     }
 
     beginEdit(event) {
@@ -19,6 +18,9 @@ export default class EditableText extends Component {
             elem.contentEditable = false
             elem.style.border = "none"
             this.state.user[this.state.type]= String(elem.innerHTML)
+            if (this.state.type == 'username' && !this.state.user.username.includes("@")){
+                this.state.user.username = "@"+this.state.user.username
+            }
             this.setState({editing: false })
             this.state.setUser(this.state.user)
         } else {
@@ -31,13 +33,11 @@ export default class EditableText extends Component {
     handleIn(event) {
         const elem = document.getElementsByName(this.state.type)[0]
         elem.style.visibility = "visible"
-        elem.enable = true
     }
 
     handleOut(event) {
         const elem = document.getElementsByName(this.state.type)[0]
         elem.style.visibility = "hidden"
-        elem.enable = false
     }
 
     editIn(event) {
@@ -50,15 +50,17 @@ export default class EditableText extends Component {
 
     render() {
         var text;
-        if (this.state.type == "username") {
-            text = "@"+this.state.user[this.state.type]
+        if (this.state.user == null){
+            text = this.props.type
+        }else if (this.state.type == "username") {
+            text = this.state.user[this.state.type]
         } else {
             text = this.state.user[this.state.type] == null ? this.props.type : this.state.user[this.state.type]
         }
         return (
             <div style={editStyle.editableTextDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
                 <p id={this.state.type} style={editStyle.textStyle}>{text}</p>
-                <button name={this.state.type} style={editStyle.editButton} enable={false} onClick={this.beginEdit}
+                <button name={this.state.type} style={editStyle.editButton} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
                     {(this.state.editing) ? tickSvg : penSvg}
                 </button>

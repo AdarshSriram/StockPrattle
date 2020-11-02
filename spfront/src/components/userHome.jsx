@@ -14,13 +14,14 @@ import {getCurrentUserInfo, setCurrentUserInfo} from '../firebase_functions.js'
 export default class UserPage extends Component{
     constructor(props){
         super(props);
-        this.state = {current: null, user: getCurrentUserInfo()}
-        console.log(this.state.user)
+        this.state = {current: null, user: null}
         this.profileButtonClick = this.profileButtonClick.bind(this);
         this.feedButtonClick = this.feedButtonClick.bind(this);
         this.messagesButtonClick = this.messagesButtonClick.bind(this);
         this.exploreButtonClick = this.exploreButtonClick.bind(this);
         this.updateUserInfo = this.updateUserInfo.bind(this);
+        this.setStateUser = this.setStateUser.bind(this)
+        this.setStateUser();
     }
 
     componentDidMount(){
@@ -30,9 +31,19 @@ export default class UserPage extends Component{
         this.setState({current: "feed"});
     }
 
-    updateUserInfo(obj){
-        setCurrentUserInfo(obj)
-        this.setState({user: getCurrentUserInfo()})
+    async setStateUser(){
+        getCurrentUserInfo().then((doc) => {
+        if (!doc.exists) {
+            console.log('No user found')
+        } else {
+            // console.log(doc.data())
+            this.setState({user: doc.data()})
+        }}).catch((err) => console.log(err))
+    }
+
+    async updateUserInfo(obj){
+        await setCurrentUserInfo(obj).then(() => this.setStateUser())
+        .catch((err) => alert("Details couldn't be updated!"))
     }
 
     profileButtonClick(){
