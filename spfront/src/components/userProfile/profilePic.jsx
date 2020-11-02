@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { penSvg, nopicSvg } from '../svgs.jsx';
-import { uploadPhoto, getPhoto } from '../../firebase_functions'
+import {penSvg, nopicSvg} from '../svgs.jsx';
+import {uploadPhoto, getPhoto} from '../../firebase_functions'
 
 export default class ProfilePic extends Component {
     constructor(props) {
         super(props);
         this.state = { image: props.image }
     }
-    beginEdit(input) {
 
+    beginEdit(input) {
+        document.getElementById('fileInput').click()
     }
 
     handleIn(event) {
         const elem = document.getElementById("ProfilePicEdit")
         elem.style.visibility = "visible"
-        elem.disabled = false
     }
 
     handleOut(event) {
         const elem = document.getElementById("ProfilePicEdit")
         elem.style.visibility = "hidden"
-        elem.disabled = true
     }
 
     editIn(event) {
@@ -36,8 +35,9 @@ export default class ProfilePic extends Component {
         return (
             <div style={propicStyle.mainDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
                 {nopicSvg}
-                <button id="ProfilePicEdit" style={propicStyle.editButton} disabled={true} onClick={this.beginEdit}
+                <button id="ProfilePicEdit" style={propicStyle.editButton} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
+                    <input id="fileInput" type="file" style={{display: "none"}}/>
                     {penSvg}
                 </button>
             </div>
