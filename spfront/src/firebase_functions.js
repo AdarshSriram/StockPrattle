@@ -144,17 +144,17 @@ export const setCurrentUserInfo = (info) => {
 
 export const uploadPhoto = (photo) => {
   storageRef.child('profilePhoto' + photo.name)
-    .put(file)
+    .put(photo)
     .then((snap) => console.log('pic upload'))
     .catch((err) => console.log(err))
 }
 
-export const getPhoto = (email) = {
+export const getPhoto = (email, element) => {
   storageRef.child('profilePhoto/email.jpg')
     .getDownloadURL()
     .then((url) => {
       // Or inserted into an <img> element:
-      var img = document.getElementById('myimg');
+      var img = document.getElementById(element); // Element where you want to put pic
       img.src = url;
     }).catch(function (error) {
       console.log(error)
