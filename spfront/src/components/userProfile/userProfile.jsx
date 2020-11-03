@@ -21,7 +21,7 @@ export default class UserProfile extends Component {
         return (
             <div style={userProfileStyle.centerDiv}>
                 <div id="top" style={userProfileStyle.topDiv}>
-                    <ProfilePic image={null} />
+                    <ProfilePic user={this.state.user} />
                     <div style={userProfileStyle.details}>
                         <EditableText type={'Username'} setUser={this.updateProfile} user={this.state.user}/>
                         <EditableText type={'Full Name'} setUser={this.updateProfile} user={this.state.user}/>
@@ -34,7 +34,7 @@ export default class UserProfile extends Component {
                     </div>
                     <SocialDetails />
                 </div>
-                <MyPosts />
+                <MyPosts user={this.state.user}/>
             </div>
         )
     }
@@ -57,7 +57,7 @@ const userProfileStyle = {
         background: "rgba(229, 229, 229, 0.6)",
         borderRadius: "10px"
     }, topDiv: {
-        height: "150px",
+        height: "170px",
         width: "100%",
         display: "flex",
         flexDirection: "row",

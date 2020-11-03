@@ -13,7 +13,9 @@ export default class Post extends Component{
             <div style={postStyle.postDiv}>
                 <div style={postStyle.topBar}>
                     {smallnopicSvg}
-                    <p style={postStyle.textStyle}>{"@username"}</p>
+                    <p style={postStyle.textStyle}>
+                        {this.props.user==null ? "@username": this.props.user.username}
+                    </p>
                 </div>
                 <div style={postStyle.contentDiv}>
                     <p style={postStyle.textStyle}>{this.props.text}</p>

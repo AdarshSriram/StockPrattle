@@ -124,7 +124,7 @@ export const setUserInfo = (email, update) => {
     .catch((err) => console.log(err))
 }
 
-export function getCurrentUserInfo(){
+export const getCurrentUserInfo = () => {
     var user = firebase.auth().currentUser;
     if (user != null) {
         return userCollection.doc(user.email).get()
@@ -138,21 +138,10 @@ export const setCurrentUserInfo = (info) => {
   return userCollection.doc(user.email).update(info)
 }
 
-export const uploadPhoto = (photo) => {
-  storageRef.child('profilePhoto' + photo.name)
-    .put(photo)
-    .then((snap) => console.log('pic upload'))
-    .catch((err) => console.log(err))
+export const uploadPhoto = (email, photo) => {
+  return storageRef.child('profilePhoto/'+email).put(photo)
 }
 
-export const getPhoto = (email, element) => {
-  storageRef.child('profilePhoto/email.jpg')
-    .getDownloadURL()
-    .then((url) => {
-      // Or inserted into an <img> element:
-      var img = document.getElementById(element); // Element where you want to put pic
-      img.src = url;
-    }).catch(function (error) {
-      console.log(error)
-    })
+export const getPhoto = (email) => {
+  return storageRef.child('profilePhoto/'+email).getDownloadURL()
 }

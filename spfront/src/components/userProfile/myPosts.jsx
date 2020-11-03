@@ -10,7 +10,7 @@ export default class MyPosts extends Component{
     render(){
         return(
         <div style={myPostsStyle.mainDiv}>
-        <Post text="Hi! I just joined Stock Prattle!"/>
+            <Post user={this.props.user} text="Hi! I just joined Stock Prattle!"/>
         </div>
         )
     }
