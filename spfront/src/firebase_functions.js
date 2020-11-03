@@ -125,12 +125,12 @@ export const setUserInfo = (email, update) => {
 }
 
 export const getCurrentUserInfo = () => {
-    var user = firebase.auth().currentUser;
-    if (user != null) {
-        return userCollection.doc(user.email).get()
-    } else {
-        console.log('error occured, try again')
-    }
+  var user = firebase.auth().currentUser;
+  if (user != null) {
+    return userCollection.doc(user.email).get()
+  } else {
+    console.log('error occured, try again')
+  }
 }
 
 export const setCurrentUserInfo = (info) => {
@@ -139,9 +139,9 @@ export const setCurrentUserInfo = (info) => {
 }
 
 export const uploadPhoto = (email, photo) => {
-  return storageRef.child('profilePhoto/'+email).put(photo)
+  return storageRef.child('profilePhoto/' + email).put(photo)
 }
 
 export const getPhoto = (email) => {
-  return storageRef.child('profilePhoto/'+email).getDownloadURL()
+  return storageRef.child('profilePhoto/' + email).getDownloadURL()
 }

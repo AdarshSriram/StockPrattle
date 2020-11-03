@@ -1,31 +1,45 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {penSvg, nopicSvg} from '../svgs.jsx';
-import {uploadPhoto, getPhoto} from '../../firebase_functions'
+import { penSvg, nopicSvg } from '../svgs.jsx';
+import { uploadPhoto, getPhoto } from '../../firebase_functions'
+import firebase from '../../utils/config'
 
 export default class ProfilePic extends Component {
     constructor(props) {
         super(props);
-        this.state = {user: props.user, image: null}
+        this.state = { user: props.user, image: null }
         this.setStateImage = this.setStateImage.bind(this)
         this.handleUpload = this.handleUpload.bind(this)
     }
 
-    async setStateImage(){
+    async setStateImage() {
         await getPhoto(this.state.user.email).then((url) => {
-            this.setState({image: url})
-        }).catch((error)=> console.log(error))
+            this.setState({ image: url })
+            console.log(`url is ${url}`)
+        }).catch((error) => console.log(error))
     }
 
-    async handleUpload(){
+    async handleUpload() {
         const photo = document.getElementById('fileInput').files[0]
-        if (photo != null){
-            await uploadPhoto(this.state.user.email, photo).then((snap) => {console.log('Pic Upload Successful'); this.setStateImage();})
-            .catch((err) => console.log(err))
+        if (photo != null) {
+            await uploadPhoto(this.state.user.email, photo).then((snap) => {
+                var user = firebase.auth().currentUser;
+                getPhoto(this.state.user.email)
+                    .then((url) => {
+                        if (user != null) {
+                            user.updateProfile({ photoURL: url })
+                                .then(() => console.log(`url is ${url}`))
+                            console.log('Pic Upload Successful'); //this.setStateImage();
+                            this.setState({ image: url })
+                        }
+                    })
+
+            })
+                .catch((err) => console.log(err))
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         document.getElementById("fileInput").onchange = this.handleUpload
     }
 
@@ -53,9 +67,10 @@ export default class ProfilePic extends Component {
 
     render() {
         var error = false;
-        var disp = <img src={this.state.image} alt="Profile Pic" onError={()=>error=true} style={propicStyle.image} />
-        if (this.state.image == null || error){
+        var disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={propicStyle.image} />
+        if (this.state.image == null || error) {
             disp = nopicSvg
+            console.log("url is none")
         }
         return (
             <div style={propicStyle.mainDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
@@ -64,7 +79,7 @@ export default class ProfilePic extends Component {
                 </div>
                 <button id="ProfilePicEdit" style={propicStyle.editButton} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
-                    <input id="fileInput" type="file" accept='image/*' style={{display: "none"}}/>
+                    <input id="fileInput" type="file" accept='image/*' style={{ display: "none" }} />
                     {penSvg}
                 </button>
             </div>
@@ -92,8 +107,8 @@ const propicStyle = {
         borderRadius: "5px",
         cursor: "pointer"
     }, imageDiv: {
-        width:"150px",
-        height:"150px",
+        width: "150px",
+        height: "150px",
         borderRadius: "75px",
         background: "none",
         display: "flex",
@@ -104,8 +119,8 @@ const propicStyle = {
         marginLeft: "10px",
         overflow: "hidden"
     }, image: {
-        maxWidth:"100%",
-        maxHeight:"100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
         margin: "0px"
     }
 }
