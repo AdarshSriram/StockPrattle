@@ -1,18 +1,42 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {smallnopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg} from './svgs.jsx'
+import {smallnopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg} from './svgs.jsx';
+import { getPhoto } from '../firebase_functions'
 
 export default class Post extends Component{
     constructor(props){
         super(props);
+        this.state = { user: props.user, image: null }
+        this.setStateImage = this.setStateImage.bind(this)
+    }
+
+    async setStateImage() {
+        await getPhoto(this.state.user.email).then((url) => {
+            this.setState({ image: url })
+            console.log(`url is ${url}`)
+        }).catch((error) => console.log(error))
+    }
+
+    componentDidMount() {
+        if (this.state.user != null){
+            this.setStateImage();
+        }
     }
 
     render(){
+        var error = false;
+        var disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
+        if (this.state.image == null || error) {
+            disp = smallnopicSvg
+            console.log("url is none")
+        }
     return (
         <div style={postStyle.mainDiv}>
             <div style={postStyle.postDiv}>
                 <div style={postStyle.topBar}>
-                    {smallnopicSvg}
+                    <div style={postStyle.imageDiv}>
+                        {disp}
+                    </div>
                     <p style={postStyle.textStyle}>
                         {this.props.user==null ? "@username": this.props.user.username}
                     </p>
@@ -70,7 +94,7 @@ const postStyle= {mainDiv: {
         overflow: "scroll"
     }, topBar: {
         width: "100%",
-        height: "50px",
+        height: "60px",
         display: "flex",
         flexDirection: "row",
         gap: "10px",
@@ -114,5 +138,21 @@ const postStyle= {mainDiv: {
         boxSizing: "border-box",
         background: "none",
         overflow: "none"
+    }, image: {
+        maxWidth: "100%",
+        maxHeight: "100%",
+        margin: "0px"
+    }, imageDiv: {
+        width: "48px",
+        height: "48px",
+        borderRadius: "24px",
+        background: "none",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        border: "thin solid lightGray",
+        // marginLeft: "10px",
+        overflow: "hidden"
     }
 }

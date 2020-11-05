@@ -22,25 +22,15 @@ export default class ProfilePic extends Component {
     async handleUpload() {
         const photo = document.getElementById('fileInput').files[0]
         if (photo != null) {
-            await uploadPhoto(this.state.user.email, photo).then((snap) => {
-                var user = firebase.auth().currentUser;
-                getPhoto(this.state.user.email)
-                    .then((url) => {
-                        if (user != null) {
-                            user.updateProfile({ photoURL: url })
-                                .then(() => console.log(`url is ${url}`))
-                            console.log('Pic Upload Successful'); //this.setStateImage();
-                            this.setState({ image: url })
-                        }
-                    })
-
-            })
-                .catch((err) => console.log(err))
+            await uploadPhoto(this.state.user.email, photo).then(() =>
+                this.setStateImage()
+            ).catch((err) => console.log(err))
         }
     }
 
     componentDidMount() {
         document.getElementById("fileInput").onchange = this.handleUpload
+        this.setStateImage()
     }
 
     beginEdit(input) {
@@ -58,11 +48,25 @@ export default class ProfilePic extends Component {
     }
 
     editIn(event) {
-        event.target.style.background = "lightGray"
+        var elems = document.getElementsByName("penSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "#00B140"
+        }
+        elems = document.getElementsByName("tickSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "#00B140"
+        }
     }
 
     editOut(event) {
-        event.target.style.background = "#FFFFFF"
+        var elems = document.getElementsByName("penSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "black"
+        }
+        elems = document.getElementsByName("tickSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "black"
+        }
     }
 
     render() {

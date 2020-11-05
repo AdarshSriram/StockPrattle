@@ -36,7 +36,8 @@ const socialStyle = {mainDiv: {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        // border: "thick solid black",
+        border: "thin solid lightGray",
+        borderWidth: "0 0 0 1px",
         boxSizing: "border-box",
         background: "none",
         // overflow: "scroll"

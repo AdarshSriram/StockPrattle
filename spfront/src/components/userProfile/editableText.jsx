@@ -41,11 +41,25 @@ export default class EditableText extends Component {
     }
 
     editIn(event) {
-        event.target.style.background = "lightGray"
+        var elems = document.getElementsByName("penSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "#00B140"
+        }
+        elems = document.getElementsByName("tickSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "#00B140"
+        }
     }
 
     editOut(event) {
-        event.target.style.background = "#FFFFFF"
+        var elems = document.getElementsByName("penSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "black"
+        }
+        elems = document.getElementsByName("tickSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "black"
+        }
     }
 
     render() {
@@ -59,6 +73,7 @@ export default class EditableText extends Component {
         }
         return (
             <div style={editStyle.editableTextDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
+                <label style={editStyle.label}>{this.props.type + ": "}</label>
                 <p id={this.state.type} style={editStyle.textStyle}>{text}</p>
                 <button name={this.state.type} style={editStyle.editButton} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
@@ -75,6 +90,7 @@ const editStyle = {
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
+        gap: "10px",
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none",
@@ -94,6 +110,17 @@ const editStyle = {
         background: "#FFFFFF",
         borderWidth: "0px",
         outline: "none",
-        borderRadius: "5px"
+        borderRadius: "5px",
+        cursor: "pointer"
+    },  label: {
+        // border: "thick solid black",
+        padding: "2px",
+        margin: "0px",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        fontWeight: "bold",
+        fontSize: "18px",
+        outline: "none",
+        borderRadius: "10px"
     }
 }

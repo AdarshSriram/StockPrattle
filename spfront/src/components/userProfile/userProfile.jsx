@@ -86,7 +86,7 @@ const userProfileStyle = {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "flex-start",
         // border: "thick solid black",
         boxSizing: "border-box",
         background: "none",

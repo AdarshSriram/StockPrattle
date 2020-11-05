@@ -58,7 +58,7 @@ export const SignUp = (params) => {
               email: email,
             })
               .then(() => {
-                console.log(`User signed up successfully`)
+                alert(`Sign Up Successful!`)
                 firebase.auth().onAuthStateChanged(function (user) {
                   if (user) {
                     user.updateProfile({
@@ -71,7 +71,7 @@ export const SignUp = (params) => {
                         console.log("User profile could not be created. Try again :(")
                       });
                   } else {
-                    console.log('Please try again')
+                    alert('Sign Up Unsuccessful. Please try again!')
                   }
                 });
               })
@@ -81,12 +81,12 @@ export const SignUp = (params) => {
             .catch((err) => console.log(err))
         }
         else {
-          console.log("Username is taken")
+          alert("This username isn't available.")
         }
       })
     }
     else {
-      console.log('User with this email already exists')
+      alert("A user with this email already exists.")
     }
   })
 }
@@ -94,12 +94,14 @@ export const SignUp = (params) => {
 export const SignIn = (params) => {
   const email = params[0]
   const password = params[1]
-  console.log(params)
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then(() => console.log('Signed in!'))
-    .catch(function (error) {
-      console.log(error.code)
-      console.log(error.message)
+    .catch((error) => {
+      if (error.code === 'auth/user-not-found' ){
+            alert("User with given email was not found.")
+      } else if (error.code === 'auth/wrong-password'){
+            alert("The password is incorrect.")
+      }
     });
 }
 
