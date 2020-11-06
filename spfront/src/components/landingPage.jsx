@@ -63,10 +63,11 @@ export default class LandingPage extends Component {
             )
         }
         return (
+            <div id="containerDiv" style={startStyle.container}>
+            <ul id="ellipseList" style={startStyle.ellipseList}>
+                {ls.map(item => (<li key={ls.indexOf(item)}>{item}</li>))}
+            </ul>
             <div id="wholeScreen" style={startStyle.mainDiv}>
-                <ul id="ellipseList" style={startStyle.ellipseList}>
-                    {ls.map(item => (<li key={ls.indexOf(item)}>{item}</li>))}
-                </ul>
                 <div id="header" style={startStyle.header}>
                     <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
                         onMouseLeave={this.loginMouseOut} onClick={(event) => { buttonPress("Login") }}>Login</button>
@@ -98,52 +99,55 @@ export default class LandingPage extends Component {
                 </div>
                 <div id="popUpContainer" style={{ top: "100%", left: "100%" }} />
             </div>
+            </div>
         );
     }
 }
 
-const startStyle = {
-    mainDiv: {
+const startStyle = {container: {
         width: "100vw",
         height: "100vh",
         overflow: "none",
         backgroundColor: "#00B140",
-    }, centerDiv: {
+    }, mainDiv: {
         position: "absolute",
-        gap: "50px",
-        top: "100px",
+        top: "0px",
         left: "0px",
+        width: "100%",
+        height: "100%",
+        overflow: "none",
+        background: "none",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        // border: "thick solid black"
+    }, centerDiv: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        width: window.innerWidth + "px",
-        height: window.innerHeight - 200 + "px",
+        width: "100%",
+        height: "100%",
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none"
     }, header: {
-        position: "absolute",
-        top: "0px",
-        left: "0px",
         display: "flex",
         flexDirection: "row",
         justifyContent: "flex-end",
         alignItems: "center",
-        width: window.innerWidth + "px",
-        height: 100 + "px",
+        width: "100%",
+        height: "100px",
         boxSizing: "border-box",
         background: "none"
     }, footer: {
-        position: "absolute",
-        bottom: "0px",
-        left: "0px",
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        width: window.innerWidth + "px",
-        height: 100 + "px",
+        width: "100%",
+        height: "100px",
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none"
@@ -153,8 +157,8 @@ const startStyle = {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        width: window.innerWidth + "px",
-        height: window.innerHeight - 200 + "px",
+        width: "100%",
+        height: "100%",
         //border: "thick solid black",
         boxSizing: "border-box",
         background: "none"
