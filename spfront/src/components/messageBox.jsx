@@ -9,7 +9,7 @@ export default class MessageBox extends Component{
     render(){
     return (
         <div style={messageBoxStyle.centerDiv}>
-        Message
+        Under Construction!
         </div>
         )
     }

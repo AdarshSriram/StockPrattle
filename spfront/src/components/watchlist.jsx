@@ -27,8 +27,7 @@ const watchlistStyle= { mainDiv: {
         background: "none",
         border: "1px solid #00B140",
         borderRadius: "15px",
-        marginRight: "10px",
-        marginBottom: "10px"
+        marginRight: "10px"
     }, headingText:{
         fontFamily: "Dosis",
         fontStyle: "normal",

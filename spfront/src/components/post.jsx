@@ -6,6 +6,7 @@ import { getPhoto } from '../firebase_functions'
 export default class Post extends Component{
     constructor(props){
         super(props);
+        console.log(props.user)
         this.state = { user: props.user, image: null }
         this.setStateImage = this.setStateImage.bind(this)
     }
@@ -27,7 +28,7 @@ export default class Post extends Component{
         var error = false;
         var disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
         if (this.state.image == null || error) {
-            disp = smallnopicSvg
+            disp = <img src={require("./LogoGreen.jpeg")} alt="Stock Prattle Green" style={postStyle.image}/>
             console.log("url is none")
         }
     return (
@@ -38,7 +39,7 @@ export default class Post extends Component{
                         {disp}
                     </div>
                     <p style={postStyle.textStyle}>
-                        {this.props.user==null ? "@username": this.props.user.username}
+                        {this.props.user==null ? "@stockprattle": this.props.user.username}
                     </p>
                 </div>
                 <div style={postStyle.contentDiv}>

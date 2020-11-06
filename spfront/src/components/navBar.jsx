@@ -52,11 +52,12 @@ const navBarStyle= { header: {
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
-        width: window.innerWidth+"px",
-        height: "150px",
+        width: "100%",
+        height: "140px",
         boxSizing: "border-box",
         background: "none",
-        //border: "thick solid black",
+        // overflow: "scroll",
+        // border: "thick solid black",
     }, headerFunction: {
         display: "flex",
         flexDirection: "column",
@@ -64,9 +65,11 @@ const navBarStyle= { header: {
         alignItems: "center",
         width: "100%",
         height: "100%",
-        //border: "thick solid black",
+        // border: "thick solid black",
         boxSizing: "border-box",
-        background: "none"
+        background: "none",
+        marginRight: "10px",
+        overflow: "scroll"
     }, stockBar: {
         height: "50px",
         marginBottom: "10px",
@@ -75,11 +78,10 @@ const navBarStyle= { header: {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        //border: "thin solid gray",
+        // border: "thick solid black",
         boxSizing: "border-box",
         backgroundColor: "rgba(229, 229, 229, 0.6)",
         borderRadius: "20px",
-        marginRight: "10px"
     },otherHeaderStuff: {
         height: "100%",
         width: "100%",
@@ -97,12 +99,12 @@ const navBarStyle= { header: {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        //border: "thick solid black",
+        // border: "thick solid black",
         boxSizing: "border-box",
         background: "none"
     }, logoDiv: {
-        height: "100%",
-        width: "200px",
+        height: "150px",
+        width: "190px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
@@ -111,12 +113,12 @@ const navBarStyle= { header: {
         boxSizing: "border-box",
         background: "none"
     },logo: {
-        height: "107px",
-        width: "111px"
+        height: "133.75px",
+        width: "138.75px"
     }, searchBar:{
-        width: "400px",
+        width: "600px",
         height: "40px",
-        paddingLeft: "10px",
+        // paddingLeft: "10px",
         background: "rgba(0, 177, 64, 0.05)",
         border: "1px solid #00B140",
         boxSizing: "border-box",
@@ -126,10 +128,11 @@ const navBarStyle= { header: {
         fontWeight: "bold",
         fontSize: "18px",
         textAlign: "center",
-        outline: "none"
+        outline: "none",
+        // margin: "0px"
     }, button: {
         background: "none",
-        width: "150px",
+        width: "130px",
         height: "45px",
         marginRight: "30px",
         borderRadius: "30px",
@@ -140,6 +143,7 @@ const navBarStyle= { header: {
         fontWeight: "bold",
         fontSize: "18px",
         outline: "none",
-        cursor: "pointer"
+        cursor: "pointer",
+        // border: "thick solid black",
     }
 }

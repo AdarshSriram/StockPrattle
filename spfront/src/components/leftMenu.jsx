@@ -61,7 +61,6 @@ const leftMenuStyle = {
         boxSizing: "border-box",
         background: "none",
         marginLeft: "10px",
-        marginBottom: "10px"
     }, buttonDiv: {
         width: "100%",
         height: "100%",

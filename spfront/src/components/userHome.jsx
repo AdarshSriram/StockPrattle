@@ -145,8 +145,9 @@ const userHomeStyle = { mainDiv:{
         alignItems: "center",
         width: "100%",
         height: "100%",
-        //border: "thick solid black",
+        // border: "thick solid black",
         boxSizing: "border-box",
-        background: "none"
+        background: "none",
+        marginBottom: "10px"
     }
 }

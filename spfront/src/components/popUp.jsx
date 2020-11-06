@@ -8,7 +8,7 @@ export default class PopUp extends Component {
     constructor(props) {
         super(props);
         this.state = { type: props.type }
-        //this.done = this.done.bind(this);
+        this.switchState = this.switchState.bind(this);
     }
 
     handleSignUp() {
@@ -39,6 +39,19 @@ export default class PopUp extends Component {
         but.target.style.textDecoration = "none";
     }
 
+    mainMouseIn(but) {
+        but.target.style.background = "#009435";
+    }
+
+    mainMouseOut(but) {
+        but.target.style.background = "#00B140";
+    }
+
+    switchState(){
+        var ty = this.state.type === "Login" ? "Sign Up" : "Login"
+        this.setState({type: ty})
+    }
+
     render() {
         var ls = []; var txt;
         if (this.state.type === "Login") {
@@ -65,12 +78,15 @@ export default class PopUp extends Component {
                     }}
                         style={popUpStyle.form}>
                         {ls.map(item => (item))}
-                        <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type} />
+                        <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type}
+                        onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut}/>
                     </form>
                     <div id="subLayer" style={popUpStyle.subLayer}>
                         <p id="subText" style={popUpStyle.subText}>Already have an account?</p>
                         <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.subMouseIn}
-                            onMouseLeave={this.subMouseOut}>{this.state.type === "Login" ? "Sign Up" : "Login"}</button>
+                        onMouseLeave={this.subMouseOut} onClick={this.switchState}>
+                            {this.state.type === "Login" ? "Sign Up" : "Login"}
+                        </button>
                     </div>
                 </div>
             </div>
