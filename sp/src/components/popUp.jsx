@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
 import { SignIn, SignUp } from '../firebase_functions'
+import {googleSvg, facebookSvg} from './svgs.jsx';
 
 
 export default class PopUp extends Component {
@@ -37,6 +38,34 @@ export default class PopUp extends Component {
 
     subMouseOut(but) {
         but.target.style.textDecoration = "none";
+    }
+
+    gMouseIn(but) {
+        var elems = document.getElementsByName("googleSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "#00B140"
+        }
+    }
+
+    gMouseOut(but) {
+        var elems = document.getElementsByName("googleSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "black"
+        }
+    }
+
+    fMouseIn(but) {
+        var elems = document.getElementsByName("facebookSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "#00B140"
+        }
+    }
+
+    fMouseOut(but) {
+        var elems = document.getElementsByName("facebookSvg"); var elem;
+        for (elem of elems) {
+            elem.style.fill = "black"
+        }
     }
 
     mainMouseIn(but) {
@@ -81,6 +110,22 @@ export default class PopUp extends Component {
                         <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type}
                         onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut}/>
                     </form>
+                    {(this.state.type === "Login") ? null : (
+                        <p style={popUpStyle.orText}>---------- OR ----------</p>
+                    )}
+                    {(this.state.type === "Login") ? null : (
+                        <div id="altLayer" style={popUpStyle.alternativeLayer}>
+                            <p style={popUpStyle.altText}>Sign Up With: </p>
+                            <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
+                            onMouseLeave={this.gMouseOut}>
+                                {googleSvg}
+                            </button>
+                            <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.fMouseIn}
+                            onMouseLeave={this.fMouseOut}>
+                                {facebookSvg}
+                            </button>
+                        </div>
+                    )}
                     <div id="subLayer" style={popUpStyle.subLayer}>
                         <p id="subText" style={popUpStyle.subText}>Already have an account?</p>
                         <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.subMouseIn}
@@ -88,6 +133,8 @@ export default class PopUp extends Component {
                             {this.state.type === "Login" ? "Sign Up" : "Login"}
                         </button>
                     </div>
+
+
                 </div>
             </div>
         )
@@ -116,12 +163,14 @@ const popUpStyle = {
         overflow: "scroll",
         justifyContent: "center",
         alignItems: "center",
+        gap: "20px"
     }, form: {
         display: 'flex',
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         gap: "16px",
+        margin: "0px"
     }, inputs: {
         width: "404px",
         height: "45px",
@@ -156,7 +205,15 @@ const popUpStyle = {
         justifyContent: "center",
         alignItems: "center",
         gap: "0px",
-        marginTop: "50px"
+        margin: "0px"
+    }, alternativeLayer: {
+        width: "100%",
+        display: 'flex',
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "20px",
+        margin: "0 0 20px 0"
     }, subText: {
         color: "#949494",
         fontFamily: "Dosis",
@@ -176,5 +233,19 @@ const popUpStyle = {
         fontSize: "18px",
         outline: "none",
         cursor: "pointer"
+    }, orText: {
+        color: "#949494",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        fontWeight: "bold",
+        fontSize: "30px",
+        margin: "0px"
+    }, altText: {
+        color: "black",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        fontWeight: "bold",
+        fontSize: "24px",
+        margin: "0px"
     }
 }
