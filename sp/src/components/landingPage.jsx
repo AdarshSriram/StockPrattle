@@ -14,7 +14,7 @@ function buttonPress(type = null) {
 
 function reversePress(event) {
     const exclusions = ["emailField", "passwordField", "popUpBox", "popUpForm",
-        "submitButton", "subLayer", "subText", "subButton", "usernameField"];
+        "submitButton", "subLayer", "subText", "subButton", "usernameField", "altLayer", "orText"];
     if (exclusions.includes(event.target.id)) { return; }
     ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
     document.getElementById("wholeScreen").removeEventListener('click', reversePress);
@@ -64,47 +64,48 @@ export default class LandingPage extends Component {
         }
         return (
             <div id="containerDiv" style={startStyle.container}>
-            <ul id="ellipseList" style={startStyle.ellipseList}>
-                {ls.map(item => (<li key={ls.indexOf(item)}>{item}</li>))}
-            </ul>
-            <div id="wholeScreen" style={startStyle.mainDiv}>
-                <div id="header" style={startStyle.header}>
-                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                        onMouseLeave={this.loginMouseOut} onClick={(event) => { buttonPress("Login") }}>Login</button>
-                    <button style={startStyle.joinButtonTwo} onMouseOver={this.joinMouseIn}
-                        onMouseLeave={this.joinMouseOut} onClick={(event) => { buttonPress("Join Now") }}>Join Now</button>
-                </div>
-                <div id="centerDiv" style={startStyle.centerDiv}>
-                    <div style={startStyle.textDiv}>
-                        <img src={require("./Logo.png")} alt="Stock Prattle Logo" style={startStyle.image} />
+                <ul id="ellipseList" style={startStyle.ellipseList}>
+                    {ls.map(item => (<li key={ls.indexOf(item)}>{item}</li>))}
+                </ul>
+                <div id="wholeScreen" style={startStyle.mainDiv}>
+                    <div id="header" style={startStyle.header}>
+                        <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                            onMouseLeave={this.loginMouseOut} onClick={(event) => { buttonPress("Login") }}>Login</button>
+                        <button style={startStyle.joinButtonTwo} onMouseOver={this.joinMouseIn}
+                            onMouseLeave={this.joinMouseOut} onClick={(event) => { buttonPress("Join Now") }}>Join Now</button>
                     </div>
-                    <div style={startStyle.textDiv}>
-                        <p style={startStyle.text}>India’s Stock Community Platform</p>
-                        <p style={startStyle.subText}>Invest Better. Every Rupee Counts.</p>
-                        <div style={{ width: "100%", marginTop: "20px" }}>
-                            <button style={startStyle.joinButton} onMouseOver={this.joinMouseIn}
-                                onMouseLeave={this.joinMouseOut} onClick={(event) => { buttonPress("Join Now") }}>Join Now</button>
+                    <div id="centerDiv" style={startStyle.centerDiv}>
+                        <div style={startStyle.textDiv}>
+                            <img src={require("./Logo.png")} alt="Stock Prattle Logo" style={startStyle.image} />
+                        </div>
+                        <div style={startStyle.textDiv}>
+                            <p style={startStyle.text}>India’s Stock Community Platform</p>
+                            <p style={startStyle.subText}>Invest Better. Every Rupee Counts.</p>
+                            <div style={{ width: "100%", marginTop: "20px" }}>
+                                <button style={startStyle.joinButton} onMouseOver={this.joinMouseIn}
+                                    onMouseLeave={this.joinMouseOut} onClick={(event) => { buttonPress("Join Now") }}>Join Now</button>
+                            </div>
                         </div>
                     </div>
+                    <div id="footer" style={startStyle.footer}>
+                        <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                            onMouseLeave={this.loginMouseOut}>FAQ</button>
+                        <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                            onMouseLeave={this.loginMouseOut}>About</button>
+                        <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                            onMouseLeave={this.loginMouseOut}>Support</button>
+                        <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
+                            onMouseLeave={this.loginMouseOut}>Feedback</button>
+                    </div>
+                    <div id="popUpContainer" style={{ top: "100%", left: "100%" }} />
                 </div>
-                <div id="footer" style={startStyle.footer}>
-                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                        onMouseLeave={this.loginMouseOut}>FAQ</button>
-                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                        onMouseLeave={this.loginMouseOut}>About</button>
-                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                        onMouseLeave={this.loginMouseOut}>Support</button>
-                    <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                        onMouseLeave={this.loginMouseOut}>Feedback</button>
-                </div>
-                <div id="popUpContainer" style={{ top: "100%", left: "100%" }} />
-            </div>
             </div>
         );
     }
 }
 
-const startStyle = {container: {
+const startStyle = {
+    container: {
         width: "100vw",
         height: "100vh",
         overflow: "none",
