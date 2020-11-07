@@ -47,48 +47,37 @@ export const SignUp = (params) => {
   const username = params[0]
   const email = params[1]
   const password = params[2]
+  if (params.includes(null)){alert("Sign up unsuccessful. Please try again!"); return}
 
   userCollection.doc(email).get().then((doc) => {
     if (!doc.exists) {
-      userCollection.where('username', '==', username).get().then((snap) => {
+        userCollection.where('username', '==', username).get().then((snap) => {
         if (snap.empty) {
-          firebase.auth().createUserWithEmailAndPassword(email, password)
+            firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(userCollection.doc(email).set({
-              username: username,
-              email: email,
-            })
-              .then(() => {
+                username: username,
+                email: email,
+            }).then(() => {
                 alert(`Sign Up Successful!`)
                 firebase.auth().onAuthStateChanged(function (user) {
-                  if (user) {
-                    user.updateProfile({
-                      displayName: username
-                    })
-                      .then(function () {
-                        console.log("User profile successfully created")
-                      })
-                      .catch(function (error) {
-                        console.log("User profile could not be created. Try again :(")
-                      });
-                  } else {
-                    alert('Sign Up Unsuccessful. Please try again!')
-                  }
+                    if (user) {
+                        user.updateProfile({
+                            displayName: username
+                        }).then(function () {
+                            console.log("User profile successfully created")
+                        }).catch(function (error) {
+                            console.log("User profile could not be created. Try again :(")
+                        });
+                    } else {
+                        alert('Sign up unsuccessful. Please try again!')
+                    }
                 });
-              })
-              .catch((err) => console.log(err)
-              )
-            )
-            .catch((err) => console.log(err))
-        }
-        else {
-          alert("This username isn't available.")
-        }
-      })
-    }
-    else {
-      alert("A user with this email already exists.")
-    }
-  })
+              }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
+            ).catch((err) => alert('Sign up unsuccessful. Please try again!'))
+        } else {alert("This username isn't available.")}
+    })} else {
+        alert("A user with this email already exists.")
+    }}).catch((err) => alert('Sign up unsuccessful. Please try again!'))
 }
 
 export const SignIn = (params) => {
