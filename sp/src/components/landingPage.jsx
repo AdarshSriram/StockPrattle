@@ -14,7 +14,9 @@ function buttonPress(type = null) {
 
 function reversePress(event) {
     const exclusions = ["emailField", "passwordField", "popUpBox", "popUpForm",
-        "submitButton", "subLayer", "subText", "subButton", "usernameField", "altLayer", "orText"];
+        "submitButton", "subLayer", "subText", "subButton", "usernameField",
+        "altLayer", "googleButton", "facebookButton", "googleSvg", "facebookSvg",
+        "orText", "altText", "googlePath", "facebookPath", "facebookRect"];
     if (exclusions.includes(event.target.id)) { return; }
     ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
     document.getElementById("wholeScreen").removeEventListener('click', reversePress);

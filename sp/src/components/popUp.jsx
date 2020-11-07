@@ -41,31 +41,19 @@ export default class PopUp extends Component {
     }
 
     gMouseIn(but) {
-        var elems = document.getElementsByName("googleSvg"); var elem;
-        for (elem of elems) {
-            elem.style.fill = "#00B140"
-        }
+        document.getElementById("googleSvg").style.fill = "#00B140"
     }
 
     gMouseOut(but) {
-        var elems = document.getElementsByName("googleSvg"); var elem;
-        for (elem of elems) {
-            elem.style.fill = "black"
-        }
+        document.getElementById("googleSvg").style.fill = "black"
     }
 
     fMouseIn(but) {
-        var elems = document.getElementsByName("facebookSvg"); var elem;
-        for (elem of elems) {
-            elem.style.fill = "#00B140"
-        }
+        document.getElementById("facebookSvg").style.fill = "#00B140"
     }
 
     fMouseOut(but) {
-        var elems = document.getElementsByName("facebookSvg"); var elem;
-        for (elem of elems) {
-            elem.style.fill = "black"
-        }
+        document.getElementById("facebookSvg").style.fill = "black"
     }
 
     mainMouseIn(but) {
@@ -115,12 +103,12 @@ export default class PopUp extends Component {
                     )}
                     {(this.state.type === "Login") ? null : (
                         <div id="altLayer" style={popUpStyle.alternativeLayer}>
-                            <p style={popUpStyle.altText}>Sign Up With: </p>
-                            <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
+                            <p id="altText" style={popUpStyle.altText}>Sign Up With: </p>
+                            <button id="googleButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
                                 onMouseLeave={this.gMouseOut} onClick={signInGoogle}>
                                 {googleSvg}
                             </button>
-                            <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.fMouseIn}
+                            <button id="facebookButton" style={popUpStyle.subButton} onMouseOver={this.fMouseIn}
                                 onMouseLeave={this.fMouseOut}>
                                 {facebookSvg}
                             </button>
