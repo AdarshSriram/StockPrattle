@@ -42,8 +42,12 @@ export default class UserPage extends Component{
     }
 
     async updateUserInfo(obj){
-        await setCurrentUserInfo(obj).then(() => this.setStateUser())
-        .catch((err) => alert("Details couldn't be updated!"))
+        try{
+            await setCurrentUserInfo(obj).then(() => this.setStateUser())
+            .catch((err) => alert("Details couldn't be updated!"))
+        } catch {
+            this.setStateUser();
+        }
     }
 
     profileButtonClick(){

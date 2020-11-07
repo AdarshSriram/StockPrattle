@@ -12,6 +12,12 @@ export default class EditableText extends Component {
         this.handleOut = this.handleOut.bind(this)
     }
 
+    componentDidUpdate(prevProps){
+        if (this.props.user[this.state.type] != String(document.getElementById(this.state.type).innerHTML)){
+            this.setState({user: this.props.user})
+        }
+    }
+
     beginEdit(event) {
         const elem = document.getElementById(this.state.type)
         if (this.state.editing) {

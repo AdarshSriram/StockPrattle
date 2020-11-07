@@ -15,7 +15,6 @@ export default class ProfilePic extends Component {
     async setStateImage() {
         await getPhoto(this.state.user.email).then((url) => {
             this.setState({ image: url })
-            console.log(`url is ${url}`)
         }).catch((error) => console.log(error))
     }
 

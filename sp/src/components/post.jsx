@@ -6,7 +6,6 @@ import { getPhoto } from '../firebase_functions'
 export default class Post extends Component{
     constructor(props){
         super(props);
-        console.log(props.user)
         this.state = { user: props.user, image: null }
         this.setStateImage = this.setStateImage.bind(this)
     }
@@ -14,7 +13,6 @@ export default class Post extends Component{
     async setStateImage() {
         await getPhoto(this.state.user.email).then((url) => {
             this.setState({ image: url })
-            console.log(`url is ${url}`)
         }).catch((error) => console.log(error))
     }
 

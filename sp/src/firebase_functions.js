@@ -129,29 +129,35 @@ export const getCurrentUserInfo = () => {
 }
 
 export const setCurrentUserInfo = (info) => {
-  const user = firebase.auth().currentUser;
-  if (info.username !== user.displayName) {
-    userCollection.doc(info.email).get().then((doc) => {
-      if (!doc.exists) {
-        userCollection.where('username', '==', info.username).get().then((snap) => {
-          if (snap.empty) {
-            return userCollection.doc(user.email).update(info)
-          }
-        })
-      }
-    })
-  }
-  else {
-    return userCollection.doc(user.email).update(info)
-  }
+    const user = firebase.auth().currentUser;
+    if (info.username != user.displayName) {
+        if (info.username.length <= 4){
+            alert("Username must be more than 4 characters long!")
+            return userCollection.doc(user.email).get()
+        } else {
+            userCollection.where('username', '==', info.username).get().then((snap) => {
+                if (snap.empty) {
+                    return userCollection.doc(user.email).update(info)
+                } else {
+                    alert("Username is already taken.")
+                    return userCollection.doc(user.email).get()
+                }
+            }).catch((err) => {
+                alert("Profile update was unsuccessful.");
+                return userCollection.doc(user.email).get()
+            })
+        }
+    } else {
+        return userCollection.doc(user.email).update(info)
+    }
 }
 
 export const uploadPhoto = (email, photo) => {
-  return storageRef.child('profilePhoto/' + email).put(photo)
+    return storageRef.child('profilePhoto/' + email).put(photo)
 }
 
 export const getPhoto = (email) => {
-  return storageRef.child('profilePhoto/' + email).getDownloadURL()
+    return storageRef.child('profilePhoto/' + email).getDownloadURL()
 }
 
 export const signInGoogle = () => {

@@ -13,6 +13,12 @@ export default class UserProfile extends Component {
         this.updateProfile = this.updateProfile.bind(this)
     }
 
+    componentDidUpdate(prevProps){
+        if (this.props.user.username != prevProps.user.username){
+            this.setState({user: this.props.user})
+        }
+    }
+
     updateProfile(obj){
         this.state.setUser(obj)
     }
