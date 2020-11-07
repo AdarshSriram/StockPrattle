@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
-import { SignIn, SignUp } from '../firebase_functions'
-import {googleSvg, facebookSvg} from './svgs.jsx';
+import { SignIn, SignUp, signInGoogle } from '../firebase_functions'
+import { googleSvg, facebookSvg } from './svgs.jsx';
 
 
 export default class PopUp extends Component {
@@ -76,9 +76,9 @@ export default class PopUp extends Component {
         but.target.style.background = "#00B140";
     }
 
-    switchState(){
+    switchState() {
         var ty = this.state.type === "Login" ? "Sign Up" : "Login"
-        this.setState({type: ty})
+        this.setState({ type: ty })
     }
 
     render() {
@@ -108,20 +108,20 @@ export default class PopUp extends Component {
                         style={popUpStyle.form}>
                         {ls.map(item => (item))}
                         <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type}
-                        onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut}/>
+                            onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut} />
                     </form>
                     {(this.state.type === "Login") ? null : (
-                        <p style={popUpStyle.orText}>---------- OR ----------</p>
+                        <p id={"orText"} style={popUpStyle.orText}>---------- OR ----------</p>
                     )}
                     {(this.state.type === "Login") ? null : (
                         <div id="altLayer" style={popUpStyle.alternativeLayer}>
                             <p style={popUpStyle.altText}>Sign Up With: </p>
                             <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
-                            onMouseLeave={this.gMouseOut}>
+                                onMouseLeave={this.gMouseOut} onClick={signInGoogle}>
                                 {googleSvg}
                             </button>
                             <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.fMouseIn}
-                            onMouseLeave={this.fMouseOut}>
+                                onMouseLeave={this.fMouseOut}>
                                 {facebookSvg}
                             </button>
                         </div>
@@ -129,7 +129,7 @@ export default class PopUp extends Component {
                     <div id="subLayer" style={popUpStyle.subLayer}>
                         <p id="subText" style={popUpStyle.subText}>Already have an account?</p>
                         <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.subMouseIn}
-                        onMouseLeave={this.subMouseOut} onClick={this.switchState}>
+                            onMouseLeave={this.subMouseOut} onClick={this.switchState}>
                             {this.state.type === "Login" ? "Sign Up" : "Login"}
                         </button>
                     </div>

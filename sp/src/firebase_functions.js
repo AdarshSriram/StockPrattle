@@ -1,7 +1,9 @@
 import firebase from './utils/config'
+import fire from 'firebase'
 
 const userCollection = firebase.firestore().collection('users')
 var storageRef = firebase.storage().ref();
+var provider = new fire.auth.GoogleAuthProvider();
 
 // Demo user object:
 //  {
@@ -47,37 +49,39 @@ export const SignUp = (params) => {
   const username = params[0]
   const email = params[1]
   const password = params[2]
-  if (params.includes(null)){alert("Sign up unsuccessful. Please try again!"); return}
+  if (params.includes(null)) { alert("Sign up unsuccessful. Please try again!"); return }
 
   userCollection.doc(email).get().then((doc) => {
     if (!doc.exists) {
-        userCollection.where('username', '==', username).get().then((snap) => {
+      userCollection.where('username', '==', username).get().then((snap) => {
         if (snap.empty) {
-            firebase.auth().createUserWithEmailAndPassword(email, password)
+          firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(userCollection.doc(email).set({
-                username: username,
-                email: email,
+              username: username,
+              email: email,
             }).then(() => {
-                alert(`Sign Up Successful!`)
-                firebase.auth().onAuthStateChanged(function (user) {
-                    if (user) {
-                        user.updateProfile({
-                            displayName: username
-                        }).then(function () {
-                            console.log("User profile successfully created")
-                        }).catch(function (error) {
-                            console.log("User profile could not be created. Try again :(")
-                        });
-                    } else {
-                        alert('Sign up unsuccessful. Please try again!')
-                    }
-                });
-              }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
+              alert(`Sign Up Successful!`)
+              firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                  user.updateProfile({
+                    displayName: username
+                  }).then(function () {
+                    console.log("User profile successfully created")
+                  }).catch(function (error) {
+                    console.log("User profile could not be created. Try again :(")
+                  });
+                } else {
+                  alert('Sign up unsuccessful. Please try again!')
+                }
+              });
+            }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
             ).catch((err) => alert('Sign up unsuccessful. Please try again!'))
-        } else {alert("This username isn't available.")}
-    })} else {
-        alert("A user with this email already exists.")
-    }}).catch((err) => alert('Sign up unsuccessful. Please try again!'))
+        } else { alert("This username isn't available.") }
+      })
+    } else {
+      alert("A user with this email already exists.")
+    }
+  }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
 }
 
 export const SignIn = (params) => {
@@ -86,10 +90,10 @@ export const SignIn = (params) => {
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then(() => console.log('Signed in!'))
     .catch((error) => {
-      if (error.code === 'auth/user-not-found' ){
-            alert("User with given email was not found.")
-      } else if (error.code === 'auth/wrong-password'){
-            alert("The password is incorrect.")
+      if (error.code === 'auth/user-not-found') {
+        alert("User with given email was not found.")
+      } else if (error.code === 'auth/wrong-password') {
+        alert("The password is incorrect.")
       }
     });
 }
@@ -135,4 +139,24 @@ export const uploadPhoto = (email, photo) => {
 
 export const getPhoto = (email) => {
   return storageRef.child('profilePhoto/' + email).getDownloadURL()
+}
+
+export const signInGoogle = () => {
+  console.log("sign in")
+  firebase.auth().signInWithPopup(provider).then(function (result) {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    var token = result.credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+    console.log(user)
+  }).catch(function (error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+  });
 }
