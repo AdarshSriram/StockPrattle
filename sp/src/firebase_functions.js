@@ -130,7 +130,20 @@ export const getCurrentUserInfo = () => {
 
 export const setCurrentUserInfo = (info) => {
   const user = firebase.auth().currentUser;
-  return userCollection.doc(user.email).update(info)
+  if (info.username !== user.displayName) {
+    userCollection.doc(info.email).get().then((doc) => {
+      if (!doc.exists) {
+        userCollection.where('username', '==', info.username).get().then((snap) => {
+          if (snap.empty) {
+            return userCollection.doc(user.email).update(info)
+          }
+        })
+      }
+    })
+  }
+  else {
+    return userCollection.doc(user.email).update(info)
+  }
 }
 
 export const uploadPhoto = (email, photo) => {
@@ -147,8 +160,12 @@ export const signInGoogle = () => {
     // This gives you a Google Access Token. You can use it to access the Google API.
     var token = result.credential.accessToken;
     // The signed-in user info.
-    var user = result.user;
-    console.log(user)
+    //var user = result.user;
+    //console.log(user)
+    const user = firebase.auth().currentUser;
+    userCollection.doc(user.email).set({
+      email: user.email
+    }).then(() => console.log("user added to db"))
   }).catch(function (error) {
     // Handle Errors here.
     var errorCode = error.code;
