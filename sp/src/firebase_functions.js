@@ -159,13 +159,16 @@ export const signInGoogle = () => {
     var cred = result.credential;
     // The signed-in user info.
     const user = firebase.auth().currentUser;
-    var password = String(prompt("Create password: "))
-    if (password.length < 6){
-        for (var i=0; i<6-password.length; i++;){
-            password= password+"0"
-        }
-        alert("We added "+(6-password.length)+" 0s to your password to make it safer.")
+
+    var password = String(prompt("Create password (must be more than 6 characters):"))
+    while (password.length < 6) {
+      password = String(prompt("Create password (must be more than 6 characters):"))
     }
+    var confirm = String(prompt("Confirm password: "))
+    while (password !== confirm) {
+      confirm = String(prompt("Passwords don't match. Confirm password: "))
+    }
+
     var credential = fire.auth.EmailAuthProvider.credential(user.email, password);
     user.linkWithCredential(credential);
     userCollection.doc(user.email).set({
