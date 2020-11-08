@@ -13,8 +13,11 @@ export default class EditableText extends Component {
     }
 
     componentDidUpdate(prevProps){
-        if (this.props.user[this.state.type] != String(document.getElementById(this.state.type).innerHTML)){
-            this.setState({user: this.props.user})
+        if (this.state.type === "username"){
+            // console.log(this.props.user.username)
+            if (this.props.user.username != String(document.getElementById("username").innerHTML.substring(1))){
+                this.setState({user: this.props.user})
+            }
         }
     }
 
@@ -23,10 +26,16 @@ export default class EditableText extends Component {
         if (this.state.editing) {
             elem.contentEditable = false
             elem.style.border = "none"
-            if (!String(elem.innerHTML).includes("@")){
-                elem.innerHTML = "@"+String(elem.innerHTML)
+            if (this.state.type==="username"){
+                if (String(elem.innerHTML).includes("@")){
+                    this.state.user[this.state.type]= String(elem.innerHTML).substring(1)
+                } else {
+                    this.state.user[this.state.type]= String(elem.innerHTML)
+                    elem.innerHTML = "@"+String(elem.innerHTML)
+                }
+            } else {
+                this.state.user[this.state.type]= String(elem.innerHTML)
             }
-            this.state.user[this.state.type]= String(elem.innerHTML).substring(1,)
             this.setState({editing: false })
             this.state.setUser(this.state.user)
         } else {

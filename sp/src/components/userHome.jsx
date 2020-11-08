@@ -31,19 +31,19 @@ export default class UserPage extends Component{
         this.setState({current: "feed"});
     }
 
-    async setStateUser(){
+    setStateUser(){
         getCurrentUserInfo().then((doc) => {
         if (!doc.exists) {
             console.log('No user found')
         } else {
-            // console.log(doc.data())
+            // console.log(doc.data().username)
             this.setState({user: doc.data()})
         }}).catch((err) => console.log(err))
     }
 
-    async updateUserInfo(obj){
+    updateUserInfo(obj){
         try{
-            await setCurrentUserInfo(obj).then(() => this.setStateUser())
+            setCurrentUserInfo(obj).then(() => this.setStateUser())
             .catch((err) => alert("Details couldn't be updated!"))
         } catch {
             this.setStateUser();

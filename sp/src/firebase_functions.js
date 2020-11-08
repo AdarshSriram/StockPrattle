@@ -110,12 +110,12 @@ export const getUserInfo = (email) => {
 }
 
 export const getCurrentUserInfo = () => {
-  var user = firebase.auth().currentUser;
-  if (user != null) {
-    return userCollection.doc(user.email).get()
-  } else {
-    console.log('error occured, try again')
-  }
+    var user = firebase.auth().currentUser;
+    if (user != null) {
+        return userCollection.doc(user.email).get()
+    } else {
+        console.log('error occured, try again')
+    }
 }
 
 export const setCurrentUserInfo = (info) => {
@@ -128,7 +128,7 @@ export const setCurrentUserInfo = (info) => {
       userCollection.where('username', '==', info.username).get().then((snap) => {
         if (snap.empty) {
           user.updateProfile({ displayName: info.username })
-            .then(() => userCollection.doc(user.email).update(info))
+          return userCollection.doc(user.email).update(info)
         } else {
           alert("Username is already taken.")
           return userCollection.doc(user.email).get()

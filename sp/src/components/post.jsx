@@ -27,7 +27,6 @@ export default class Post extends Component{
         var disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
         if (this.state.image == null || error) {
             disp = <img src={require("./LogoGreen.jpeg")} alt="Stock Prattle Green" style={postStyle.image}/>
-            console.log("url is none")
         }
     return (
         <div style={postStyle.mainDiv}>
@@ -37,7 +36,7 @@ export default class Post extends Component{
                         {disp}
                     </div>
                     <p style={postStyle.textStyle}>
-                        {this.props.user==null ? "@stockprattle": this.props.user.username}
+                        {this.props.user==null ? "@stockprattle": "@"+this.props.user.username}
                     </p>
                 </div>
                 <div style={postStyle.contentDiv}>

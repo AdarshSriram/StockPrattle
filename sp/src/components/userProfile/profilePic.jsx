@@ -74,7 +74,6 @@ export default class ProfilePic extends Component {
         var disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={propicStyle.image} />
         if (this.state.image == null || error) {
             disp = nopicSvg
-            console.log("url is none")
         }
         return (
             <div style={propicStyle.mainDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
