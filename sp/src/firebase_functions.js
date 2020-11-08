@@ -159,8 +159,14 @@ export const signInGoogle = () => {
     var cred = result.credential;
     // The signed-in user info.
     const user = firebase.auth().currentUser;
-    var credential = fire.auth.EmailAuthProvider.credential(user.email, "Tracetrace");
-    console.log(cred)
+    var password = String(prompt("Create password: "))
+    if (password.length < 6){
+        for (var i=0; i<6-password.length; i++;){
+            password= password+"0"
+        }
+        alert("We added "+(6-password.length)+" 0s to your password to make it safer.")
+    }
+    var credential = fire.auth.EmailAuthProvider.credential(user.email, password);
     user.linkWithCredential(credential);
     userCollection.doc(user.email).set({
       email: user.email,
