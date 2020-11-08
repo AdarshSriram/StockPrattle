@@ -21,8 +21,9 @@ export default class ProfilePic extends Component {
     async handleUpload() {
         const photo = document.getElementById('fileInput').files[0]
         if (photo != null) {
-            await uploadPhoto(this.state.user.email, photo).then(() =>
+            await uploadPhoto(this.state.user.email, photo).then((url) => {
                 this.setStateImage()
+            }
             ).catch((err) => console.log(err))
         }
     }

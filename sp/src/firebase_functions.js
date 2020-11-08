@@ -112,13 +112,6 @@ export const getUserInfo = (email) => {
     .catch((err) => console.log(err))
 }
 
-export const setUserInfo = (email, update) => {
-  userCollection.doc(email)
-    .update(update)
-    .then(() => console.log("User set"))
-    .catch((err) => console.log(err))
-}
-
 export const getCurrentUserInfo = () => {
   var user = firebase.auth().currentUser;
   if (user != null) {
@@ -129,35 +122,36 @@ export const getCurrentUserInfo = () => {
 }
 
 export const setCurrentUserInfo = (info) => {
-    const user = firebase.auth().currentUser;
-    if (info.username != user.displayName) {
-        if (info.username.length <= 4){
-            alert("Username must be more than 4 characters long!")
-            return userCollection.doc(user.email).get()
-        } else {
-            userCollection.where('username', '==', info.username).get().then((snap) => {
-                if (snap.empty) {
-                    return userCollection.doc(user.email).update(info)
-                } else {
-                    alert("Username is already taken.")
-                    return userCollection.doc(user.email).get()
-                }
-            }).catch((err) => {
-                alert("Profile update was unsuccessful.");
-                return userCollection.doc(user.email).get()
-            })
-        }
+  const user = firebase.auth().currentUser;
+  if (info.username != user.displayName) {
+    if (info.username.length <= 4) {
+      alert("Username must be more than 4 characters long!")
+      return userCollection.doc(user.email).get()
     } else {
-        return userCollection.doc(user.email).update(info)
+      userCollection.where('username', '==', info.username).get().then((snap) => {
+        if (snap.empty) {
+          user.updateProfile({ displayName: info.username })
+            .then(() => userCollection.doc(user.email).update(info))
+        } else {
+          alert("Username is already taken.")
+          return userCollection.doc(user.email).get()
+        }
+      }).catch((err) => {
+        alert("Profile update was unsuccessful.");
+        return userCollection.doc(user.email).get()
+      })
     }
+  } else {
+    return userCollection.doc(user.email).update(info)
+  }
 }
 
 export const uploadPhoto = (email, photo) => {
-    return storageRef.child('profilePhoto/' + email).put(photo)
+  return storageRef.child('profilePhoto/' + email).put(photo)
 }
 
 export const getPhoto = (email) => {
-    return storageRef.child('profilePhoto/' + email).getDownloadURL()
+  return storageRef.child('profilePhoto/' + email).getDownloadURL()
 }
 
 export const signInGoogle = () => {
@@ -170,8 +164,14 @@ export const signInGoogle = () => {
     //console.log(user)
     const user = firebase.auth().currentUser;
     userCollection.doc(user.email).set({
-      email: user.email
-    }).then(() => console.log("user added to db"))
+      email: user.email,
+      username: user.email
+    }).then(() => {
+      console.log("user added to db")
+      user.updateProfile({ displayName: user.email })
+        .then(() => console.log("updated auth obj w username"))
+        .catch(() => alert("Something went Wrong"))
+    })
   }).catch(function (error) {
     // Handle Errors here.
     var errorCode = error.code;
