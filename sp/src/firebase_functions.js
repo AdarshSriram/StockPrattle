@@ -83,17 +83,43 @@ export const SignUp = (params) => {
 }
 
 export const SignIn = (params) => {
-  const email = params[0]
-  const password = params[1]
-  firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(() => console.log('Signed in!'))
-    .catch((error) => {
-      if (error.code === 'auth/user-not-found') {
-        alert("User with given email was not found.")
-      } else if (error.code === 'auth/wrong-password') {
-        alert("The password is incorrect.")
+  var email = params[0]
+  var password = params[1]
+  if (!email.includes('@')) {
+    userCollection.where('username', '==', email).get().then((snap) => {
+      if (snap.empty) {
+        alert("User with this username does not exist")
+        return
       }
-    });
+      else {
+        snap.forEach(doc => {
+          email = doc.data().email
+          var credential = fire.auth.EmailAuthProvider.credential(email, password);
+          firebase.auth().signInWithCredential(credential)
+            .then(() => console.log('Signed in!'))
+            .catch((error) => {
+              if (error.code === 'auth/user-not-found') {
+                alert("User with given email was not found.")
+              } else if (error.code === 'auth/wrong-password') {
+                alert("The password is incorrect.")
+              }
+            });
+        })
+      }
+    })
+  }
+  else {
+    var credential = fire.auth.EmailAuthProvider.credential(email, password);
+    firebase.auth().signInWithCredential(credential)
+      .then(() => console.log('Signed in!'))
+      .catch((error) => {
+        if (error.code === 'auth/user-not-found') {
+          alert("User with given email was not found.")
+        } else if (error.code === 'auth/wrong-password') {
+          alert("The password is incorrect.")
+        }
+      });
+  }
 }
 
 export const getUserInfo = (email) => {
