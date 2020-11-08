@@ -154,13 +154,14 @@ export const getPhoto = (email) => {
 
 export const signInGoogle = () => {
   console.log("sign in")
-  firebase.auth().linkWithPopup(provider).then(function (result) {
+  firebase.auth().signInWithPopup(provider).then(function (result) {
     // This gives you a Google Access Token. You can use it to access the Google API.
-    var token = result.credential.accessToken;
+    var cred = result.credential;
     // The signed-in user info.
     //var user = result.user;
     //console.log(user)
     const user = firebase.auth().currentUser;
+    user.linkWithCredential(cred);
     userCollection.doc(user.email).set({
       email: user.email,
       username: user.email
