@@ -83,16 +83,16 @@ export const SignUp = (params) => {
 }
 
 export const SignIn = (params) => {
-  function helper(credential){
-      firebase.auth().signInWithCredential(credential)
-        .then(() => console.log('Signed in!'))
-        .catch((error) => {
-          if (error.code === 'auth/user-not-found') {
-            alert("User with given email was not found.")
-          } else if (error.code === 'auth/wrong-password') {
-            alert("The password is incorrect.")
-          }
-        });
+  function helper(credential) {
+    firebase.auth().signInWithCredential(credential)
+      .then(() => console.log('Signed in!'))
+      .catch((error) => {
+        if (error.code === 'auth/user-not-found') {
+          alert("User with given email was not found.")
+        } else if (error.code === 'auth/wrong-password') {
+          alert("The password is incorrect.")
+        }
+      });
   }
   var email = params[0]
   var password = params[1]
@@ -179,18 +179,18 @@ export const signInGoogle = () => {
     // This gives you a Google Access Token. You can use it to access the Google API.
     var cred = result.credential;
     // The signed-in user info.
-    const user = firebase.auth().currentUser;
+    var user = firebase.auth().currentUser;
     var credential = fire.auth.EmailAuthProvider.credential(user.email, "12345678");
     user.linkWithCredential(credential);
+    user.updateProfile({ displayName: user.email })
+      .then(() => console.log("updated auth obj w username"))
+      .catch((err) => console.log(err))
     userCollection.doc(user.email).set({
       email: user.email,
       username: user.email,
       passwordChange: true
     }).then(() => {
       console.log("user added to db")
-      user.updateProfile({ displayName: user.email })
-        .then(() => console.log("updated auth obj w username"))
-        .catch((err) => console.log(err))
     })
   }).catch(function (error) {
     // Handle Errors here.
@@ -201,5 +201,5 @@ export const signInGoogle = () => {
     // The firebase.auth.AuthCredential type that was used.
     var credential = error.credential;
     // ...
-  });
+  })
 }
