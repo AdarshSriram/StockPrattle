@@ -42,14 +42,13 @@ export default class UserPage extends Component{
                 document.getElementById("header").style.filter = "blur(4px)";
                 document.getElementById("body").style.filter = "blur(4px)";
             }
-            // console.log(doc.data().username)
-            this.setState({user: doc.data()})
+            this.setState({user: user})
         }}).catch((err) => console.log(err))
     }
 
     updateUserInfo(obj){
         try{
-            setCurrentUserInfo(obj).then(() => this.setStateUser())
+            setCurrentUserInfo(obj).then((res) => this.setStateUser())
             .catch((err) => alert("Details couldn't be updated!"))
         } catch {
             this.setStateUser();

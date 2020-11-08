@@ -50,6 +50,7 @@ export const SignUp = (params) => {
   const email = params[1]
   const password = params[2]
   if (params.includes(null)) { alert("Sign up unsuccessful. Please try again!"); return }
+  if (username.includes("@")) { alert("Username cannot include \"@\"."); return }
 
   userCollection.doc(email).get().then((doc) => {
     if (!doc.exists) {
@@ -140,27 +141,29 @@ export const getCurrentUserInfo = () => {
   }
 }
 
-export const setCurrentUserInfo = (info) => {
-  const user = firebase.auth().currentUser;
-  if (info.username != user.displayName) {
-    if (info.username.length <= 4) {
-      alert("Username must be more than 4 characters long.")
-      return userCollection.doc(user.email).get()
-    } if (info.username.includes("@")) {
-      alert("Username cannot have @ in it.")
-      return userCollection.doc(user.email).get()
-    }
-    userCollection.where('username', '==', info.username).get().then((snap) => {
-    if (snap.empty) {
-        user.updateProfile({ displayName: info.username })
-        return userCollection.doc(user.email).update(info)
+export const setCurrentUserInfo = async (info) => {
+    const user = firebase.auth().currentUser;
+    if (info.username != user.displayName) {
+        if (info.username.length <= 4) {
+            alert("Username must be more than 4 characters long.")
+            return userCollection.doc(user.email).get()
+        } if (info.username.includes("@")) {
+            alert("Username cannot have @ in it.")
+            return userCollection.doc(user.email).get()
+        }
+        await userCollection.where('username', '==', info.username).get().then((snap) => {
+            if (snap.empty) {
+                user.updateProfile({ displayName: info.username })
+                return userCollection.doc(user.email).update(info)
+            } else {
+                alert("Username is already taken.")
+                return userCollection.doc(user.email).get()
+            }
+        }).catch((err) => {
+            alert("Profile update was unsuccessful.");
+            return userCollection.doc(user.email).get()
+        })
     } else {
-        alert("Username is already taken.")
-        return userCollection.doc(user.email).get()
-    }}).catch((err) => {
-        alert("Profile update was unsuccessful.");
-        return userCollection.doc(user.email).get()
-    })} else {
         return userCollection.doc(user.email).update(info)
     }
 }
@@ -187,7 +190,7 @@ export const signInGoogle = () => {
       .catch((err) => console.log(err))
     userCollection.doc(user.email).set({
       email: user.email,
-      username: user.email,
+      username: user.email.replace("@","."),
       passwordChange: true
     }).then(() => {
       console.log("user added to db")
