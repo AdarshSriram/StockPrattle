@@ -10,25 +10,25 @@ import ExplorePage from './explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
 import {getCurrentUserInfo, setCurrentUserInfo} from '../firebase_functions.js'
+import firebase from '../utils/config'
 
 export default class UserPage extends Component{
     constructor(props){
         super(props);
-        this.state = {current: null, user: null}
+        this.state = {current: "feed", user: null}
         this.profileButtonClick = this.profileButtonClick.bind(this);
         this.feedButtonClick = this.feedButtonClick.bind(this);
         this.messagesButtonClick = this.messagesButtonClick.bind(this);
         this.exploreButtonClick = this.exploreButtonClick.bind(this);
         this.updateUserInfo = this.updateUserInfo.bind(this);
         this.setStateUser = this.setStateUser.bind(this)
-        this.setStateUser();
     }
 
     componentDidMount(){
         const but = document.getElementById("feedButton");
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
-        this.setState({current: "feed"});
+        this.setStateUser();
     }
 
     setStateUser(){
@@ -36,6 +36,13 @@ export default class UserPage extends Component{
         if (!doc.exists) {
             console.log('No user found')
         } else {
+            var user = doc.data()
+            if (user.passwordChange){
+                var elem = document.getElementById("popUpContainer");
+                ReactDOM.render(<PopUp type={"Set Password"} user={firebase.auth().currentUser} func={this.updateUserInfo}/>, elem);
+                document.getElementById("header").style.filter = "blur(4px)";
+                document.getElementById("body").style.filter = "blur(4px)";
+            }
             // console.log(doc.data().username)
             this.setState({user: doc.data()})
         }}).catch((err) => console.log(err))

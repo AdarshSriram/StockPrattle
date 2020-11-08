@@ -83,6 +83,17 @@ export const SignUp = (params) => {
 }
 
 export const SignIn = (params) => {
+  function helper(credential){
+      firebase.auth().signInWithCredential(credential)
+        .then(() => console.log('Signed in!'))
+        .catch((error) => {
+          if (error.code === 'auth/user-not-found') {
+            alert("User with given email was not found.")
+          } else if (error.code === 'auth/wrong-password') {
+            alert("The password is incorrect.")
+          }
+        });
+  }
   var email = params[0]
   var password = params[1]
   if (!email.includes('@')) {
@@ -95,30 +106,14 @@ export const SignIn = (params) => {
         snap.forEach(doc => {
           email = doc.data().email
           var credential = fire.auth.EmailAuthProvider.credential(email, password);
-          firebase.auth().signInWithCredential(credential)
-            .then(() => console.log('Signed in!'))
-            .catch((error) => {
-              if (error.code === 'auth/user-not-found') {
-                alert("User with given email was not found.")
-              } else if (error.code === 'auth/wrong-password') {
-                alert("The password is incorrect.")
-              }
-            });
+          helper(credential);
         })
       }
     })
   }
   else {
     var credential = fire.auth.EmailAuthProvider.credential(email, password);
-    firebase.auth().signInWithCredential(credential)
-      .then(() => console.log('Signed in!'))
-      .catch((error) => {
-        if (error.code === 'auth/user-not-found') {
-          alert("User with given email was not found.")
-        } else if (error.code === 'auth/wrong-password') {
-          alert("The password is incorrect.")
-        }
-      });
+    helper(credential);
   }
 }
 
@@ -185,21 +180,12 @@ export const signInGoogle = () => {
     var cred = result.credential;
     // The signed-in user info.
     const user = firebase.auth().currentUser;
-
-    var password = String(prompt("Create password (must be more than 6 characters):"))
-    while (password.length < 6) {
-      password = String(prompt("Create password (must be more than 6 characters):"))
-    }
-    var confirm = String(prompt("Confirm password: "))
-    while (password !== confirm) {
-      confirm = String(prompt("Passwords don't match. Confirm password: "))
-    }
-
-    var credential = fire.auth.EmailAuthProvider.credential(user.email, password);
+    var credential = fire.auth.EmailAuthProvider.credential(user.email, "12345678");
     user.linkWithCredential(credential);
     userCollection.doc(user.email).set({
       email: user.email,
-      username: user.email
+      username: user.email,
+      passwordChange: true
     }).then(() => {
       console.log("user added to db")
       user.updateProfile({ displayName: user.email })

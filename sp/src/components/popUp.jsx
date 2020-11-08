@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
-import { SignIn, SignUp, signInGoogle } from '../firebase_functions'
+import { SignIn, SignUp, signInGoogle, setCurrentUserInfo } from '../firebase_functions'
 import { googleSvg, facebookSvg } from './svgs.jsx';
 
 
@@ -10,6 +10,24 @@ export default class PopUp extends Component {
         super(props);
         this.state = { type: props.type }
         this.switchState = this.switchState.bind(this);
+    }
+
+    handlePasswordChange() {
+        var pass = String(document.getElementById("passwordField").value)
+        var cfm = String(document.getElementById("cfmPasswordField").value)
+        if (cfm !== pass){
+            alert("Passwords do not match!");
+            return;
+        }
+        this.props.user.updatePassword(pass).then(function() {
+            this.props.user.passwordChange = false
+            this.props.func(this.props.user)
+            ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
+            document.getElementById("header").style.filter = "none";
+            document.getElementById("body").style.filter = "none";
+        }).catch(function(error) {
+            alert("Sorry passwords couldn't be updated.")
+        });
     }
 
     handleSignUp() {
@@ -73,8 +91,13 @@ export default class PopUp extends Component {
         var ls = []; var txt;
         if (this.state.type === "Login") {
             ls.push(<input name="inputs" id="emailField" type="text" placeholder={"Email"} style={popUpStyle.inputs} />)
-            ls.push(<input name="inputs" id="passwordField" type="password" minLength={2}
+            ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
                 placeholder={"Password"} style={popUpStyle.inputs} />)
+        } else if (this.state.type === "Set Password") {
+            ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
+                placeholder={"Password"} style={popUpStyle.inputs} />)
+            ls.push(<input name="inputs" id="cfmPasswordField" type="password" minLength={8}
+                placeholder={"Confirm Password"} style={popUpStyle.inputs} />)
         } else {
             ls.push(<input name="inputs" id="usernameField" type="text" placeholder={"Username"} style={popUpStyle.inputs} />)
             ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
@@ -88,8 +111,9 @@ export default class PopUp extends Component {
                         event.preventDefault();
                         if (this.state.type === 'Login') {
                             this.handleSignIn();
-                        }
-                        else {
+                        } else if (this.state.type === 'Set Password'){
+                            this.handlePasswordChange()
+                        } else {
                             this.handleSignUp()
                         }
                     }}
@@ -98,10 +122,10 @@ export default class PopUp extends Component {
                         <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type}
                             onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut} />
                     </form>
-                    {(this.state.type === "Login") ? null : (
+                    {(this.state.type !== "Sign Up") ? null : (
                         <p id={"orText"} style={popUpStyle.orText}>---------- OR ----------</p>
                     )}
-                    {(this.state.type === "Login") ? null : (
+                    {(this.state.type !== "Sign Up") ? null : (
                         <div id="altLayer" style={popUpStyle.alternativeLayer}>
                             <p id="altText" style={popUpStyle.altText}>Sign Up With: </p>
                             <button id="googleButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
@@ -114,13 +138,13 @@ export default class PopUp extends Component {
                             </button>
                         </div>
                     )}
-                    <div id="subLayer" style={popUpStyle.subLayer}>
+                    {(this.state.type === "Set Password") ? null : (<div id="subLayer" style={popUpStyle.subLayer}>
                         <p id="subText" style={popUpStyle.subText}>Already have an account?</p>
                         <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.subMouseIn}
                             onMouseLeave={this.subMouseOut} onClick={this.switchState}>
                             {this.state.type === "Login" ? "Sign Up" : "Login"}
                         </button>
-                    </div>
+                        </div>)}
 
 
                 </div>
