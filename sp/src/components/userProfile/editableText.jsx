@@ -5,16 +5,18 @@ import { penSvg, tickSvg } from "../svgs.jsx"
 export default class EditableText extends Component {
     constructor(props) {
         super(props);
-        this.state = {editing: false, user: props.user, setUser: this.props.setUser,
-            type: props.type.split(" ").join("").toLowerCase()}
+        this.state = {
+            editing: false, user: props.user, setUser: this.props.setUser,
+            type: props.type.split(" ").join("").toLowerCase()
+        }
         this.handleIn = this.handleIn.bind(this)
         this.beginEdit = this.beginEdit.bind(this)
         this.handleOut = this.handleOut.bind(this)
     }
 
-    componentDidUpdate(prevProps){
-        if (this.props.user[this.state.type] != String(document.getElementById(this.state.type).innerHTML)){
-            this.setState({user: this.props.user})
+    componentDidUpdate(prevProps) {
+        if (this.props.user[this.state.type] != String(document.getElementById(this.state.type).innerHTML).substring(1)) {
+            this.setState({ user: this.props.user })
         }
     }
 
@@ -23,11 +25,11 @@ export default class EditableText extends Component {
         if (this.state.editing) {
             elem.contentEditable = false
             elem.style.border = "none"
-            if (!String(elem.innerHTML).includes("@")){
-                elem.innerHTML = "@"+String(elem.innerHTML)
+            if (!String(elem.innerHTML).includes("@")) {
+                elem.innerHTML = "@" + String(elem.innerHTML)
             }
-            this.state.user[this.state.type]= String(elem.innerHTML).substring(1,)
-            this.setState({editing: false })
+            this.state.user[this.state.type] = String(elem.innerHTML).substring(1)
+            this.setState({ editing: false })
             this.state.setUser(this.state.user)
         } else {
             elem.contentEditable = true
@@ -70,10 +72,10 @@ export default class EditableText extends Component {
 
     render() {
         var text;
-        if (this.state.user == null){
+        if (this.state.user == null) {
             text = this.props.type
-        }else if (this.state.type == "username") {
-            text = "@"+this.state.user[this.state.type]
+        } else if (this.state.type == "username") {
+            text = "@" + this.state.user[this.state.type]
         } else {
             text = this.state.user[this.state.type] == null ? this.props.type : this.state.user[this.state.type]
         }
@@ -118,7 +120,7 @@ const editStyle = {
         outline: "none",
         borderRadius: "5px",
         cursor: "pointer"
-    },  label: {
+    }, label: {
         // border: "thick solid black",
         padding: "2px",
         margin: "0px",

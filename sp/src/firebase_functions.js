@@ -63,20 +63,21 @@ export const SignUp = (params) => {
               alert(`Sign Up Successful!`)
               firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
-                    user.updateProfile({
-                        displayName: username
-                    }).then(function () {
-                        console.log("User profile successfully created")
-                    }).catch(function (error) {
-                        console.log("User profile could not be created. Try again :(")
-                    });
-                }});
+                  user.updateProfile({
+                    displayName: username
+                  }).then(function () {
+                    console.log("User profile successfully created")
+                  }).catch(function (error) {
+                    console.log("User profile could not be created. Try again :(")
+                  });
+                }
+              });
             }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
             ).catch((err) => alert('Sign up unsuccessful. Please try again!'))
         } else { alert("This username isn't available.") }
       })
     } else {
-        alert("A user with this email already exists.")
+      alert("A user with this email already exists.")
     }
   }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
 }
