@@ -10,22 +10,24 @@ export default class PopUp extends Component {
         super(props);
         this.state = { type: props.type }
         this.switchState = this.switchState.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
 
     handlePasswordChange() {
         var pass = String(document.getElementById("passwordField").value)
         var cfm = String(document.getElementById("cfmPasswordField").value)
-        if (cfm !== pass){
+        if (cfm !== pass) {
             alert("Passwords do not match!");
             return;
         }
-        this.props.user.updatePassword(pass).then(function() {
+        this.props.user.updatePassword(pass).then(function () {
             this.props.user.passwordChange = false
             this.props.func(this.props.user)
             ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
             document.getElementById("header").style.filter = "none";
             document.getElementById("body").style.filter = "none";
-        }).catch(function(error) {
+        }).catch(function (error) {
+            console.log(error)
             alert("Sorry passwords couldn't be updated.")
         });
     }
@@ -111,7 +113,7 @@ export default class PopUp extends Component {
                         event.preventDefault();
                         if (this.state.type === 'Login') {
                             this.handleSignIn();
-                        } else if (this.state.type === 'Set Password'){
+                        } else if (this.state.type === 'Set Password') {
                             this.handlePasswordChange()
                         } else {
                             this.handleSignUp()
@@ -122,10 +124,10 @@ export default class PopUp extends Component {
                         <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type}
                             onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut} />
                     </form>
-                    {(this.state.type !== "Sign Up") ? null : (
-                        <p id={"orText"} style={popUpStyle.orText}>---------- OR ----------</p>
+                    {(this.state.type !== "Join Now") ? null : (
+                        <p id={"orText"} style={popUpStyle.orText}>---------- Or ----------</p>
                     )}
-                    {(this.state.type !== "Sign Up") ? null : (
+                    {(this.state.type !== "Join Now") ? null : (
                         <div id="altLayer" style={popUpStyle.alternativeLayer}>
                             <p id="altText" style={popUpStyle.altText}>Sign Up With: </p>
                             <button id="googleButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
@@ -144,7 +146,7 @@ export default class PopUp extends Component {
                             onMouseLeave={this.subMouseOut} onClick={this.switchState}>
                             {this.state.type === "Login" ? "Sign Up" : "Login"}
                         </button>
-                        </div>)}
+                    </div>)}
 
 
                 </div>
