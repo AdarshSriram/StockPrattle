@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
 import { SignIn, SignUp, signInGoogle, setCurrentUserInfo } from '../firebase_functions'
 import { googleSvg, facebookSvg } from './svgs.jsx';
+import firebase from '../utils/config';
 
 
 export default class PopUp extends Component {
@@ -20,9 +21,12 @@ export default class PopUp extends Component {
             alert("Passwords do not match!");
             return;
         }
-        this.props.user.updatePassword(pass).then(function () {
-            this.props.user.passwordChange = false
-            this.props.func(this.props.user)
+        const user = firebase.auth().currentUser
+        const userdb = this.props.user
+        const upd = this.props.func
+        user.updatePassword(pass).then(function () {
+            userdb.passwordChange = false
+            upd(userdb)
             ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
             document.getElementById("header").style.filter = "none";
             document.getElementById("body").style.filter = "none";
@@ -92,7 +96,7 @@ export default class PopUp extends Component {
     render() {
         var ls = []; var txt;
         if (this.state.type === "Login") {
-            ls.push(<input name="inputs" id="emailField" type="text" placeholder={"Email"} style={popUpStyle.inputs} />)
+            ls.push(<input name="inputs" id="emailField" type="text" placeholder={"Username or Email"} style={popUpStyle.inputs} />)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
                 placeholder={"Password"} style={popUpStyle.inputs} />)
         } else if (this.state.type === "Set Password") {

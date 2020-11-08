@@ -10,7 +10,6 @@ import ExplorePage from './explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
 import {getCurrentUserInfo, setCurrentUserInfo} from '../firebase_functions.js'
-import firebase from '../utils/config'
 
 export default class UserPage extends Component{
     constructor(props){
@@ -39,7 +38,7 @@ export default class UserPage extends Component{
             var user = doc.data()
             if (user.passwordChange){
                 var elem = document.getElementById("popUpContainer");
-                ReactDOM.render(<PopUp type={"Set Password"} user={firebase.auth().currentUser} func={this.updateUserInfo}/>, elem);
+                ReactDOM.render(<PopUp type={"Set Password"}  user={user} func={this.updateUserInfo}/>, elem);
                 document.getElementById("header").style.filter = "blur(4px)";
                 document.getElementById("body").style.filter = "blur(4px)";
             }
