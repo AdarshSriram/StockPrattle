@@ -73,7 +73,7 @@ export default class PopUp extends Component {
         var ls = []; var txt;
         if (this.state.type === "Login") {
             ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
-            ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
+            ls.push(<input name="inputs" id="passwordField" type="password" minLength={2}
                 placeholder={"Password"} style={popUpStyle.inputs} />)
         } else {
             ls.push(<input name="inputs" id="usernameField" type="text" placeholder={"Username"} style={popUpStyle.inputs} />)

@@ -111,12 +111,12 @@ export const getUserInfo = (email) => {
 }
 
 export const getCurrentUserInfo = () => {
-    var user = firebase.auth().currentUser;
-    if (user != null) {
-        return userCollection.doc(user.email).get()
-    } else {
-        console.log('error occured, try again')
-    }
+  var user = firebase.auth().currentUser;
+  if (user != null) {
+    return userCollection.doc(user.email).get()
+  } else {
+    console.log('error occured, try again')
+  }
 }
 
 export const setCurrentUserInfo = (info) => {
@@ -159,7 +159,8 @@ export const signInGoogle = () => {
     var cred = result.credential;
     // The signed-in user info.
     const user = firebase.auth().currentUser;
-    var credential = firebase.auth.EmailAuthProvider.credential(user.email, "trace");
+    var credential = fire.auth.EmailAuthProvider.credential(user.email, "Tracetrace");
+    console.log(cred)
     user.linkWithCredential(credential);
     userCollection.doc(user.email).set({
       email: user.email,
@@ -168,7 +169,7 @@ export const signInGoogle = () => {
       console.log("user added to db")
       user.updateProfile({ displayName: user.email })
         .then(() => console.log("updated auth obj w username"))
-        .catch(() => alert("Something went Wrong"))
+        .catch((err) => console.log(err))
     })
   }).catch(function (error) {
     // Handle Errors here.
