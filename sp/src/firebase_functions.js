@@ -3,7 +3,8 @@ import fire from 'firebase'
 
 const userCollection = firebase.firestore().collection('users')
 var storageRef = firebase.storage().ref();
-var provider = new fire.auth.GoogleAuthProvider();
+var providerG = new fire.auth.GoogleAuthProvider();
+var providerF = new fire.auth.FacebookAuthProvider()
 
 // Demo user object:
 //  {
@@ -176,9 +177,9 @@ export const getPhoto = (email) => {
   return storageRef.child('profilePhoto/' + email).getDownloadURL()
 }
 
-export const signUpGoogle = () => {
+export const signUpGoogle = (google) => {
   console.log("sign up")
-  firebase.auth().signInWithPopup(provider).then(function (result) {
+  firebase.auth().signInWithPopup(google ? providerG : providerF).then(function (result) {
     // This gives you a Google Access Token. You can use it to access the Google API.
     var cred = result.credential;
     // The signed-in user info.
@@ -187,10 +188,11 @@ export const signUpGoogle = () => {
     user.linkWithCredential(credential);
     user.updateProfile({ displayName: user.email.replace("@", ".") })
     userCollection.doc(user.email).set({
-        email: user.email,
-        username: user.email.replace("@", "."),
-        passwordChange: true
-    })}).catch(function (error) {
+      email: user.email,
+      username: user.email.replace("@", "."),
+      passwordChange: true
+    })
+  }).catch(function (error) {
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
