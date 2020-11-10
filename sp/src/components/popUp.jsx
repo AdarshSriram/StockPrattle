@@ -135,7 +135,7 @@ export default class PopUp extends Component {
                         <div id="altLayer" style={popUpStyle.alternativeLayer}>
                             <p id="altText" style={popUpStyle.altText}>Sign Up With: </p>
                             <button id="googleButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
-                                onMouseLeave={this.gMouseOut} onClick={signInGoogle}>
+                                onMouseLeave={this.gMouseOut} onClick={(e) => { e.preventDefault(); signInGoogle() }}>
                                 {googleSvg}
                             </button>
                             <button id="facebookButton" style={popUpStyle.subButton} onMouseOver={this.fMouseIn}

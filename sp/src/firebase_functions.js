@@ -142,30 +142,30 @@ export const getCurrentUserInfo = () => {
 }
 
 export const setCurrentUserInfo = async (info) => {
-    const user = firebase.auth().currentUser;
-    if (info.username != user.displayName) {
-        if (info.username.length <= 4) {
-            alert("Username must be more than 4 characters long.")
-            return userCollection.doc(user.email).get()
-        } if (info.username.includes("@")) {
-            alert("Username cannot have @ in it.")
-            return userCollection.doc(user.email).get()
-        }
-        await userCollection.where('username', '==', info.username).get().then((snap) => {
-            if (snap.empty) {
-                user.updateProfile({ displayName: info.username })
-                return userCollection.doc(user.email).update(info)
-            } else {
-                alert("Username is already taken.")
-                return userCollection.doc(user.email).get()
-            }
-        }).catch((err) => {
-            alert("Profile update was unsuccessful.");
-            return userCollection.doc(user.email).get()
-        })
-    } else {
-        return userCollection.doc(user.email).update(info)
+  const user = firebase.auth().currentUser;
+  if (info.username != user.displayName) {
+    if (info.username.length <= 4) {
+      alert("Username must be more than 4 characters long.")
+      return userCollection.doc(user.email).get()
+    } if (info.username.includes("@")) {
+      alert("Username cannot have @ in it.")
+      return userCollection.doc(user.email).get()
     }
+    await userCollection.where('username', '==', info.username).get().then((snap) => {
+      if (snap.empty) {
+        user.updateProfile({ displayName: info.username })
+        return userCollection.doc(user.email).update(info)
+      } else {
+        alert("Username is already taken.")
+        return userCollection.doc(user.email).get()
+      }
+    }).catch((err) => {
+      alert("Profile update was unsuccessful.");
+      return userCollection.doc(user.email).get()
+    })
+  } else {
+    return userCollection.doc(user.email).update(info)
+  }
 }
 
 export const uploadPhoto = (email, photo) => {
@@ -176,26 +176,56 @@ export const getPhoto = (email) => {
   return storageRef.child('profilePhoto/' + email).getDownloadURL()
 }
 
-export const signInGoogle = () => {
-    
-  console.log("sign in")
+export const signUpGoogle = () => {
+  console.log("sign up")
   firebase.auth().signInWithPopup(provider).then(function (result) {
     // This gives you a Google Access Token. You can use it to access the Google API.
     var cred = result.credential;
+    console.log("Get creds")
     // The signed-in user info.
     var user = firebase.auth().currentUser;
-    var credential = fire.auth.EmailAuthProvider.credential(user.email, "12345678");
-    user.linkWithCredential(credential);
-    user.updateProfile({ displayName: user.email })
-      .then(() => console.log("updated auth obj w username"))
-      .catch((err) => console.log(err))
-    userCollection.doc(user.email).set({
-      email: user.email,
-      username: user.email.replace("@","."),
-      passwordChange: true
-    }).then(() => {
-      console.log("user added to db")
-    })
+    console.log("Before searcing db")
+    userCollection.doc(user.email).get()
+      .then((doc) => {
+        if (!doc.exists) {
+          console.log("User dont exist")
+          var credential = fire.auth.EmailAuthProvider.credential(user.email, "12345678");
+          user.linkWithCredential(credential);
+          console.log("Creds linked")
+
+          user.updateProfile({ displayName: user.email })
+            .then(() => console.log("updated auth obj w username"))
+            .catch((err) => console.log(err))
+          console.log("User updated")
+
+          userCollection.doc(user.email).set({
+            email: user.email,
+            username: user.email.replace("@", "."),
+            passwordChange: true
+          }).then(() => {
+            console.log("user added to db")
+          })
+        }
+      })
+  }).catch(function (error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    console.log(error)
+    console.log(errorMessage)
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+  })
+}
+
+const signInGoogle = () => {
+  console.log('sign in')
+  firebase.auth().signInWithPopup(provider).then(function (result) {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    // The signed-in user info.
   }).catch(function (error) {
     // Handle Errors here.
     var errorCode = error.code;
