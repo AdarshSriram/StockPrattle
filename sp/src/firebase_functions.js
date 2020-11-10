@@ -181,33 +181,16 @@ export const signUpGoogle = () => {
   firebase.auth().signInWithPopup(provider).then(function (result) {
     // This gives you a Google Access Token. You can use it to access the Google API.
     var cred = result.credential;
-    console.log("Get creds")
     // The signed-in user info.
     var user = firebase.auth().currentUser;
-    console.log("Before searcing db")
-    userCollection.doc(user.email).get()
-      .then((doc) => {
-        if (!doc.exists) {
-          console.log("User dont exist")
-          var credential = fire.auth.EmailAuthProvider.credential(user.email, "12345678");
-          user.linkWithCredential(credential);
-          console.log("Creds linked")
-
-          user.updateProfile({ displayName: user.email })
-            .then(() => console.log("updated auth obj w username"))
-            .catch((err) => console.log(err))
-          console.log("User updated")
-
-          userCollection.doc(user.email).set({
-            email: user.email,
-            username: user.email.replace("@", "."),
-            passwordChange: true
-          }).then(() => {
-            console.log("user added to db")
-          })
-        }
-      })
-  }).catch(function (error) {
+    var credential = fire.auth.EmailAuthProvider.credential(user.email, "12345678");
+    user.linkWithCredential(credential);
+    user.updateProfile({ displayName: user.email.replace("@", ".") })
+    userCollection.doc(user.email).set({
+        email: user.email,
+        username: user.email.replace("@", "."),
+        passwordChange: true
+    })}).catch(function (error) {
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
@@ -221,7 +204,7 @@ export const signUpGoogle = () => {
   })
 }
 
-const signInGoogle = () => {
+export const signInGoogle = () => {
   console.log('sign in')
   firebase.auth().signInWithPopup(provider).then(function (result) {
     // This gives you a Google Access Token. You can use it to access the Google API.

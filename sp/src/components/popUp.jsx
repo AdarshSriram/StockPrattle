@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
-import { SignIn, SignUp, signInGoogle, setCurrentUserInfo } from '../firebase_functions'
+import { SignIn, SignUp, signUpGoogle, signInGoogle, setCurrentUserInfo } from '../firebase_functions'
 import { googleSvg, facebookSvg } from './svgs.jsx';
 import firebase from '../utils/config';
 
@@ -128,14 +128,17 @@ export default class PopUp extends Component {
                         <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type}
                             onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut} />
                     </form>
-                    {(this.state.type !== "Join Now") ? null : (
+                    {(this.state.type === "Set Password") ? null : (
                         <p id={"orText"} style={popUpStyle.orText}>---------- Or ----------</p>
                     )}
-                    {(this.state.type !== "Join Now") ? null : (
+                    {(this.state.type === "Set Password") ? null : (
                         <div id="altLayer" style={popUpStyle.alternativeLayer}>
-                            <p id="altText" style={popUpStyle.altText}>Sign Up With: </p>
+                            <p id="altText" style={popUpStyle.altText}>
+                                {(this.state.type==="Login") ? "Sign In With: " : "Sign Up With: "}
+                            </p>
                             <button id="googleButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
-                                onMouseLeave={this.gMouseOut} onClick={(e) => { e.preventDefault(); signInGoogle() }}>
+                                onMouseLeave={this.gMouseOut}
+                                onClick={(this.state.type==="Login") ? signInGoogle : signUpGoogle}>
                                 {googleSvg}
                             </button>
                             <button id="facebookButton" style={popUpStyle.subButton} onMouseOver={this.fMouseIn}
