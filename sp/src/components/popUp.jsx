@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
-import { SignIn, SignUp, signUpGoogle, signInGoogle, setCurrentUserInfo } from '../firebase_functions'
+import { SignIn, SignUp, signUpExt, signInExt, setCurrentUserInfo } from '../firebase_functions'
 import { googleSvg, facebookSvg } from './svgs.jsx';
 import firebase from '../utils/config';
 
@@ -138,11 +138,12 @@ export default class PopUp extends Component {
                             </p>
                             <button id="googleButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
                                 onMouseLeave={this.gMouseOut}
-                                onClick={(this.state.type==="Login") ? signInGoogle : signUpGoogle}>
+                                onClick={()=>(this.state.type==="Login") ? signInExt(true) : signUpExt(true)}>
                                 {googleSvg}
                             </button>
                             <button id="facebookButton" style={popUpStyle.subButton} onMouseOver={this.fMouseIn}
-                                onMouseLeave={this.fMouseOut}>
+                                onMouseLeave={this.fMouseOut}
+                                onClick={()=>(this.state.type==="Login") ? signInExt(false) : signUpExt(false)}>
                                 {facebookSvg}
                             </button>
                         </div>
@@ -154,8 +155,6 @@ export default class PopUp extends Component {
                             {this.state.type === "Login" ? "Sign Up" : "Login"}
                         </button>
                     </div>)}
-
-
                 </div>
             </div>
         )

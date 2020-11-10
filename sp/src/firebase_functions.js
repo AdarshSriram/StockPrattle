@@ -177,9 +177,9 @@ export const getPhoto = (email) => {
   return storageRef.child('profilePhoto/' + email).getDownloadURL()
 }
 
-export const signUpGoogle = (google) => {
+export const signUpExt = (google) => {
   console.log("sign up")
-  firebase.auth().signInWithPopup(google ? providerG : providerF).then(function (result) {
+  firebase.auth().signInWithPopup((google) ? providerG : providerF).then(function (result) {
     // This gives you a Google Access Token. You can use it to access the Google API.
     var cred = result.credential;
     // The signed-in user info.
@@ -206,9 +206,15 @@ export const signUpGoogle = (google) => {
   })
 }
 
-export const signInGoogle = () => {
-  console.log('sign in')
-  firebase.auth().signInWithPopup(provider).then(function (result) {
+export const signInExt = (google) => {
+    firebase.auth().signInWithPopup((google) ? providerG : providerF).then(function (result) {
+    const user = firebase.auth().currentUser
+    userCollection.doc(user.email).get().then((doc) => {
+        if (!doc.exists) {
+            user.delete();
+            console.log("user deleted")
+        }
+    })
     // This gives you a Google Access Token. You can use it to access the Google API.
     // The signed-in user info.
   }).catch(function (error) {
