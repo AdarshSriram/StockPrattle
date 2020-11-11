@@ -14,10 +14,26 @@ export default class EditableText extends Component {
         this.handleOut = this.handleOut.bind(this)
     }
 
+    componentDidMount(){
+        const elem = document.getElementById(this.state.type)
+        var text;
+        if (this.state.user == null) {
+            text = this.props.type
+        } else if (this.state.type == "username") {
+            text = "@" + this.state.user[this.state.type]
+        } else {
+            text = this.state.user[this.state.type] == null ? this.props.type : this.state.user[this.state.type]
+        }
+        elem.value = text
+        elem.disabled = true
+        elem.style.color = "black"
+        elem.style.background = "none"
+    }
+
     componentDidUpdate(prevProps){
         if (this.state.type === "username"){
             // console.log(this.props.user.username)
-            if (this.props.user.username != String(document.getElementById("username").innerHTML.substring(1))){
+            if (this.props.user.username != String(document.getElementById("username").value.substring(1))){
                 this.setState({user: this.props.user})
             }
         }
@@ -26,24 +42,26 @@ export default class EditableText extends Component {
     beginEdit(event) {
         const elem = document.getElementById(this.state.type)
         if (this.state.editing) {
-            elem.contentEditable = false
+            elem.disabled = true
             elem.style.border = "none"
+            elem.style.color = "black"
+            elem.style.background = "none"
             if (this.state.type==="username"){
-                if (String(elem.innerHTML).includes("@")){
-                    this.state.user[this.state.type]= String(elem.innerHTML).substring(1)
+                if (String(elem.value).includes("@")){
+                    this.state.user[this.state.type]= String(elem.value).substring(1)
                 } else {
-                    this.state.user[this.state.type]= String(elem.innerHTML)
-                    elem.innerHTML = "@"+String(elem.innerHTML)
+                    this.state.user[this.state.type]= String(elem.value)
+                    elem.value = "@"+String(elem.value)
                 }
             } else {
-                this.state.user[this.state.type]= String(elem.innerHTML)
+                this.state.user[this.state.type]= String(elem.value)
             }
             this.setState({editing: false })
             this.state.setUser(this.state.user)
         } else {
-            elem.contentEditable = true
+            elem.disabled = false
             elem.style.border = "thin solid gray"
-            this.setState({ editing: true })
+            this.setState({editing: true})
         }
     }
 
@@ -80,18 +98,11 @@ export default class EditableText extends Component {
     }
 
     render() {
-        var text;
-        if (this.state.user == null) {
-            text = this.props.type
-        } else if (this.state.type == "username") {
-            text = "@" + this.state.user[this.state.type]
-        } else {
-            text = this.state.user[this.state.type] == null ? this.props.type : this.state.user[this.state.type]
-        }
         return (
             <div style={editStyle.editableTextDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
                 <label style={editStyle.label}>{this.props.type + ": "}</label>
-                <p id={this.state.type} style={editStyle.textStyle}>{text}</p>
+                <input id={this.state.type} style={editStyle.textStyle}
+                    type={(this.state.type=="birthday") ? "date" : "text"}/>
                 <button name={this.state.type} style={editStyle.editButton} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
                     {(this.state.editing) ? tickSvg : penSvg}
@@ -121,7 +132,8 @@ const editStyle = {
         fontWeight: "600px",
         fontSize: "18px",
         outline: "none",
-        borderRadius: "10px"
+        borderRadius: "10px",
+        border: "none"
     }, editButton: {
         visibility: "hidden",
         background: "#FFFFFF",
