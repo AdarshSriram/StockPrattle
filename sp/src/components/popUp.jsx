@@ -155,6 +155,7 @@ export default class PopUp extends Component {
                             {this.state.type === "Login" ? "Sign Up" : "Login"}
                         </button>
                     </div>)}
+                    
                 </div>
             </div>
         )
