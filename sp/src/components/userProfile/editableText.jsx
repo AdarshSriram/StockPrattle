@@ -133,7 +133,6 @@ const editStyle = {
         background: "none",
         // overflow: "scroll"
     }, textStyle: {
-        // border: "thick solid black",
         padding: "2px",
         margin: "0px",
         fontFamily: "Dosis",
