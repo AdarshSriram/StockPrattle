@@ -18,11 +18,11 @@ export default class EditableText extends Component {
         const elem = document.getElementById(this.state.type)
         var text;
         if (this.state.user == null) {
-            text = this.props.type
+            text = null
         } else if (this.state.type == "username") {
             text = "@" + this.state.user[this.state.type]
         } else {
-            text = this.state.user[this.state.type] == null ? this.props.type : this.state.user[this.state.type]
+            text = this.state.user[this.state.type]
         }
         elem.value = text
         elem.disabled = true
@@ -46,6 +46,15 @@ export default class EditableText extends Component {
             elem.style.border = "none"
             elem.style.color = "black"
             elem.style.background = "none"
+            if (this.state.type=="birthday"){
+                var regex = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
+                if (!regex.test(String(elem.value))){
+                    alert("Input is not a valid date in dd/mm/yyyy format.")
+                    elem.value = this.state.user.birthday
+                    this.setState({editing: false })
+                    return
+                }
+            }
             if (this.state.type==="username"){
                 if (String(elem.value).includes("@")){
                     this.state.user[this.state.type]= String(elem.value).substring(1)
@@ -101,8 +110,8 @@ export default class EditableText extends Component {
         return (
             <div style={editStyle.editableTextDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
                 <label style={editStyle.label}>{this.props.type + ": "}</label>
-                <input id={this.state.type} style={editStyle.textStyle}
-                    type={(this.state.type=="birthday") ? "date" : "text"}/>
+                <input id={this.state.type} style={editStyle.textStyle} type="text"
+                placeholder={this.state.type === "birthday" ? "DD/MM/YYYY" : this.props.text} />
                 <button name={this.state.type} style={editStyle.editButton} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
                     {(this.state.editing) ? tickSvg : penSvg}
