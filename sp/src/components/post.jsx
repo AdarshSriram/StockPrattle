@@ -23,10 +23,14 @@ export default class Post extends Component{
     }
 
     render(){
-        var error = false;
-        var disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
-        if (this.state.image == null || error) {
+        var error = false; var disp;
+        if (this.props.logo){
             disp = <img src={require("./LogoGreen.jpeg")} alt="Stock Prattle Green" style={postStyle.image}/>
+        } else {
+            disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
+            if (this.state.image == null || error) {
+                disp = smallnopicSvg;
+            }
         }
     return (
         <div style={postStyle.mainDiv}>

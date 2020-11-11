@@ -10,7 +10,7 @@ export default class UserFeed extends Component{
     render(){
     return (
         <div style={userFeedStyle.centerDiv}>
-            <Post text="Feed is coming soon!"/>
+            <Post text="Feed is coming soon!" logo={true}/>
         </div>
         )
     }
