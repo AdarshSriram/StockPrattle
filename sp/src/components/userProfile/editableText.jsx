@@ -151,7 +151,6 @@ const editStyle = {
         borderRadius: "5px",
         cursor: "pointer"
     }, label: {
-        // border: "thick solid black",
         padding: "2px",
         margin: "0px",
         fontFamily: "Dosis",
