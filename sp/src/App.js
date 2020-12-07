@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {HashRouter, Switch, Route} from "react-router-dom";
 import LandingPage from './components/landingPage.jsx';
-import UserPage from './components/userHome.jsx';
+import UserPage from './components/userHome/userHome.jsx';
 import fire from './utils/config.js';
 
 class App extends Component {

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {Link, useHistory} from "react-router-dom";
-import PopUp from './popUp.jsx';
+import PopUp from '../popUp.jsx';
 import NavBar from './navBar.jsx';
-import UserFeed from './userFeed.jsx';
-import MessageBox from './messageBox.jsx';
+import UserFeed from './userFeed/userFeed.jsx';
+import MessageBox from './messages/messageBox.jsx';
 import UserProfile from './userProfile/userProfile.jsx';
-import ExplorePage from './explorePage.jsx';
+import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
-import {getCurrentUserInfo, setCurrentUserInfo} from '../firebase_functions.js'
+import {getCurrentUserInfo, setCurrentUserInfo} from '../../firebase_functions.js'
 
 export default class UserPage extends Component{
     constructor(props){

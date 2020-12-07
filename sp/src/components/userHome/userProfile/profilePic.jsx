@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { penSvg, nopicSvg } from '../svgs.jsx';
-import { uploadPhoto, getPhoto } from '../../firebase_functions'
-import firebase from '../../utils/config'
+import { uploadPhoto, getPhoto } from '../../../firebase_functions'
+import firebase from '../../../utils/config'
 
 export default class ProfilePic extends Component {
     constructor(props) {

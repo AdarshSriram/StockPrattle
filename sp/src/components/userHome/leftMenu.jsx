@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import fire from '../utils/config.js';
+import fire from '../../utils/config.js';
 
 export default class LeftMenu extends Component {
     constructor(props) {

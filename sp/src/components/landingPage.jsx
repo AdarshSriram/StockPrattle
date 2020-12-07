@@ -78,7 +78,7 @@ export default class LandingPage extends Component {
                     </div>
                     <div id="centerDiv" style={startStyle.centerDiv}>
                         <div style={startStyle.textDiv}>
-                            <img src={require("./Logo.png")} alt="Stock Prattle Logo" style={startStyle.image} />
+                            <img src={require("../images/Logo.png")} alt="Stock Prattle Logo" style={startStyle.image} />
                         </div>
                         <div style={startStyle.textDiv}>
                             <p style={startStyle.text}>India’s Stock Community Platform</p>

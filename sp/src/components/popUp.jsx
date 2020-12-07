@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../utils/config.js';
 import { SignIn, SignUp, signUpExt, signInExt, setCurrentUserInfo } from '../firebase_functions'
-import { googleSvg, facebookSvg } from './svgs.jsx';
+import { googleSvg, facebookSvg } from './userHome/svgs.jsx';
 import firebase from '../utils/config';
 
 
@@ -155,7 +155,7 @@ export default class PopUp extends Component {
                             {this.state.type === "Login" ? "Sign Up" : "Login"}
                         </button>
                     </div>)}
-                    
+
                 </div>
             </div>
         )

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {smallnopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg} from './svgs.jsx';
-import { getPhoto } from '../firebase_functions'
+import { getPhoto } from '../../firebase_functions'
 
 export default class Post extends Component{
     constructor(props){
@@ -25,7 +25,7 @@ export default class Post extends Component{
     render(){
         var error = false; var disp;
         if (this.props.logo){
-            disp = <img src={require("./LogoGreen.jpeg")} alt="Stock Prattle Green" style={postStyle.image}/>
+            disp = <img src={require("../../images/LogoGreen.jpeg")} alt="Stock Prattle Green" style={postStyle.image}/>
         } else {
             disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
             if (this.state.image == null || error) {

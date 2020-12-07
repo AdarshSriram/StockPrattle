@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {nopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg} from './svgs.jsx'
+import {nopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg} from '../svgs.jsx'
 
 export default class Card extends Component{
     constructor(props){
         super(props);
         this.mouseIn = this.mouseIn.bind(this);
         this.mouseOut = this.mouseOut.bind(this);
+        this.cardClick = this.cardClick.bind(this);
     }
 
     mouseIn(){
@@ -21,11 +22,25 @@ export default class Card extends Component{
         // document.getElementById(this.props.text).style.height = "300px"
     }
 
+    cardClick(){
+        this.props.onCardClick("Sample Stock")
+    }
+
     render(){
+        var img = require("../../../images/LogoGreen.jpeg");
+        var topBarStyle = {...cardStyle.topBar}
+        var imageStyle = {...cardStyle.image}
+        if (this.props.heading == "Stock Prattle Team"){
+            img = require("../../../images/Logo.png")
+            topBarStyle.backgroundColor = "#00B140"
+            imageStyle.maxWidth = "80%"
+            imageStyle.maxHeight = "80%"
+        }
     return (
-        <div id={this.props.text} style={cardStyle.mainDiv} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}>
-            <div style={cardStyle.topBar}>
-                <img src={require("./LogoGreen.jpeg")} alt="Stock Prattle Logo" style={cardStyle.image}/>
+        <div id={this.props.text} style={cardStyle.mainDiv} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
+        onClick={this.cardClick}>
+            <div style={topBarStyle}>
+                <img src={img} alt="Stock Prattle Logo" style={imageStyle}/>
             </div>
             <div style={cardStyle.contentDiv}>
                 <p id={this.props.heading} style={cardStyle.headingStyle}>{this.props.heading}</p>
@@ -45,7 +60,7 @@ const cardStyle= {mainDiv: {
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         display: "flex",
         flexDirection: "column",
-        overflow: "none",
+        overflow: "hidden",
         justifyContent: "center",
         alignItems: "center",
         borderRadius: "10px",
@@ -60,7 +75,7 @@ const cardStyle= {mainDiv: {
         border: "thin solid lightGray",
         borderWidth: "0 0 1px 0",
         boxSizing: "border-box",
-        background: "none",
+        backgroundColor: "#FFFFFF",
         overflow: "none"
     }, contentDiv: {
         width: "100%",
