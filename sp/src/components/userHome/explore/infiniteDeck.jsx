@@ -15,11 +15,11 @@ export default class InfiniteDeck extends Component{
                 redirect={this.goToPage}
                 onCardClick={this.props.onCardClick}/>
             <Card heading={"Sample Stock Page 2"}
-                text={"This is a sample stock page."}
+                text={"This is a second sample stock page."}
                 redirect={this.goToPage}
                 onCardClick={this.props.onCardClick}/>
             <Card heading={"Sample Stock Page 3"}
-                text={"This is a sample stock page."}
+                text={"This is a third sample stock page."}
                 redirect={this.goToPage}
                 onCardClick={this.props.onCardClick}/>
             <Card heading={"Stock Prattle Team"}
