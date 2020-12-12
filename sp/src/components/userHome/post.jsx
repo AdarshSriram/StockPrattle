@@ -61,12 +61,12 @@ export default class Post extends Component{
 }
 
 const postStyle= {mainDiv: {
-        minHeight: "170px",
-        width: "90%",
+        minHeight: "140px",
+        width: "80%",
         backgroundColor: "#FFFFFF",
-        border: "2px solid rgba(0, 0, 0, 0.25)",
+        border: "0px solid rgba(0, 0, 0, 0.25)",
         boxSizing: "border-box",
-        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)",
         display: "flex",
         flexDirection: "row",
         overflow: "none",
@@ -88,7 +88,7 @@ const postStyle= {mainDiv: {
         padding: "0 0 0 10px"
     }, topBar: {
         width: "100%",
-        height: "60px",
+        height: "50px",
         display: "flex",
         flexDirection: "row",
         gap: "10px",
@@ -98,7 +98,7 @@ const postStyle= {mainDiv: {
         borderWidth: "0 0 1px 0",
         boxSizing: "border-box",
         background: "none",
-        overflow: "none"
+        overflow: "none",
     }, contentDiv: {
         width: "100%",
         height: "50px",
@@ -121,14 +121,14 @@ const postStyle= {mainDiv: {
         borderRadius: "10px"
     }, bottomBar: {
         width: "100%",
-        height: "50px",
+        height: "40px",
         display: "flex",
         gap: "10px",
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
         border: "thin solid lightGray",
-        borderWidth: "1px 0 0 0",
+        borderWidth: "0 0 0 0",
         boxSizing: "border-box",
         background: "none",
         overflow: "none"
@@ -137,8 +137,8 @@ const postStyle= {mainDiv: {
         maxHeight: "100%",
         margin: "0px"
     }, imageDiv: {
-        width: "48px",
-        height: "48px",
+        width: "40px",
+        height: "40px",
         borderRadius: "24px",
         background: "none",
         display: "flex",

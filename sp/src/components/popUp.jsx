@@ -149,7 +149,9 @@ export default class PopUp extends Component {
                         </div>
                     )}
                     {(this.state.type === "Set Password") ? null : (<div id="subLayer" style={popUpStyle.subLayer}>
-                        <p id="subText" style={popUpStyle.subText}>Already have an account?</p>
+                        <p id="subText" style={popUpStyle.subText}>
+                            {this.state.type === "Login" ? "Don't have an account?" : "Already have an account?"}
+                        </p>
                         <button id="subButton" style={popUpStyle.subButton} onMouseOver={this.subMouseIn}
                             onMouseLeave={this.subMouseOut} onClick={this.switchState}>
                             {this.state.type === "Login" ? "Sign Up" : "Login"}
