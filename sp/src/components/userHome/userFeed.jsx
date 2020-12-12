@@ -51,7 +51,7 @@ const userFeedStyle= { centerDiv: {
         gap: "20px",
         // border: "thick solid black",
         boxSizing: "border-box",
-        background: "rgba(229, 229, 229, 0.6)",
+        background: "rgba(229, 229, 229, 0.3)",
         overflow: "scroll",
         borderRadius: "10px"
     }, loading: {

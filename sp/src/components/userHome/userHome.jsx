@@ -147,6 +147,7 @@ const userHomeStyle = { mainDiv:{
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        overflow: "none"
     }, body: {
         display: "flex",
         flexDirection: "row",

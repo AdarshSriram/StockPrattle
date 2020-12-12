@@ -1,10 +1,21 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {bellSvg, settingsSvg} from './svgs.jsx';
+import Ticker from 'react-ticker';
 
 export default class NavBar extends Component{
     constructor(props){
         super(props);
+        var toadd = []; var i = 0;
+        while (i<20){
+            if (i%2 == 0){
+                toadd.push(({name:"SENSEX", value: "$$$", color: "#00B140"}));
+            } else {
+                toadd.push(({name:"NIFTY", value: "$$$", color: "#E21010"}));
+            }
+            i++;
+        }
+        this.state = {sbItems: toadd}
     }
 
     mouseIn(but){
@@ -40,7 +51,13 @@ export default class NavBar extends Component{
                 onMouseLeave={this.mouseOut} onClick={this.accountClick}>Contact Us</button>
                 <div id="dropDown"/>
             </div>
-        <div id="stockBar" style={navBarStyle.stockBar}/>
+        <marquee style={navBarStyle.stockTicker}>
+        <div id="stockBar" style={navBarStyle.stockBar}>
+            {this.state.sbItems.map((i, index) => (
+                <p key={index} style={navBarStyle.sbTitle}>{i.name}<p style={{color: i.color, margin: 0}}>{i.value}</p></p>
+            ))}
+        </div>
+        </marquee>
         </div>
         </div>
         )
@@ -56,7 +73,7 @@ const navBarStyle= { header: {
         height: "140px",
         boxSizing: "border-box",
         background: "none",
-        // overflow: "scroll",
+        overflow: "none",
         // border: "thick solid black",
     }, headerFunction: {
         display: "flex",
@@ -69,20 +86,34 @@ const navBarStyle= { header: {
         boxSizing: "border-box",
         background: "none",
         marginRight: "10px",
-        overflow: "scroll"
-    }, stockBar: {
+        overflow: "hidden"
+    }, stockTicker: {
         height: "50px",
         marginBottom: "10px",
         width: "100%",
         display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
+        flexDirection: "row",
+        justifyContent: "flex-start",
         alignItems: "center",
+        gap: "20px",
         // border: "thick solid black",
         boxSizing: "border-box",
-        backgroundColor: "rgba(229, 229, 229, 0.6)",
+        background: "rgba(229, 229, 229, 0.6)",
         borderRadius: "20px",
-    },otherHeaderStuff: {
+        overflow: "scroll"
+    }, stockBar: {
+        height: "50px",
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        gap: "20px",
+        // border: "thick solid black",
+        boxSizing: "border-box",
+        backgroundColor: "none",
+        borderRadius: "20px",
+    }, otherHeaderStuff: {
         height: "100%",
         width: "100%",
         display: "flex",
@@ -145,5 +176,15 @@ const navBarStyle= { header: {
         outline: "none",
         cursor: "pointer",
         // border: "thick solid black",
+    }, sbTitle: {
+        margin: "0px",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        fontWeight: "bold",
+        fontSize: "18px",
+        outline: "none",
+        display: "flex",
+        flexDirection: "row",
+        gap: "10px"
     }
 }

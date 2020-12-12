@@ -42,7 +42,7 @@ const deckStyle= { deckDiv: {
         alignItems: "flex-start",
         // border: "thick solid black",
         boxSizing: "border-box",
-        background: "rgba(229, 229, 229, 0.6)",
+        background: "rgba(229, 229, 229, 0.3)",
         overflow: "scroll",
         margin: "10px",
         borderRadius: "10px"

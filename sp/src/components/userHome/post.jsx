@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {smallnopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg} from './svgs.jsx';
-import { getPhoto } from '../../firebase_functions'
+import { getPhoto } from '../../firebase_functions';
+import CommentScroll from './comments.jsx';
 
 export default class Post extends Component{
     constructor(props){
@@ -53,13 +54,14 @@ export default class Post extends Component{
                     {shareSvg}
                 </div>
             </div>
-            <div style={postStyle.commentsDiv} />
+            <CommentScroll />
         </div>
         )
     }
 }
 
 const postStyle= {mainDiv: {
+        minHeight: "170px",
         width: "90%",
         backgroundColor: "#FFFFFF",
         border: "2px solid rgba(0, 0, 0, 0.25)",
@@ -73,6 +75,7 @@ const postStyle= {mainDiv: {
         borderRadius: "10px"
     }, postDiv: {
         width: "70%",
+        minWidth: "70%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
@@ -83,17 +86,6 @@ const postStyle= {mainDiv: {
         background: "none",
         overflow: "none",
         padding: "0 0 0 10px"
-    }, commentsDiv: {
-        width: "30%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        // border: "thick solid black",
-        boxSizing: "border-box",
-        background: "none",
-        overflow: "scroll"
     }, topBar: {
         width: "100%",
         height: "60px",
@@ -109,7 +101,7 @@ const postStyle= {mainDiv: {
         overflow: "none"
     }, contentDiv: {
         width: "100%",
-        height: "100%",
+        height: "50px",
         display: "flex",
         flexDirection: "row",
         gap: "10px",
