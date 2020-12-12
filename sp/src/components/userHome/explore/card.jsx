@@ -12,14 +12,14 @@ export default class Card extends Component{
 
     mouseIn(){
         document.getElementById(this.props.heading).style.textDecoration = "underline"
-        document.getElementById(this.props.text).style.width = "205px"
-        document.getElementById(this.props.text).style.height = "305px"
+        // document.getElementById(this.props.text).style.width = "205px"
+        // document.getElementById(this.props.text).style.height = "305px"
     }
 
     mouseOut(){
         document.getElementById(this.props.heading).style.textDecoration = "none"
-        document.getElementById(this.props.text).style.width = "200px"
-        document.getElementById(this.props.text).style.height = "300px"
+        // document.getElementById(this.props.text).style.width = "200px"
+        // document.getElementById(this.props.text).style.height = "300px"
     }
 
     cardClick(){

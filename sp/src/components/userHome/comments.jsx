@@ -9,8 +9,13 @@ export default class CommentScroll extends Component {
             toadd.push(({user: "@username", text: "Fake comment text!"}));
             i++;
         }
-        this.state = {items: toadd}
+        this.state = {items: toadd, id: Math.random()}
         this.checkAndFetch = this.checkAndFetch.bind(this)
+    }
+
+    componentDidMount(){
+        const elem = document.getElementById(this.state.id)
+        elem.style.height = ""+elem.parentElement.offsetHeight+"px"
     }
 
     checkAndFetch(event){
@@ -30,11 +35,14 @@ export default class CommentScroll extends Component {
 
     render(){
     return (
-        <div id="usedFeedDiv" style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
+        <div id={this.state.id} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
             {this.state.items.map((i, index) => (
                 <div key={index} style={commentsStyle.comment}>
-                    <p style={commentsStyle.usernameText}>{i.user}</p>
-                    <p style={commentsStyle.text}>{i.text}</p>
+                    <div style={commentsStyle.commentBody}>
+                        <p style={commentsStyle.usernameText}>{i.user}</p>
+                        <p style={commentsStyle.text}>{i.text}</p>
+                    </div>
+                    <div style={commentsStyle.whiteDiv}/>
                 </div>
             ))}
             <p style={commentsStyle.loading}>Loading...</p>
@@ -44,8 +52,9 @@ export default class CommentScroll extends Component {
 }
 
 const commentsStyle= { centerDiv: {
-        height: "100%",
+        height: "0px",
         width: "100%",
+        maxHeight: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
@@ -84,15 +93,30 @@ const commentsStyle= { centerDiv: {
         outline: "none",
         borderRadius: "10px"
     }, comment: {
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "5px",
+        background: "rgba(0, 177, 64, 0.1)",
+        borderRadius: "10px"
+        // border: "thick solid black",
+    }, commentBody: {
         height: "100%",
         width: "90%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "flex-start",
-        padding: "5px",
-        background: "rgba(0, 177, 64, 0.1)",
-        borderRadius: "10px"
-        // border: "thick solid black",
+        background: "none",
+        borderRadius: "10px",
+        // border: "thin solid black",
+    }, whiteDiv: {
+        height: "100%",
+        width: "10%",
+        background: "#FFFFFF",
+        borderRadius: "20px 0 0 20px",
+        // border: "thin solid black",
     }
 }

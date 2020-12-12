@@ -25,7 +25,7 @@ export default class Post extends Component{
 
     render(){
         var error = false; var disp;
-        if (this.props.logo){
+        if (this.props.logo || this.props.user==null){
             disp = <img src={require("../../images/LogoGreen.jpeg")} alt="Stock Prattle Green" style={postStyle.image}/>
         } else {
             disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
@@ -34,7 +34,7 @@ export default class Post extends Component{
             }
         }
     return (
-        <div style={postStyle.mainDiv}>
+        <div id={this.props.text} style={postStyle.mainDiv}>
             <div style={postStyle.postDiv}>
                 <div style={postStyle.topBar}>
                     <div style={postStyle.imageDiv}>
@@ -61,7 +61,6 @@ export default class Post extends Component{
 }
 
 const postStyle= {mainDiv: {
-        minHeight: "140px",
         width: "80%",
         backgroundColor: "#FFFFFF",
         border: "0px solid rgba(0, 0, 0, 0.25)",
@@ -76,6 +75,7 @@ const postStyle= {mainDiv: {
     }, postDiv: {
         width: "70%",
         minWidth: "70%",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
@@ -101,7 +101,6 @@ const postStyle= {mainDiv: {
         overflow: "none",
     }, contentDiv: {
         width: "100%",
-        height: "50px",
         display: "flex",
         flexDirection: "row",
         gap: "10px",
@@ -118,12 +117,13 @@ const postStyle= {mainDiv: {
         fontWeight: "600px",
         fontSize: "18px",
         outline: "none",
-        borderRadius: "10px"
+        borderRadius: "10px",
+        margin: "20px 0 20px 0"
     }, bottomBar: {
         width: "100%",
         height: "40px",
         display: "flex",
-        gap: "10px",
+        gap: "20px",
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",

@@ -7,7 +7,7 @@ export default class UserFeed extends Component{
         super(props);
         var toadd = []; var i = 0;
         while (i<5){
-            toadd.push(({user: "@username", text: "Fake post text!"}));
+            toadd.push(({user: "@username", text: "Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text."}));
             i++;
         }
         this.state = {items: toadd}
@@ -21,7 +21,7 @@ export default class UserFeed extends Component{
 
             var toadd = []; var i = 0;
             while (i<5){
-                toadd.push(({user: "@username", text: "Fake post text!"}));
+                toadd.push(({user: "@username", text: "Fake post text."}));
                 i++;
             }
             this.setState({items: this.state.items.concat(toadd)})
@@ -32,7 +32,7 @@ export default class UserFeed extends Component{
     render(){
     return (
         <div id="usedFeedDiv" style={userFeedStyle.centerDiv} onScroll={this.checkAndFetch}>
-            {this.state.items.map((i, index) => (<Post key={index} user={i.username} text={index}/>))}
+            {this.state.items.map((i, index) => (<Post key={index} user={i.username} text={i.text}/>))}
             <p style={userFeedStyle.loading}>Loading...</p>
         </div>
         )
