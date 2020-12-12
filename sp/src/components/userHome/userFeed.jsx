@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Post from "../post.jsx";
+import Post from "./post.jsx";
 
 export default class UserFeed extends Component{
     constructor(props){

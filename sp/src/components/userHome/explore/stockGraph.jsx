@@ -229,7 +229,9 @@ export default class StockGraph extends Component{
             //returns corresponding value from the domain
             const correspondingDate = xScale.invert(d3.pointer(event)[0]);
             //gets insertion point
-            const i = bisectDate(data, correspondingDate, 1);
+            var i = bisectDate(data, correspondingDate, 1);
+            i = (i==data.length) ? i-1 : i;
+
             const d0 = data[i - 1];
             const d1 = data[i];
             const currentPoint =
@@ -363,10 +365,11 @@ const chartStyle = { mainDiv: {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
+        alignItems: "center"
         // border: "thin solid black"
     }, topDiv: {
         background: "none",
-        width: "100%",
+        width: "95%",
         height: "60px",
         display: "flex",
         flexDirection: "row",

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import StockGraph from './stockGraph.jsx';
+import UserFeed from '../userFeed.jsx';
 
 export default class StockPage extends Component{
     constructor(props){
@@ -13,16 +14,15 @@ export default class StockPage extends Component{
             <div style={stockStyle.topDiv}>
                 <StockGraph />
                 <div style={stockStyle.stockDetails}>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
+                    <p style = {stockStyle.text}><b>Previous Close:</b> $$$</p>
+                    <p style = {stockStyle.text}><b>Open:</b> $$$</p>
+                    <p style = {stockStyle.text}><b>Low:</b> $$$</p>
+                    <p style = {stockStyle.text}><b>High:</b> $$$</p>
+                    <p style = {stockStyle.text}><b>Volume:</b> $$$</p>
+                    <p style = {stockStyle.text}><b>SP Predictor:</b> $$$</p>
                 </div>
             </div>
-            <div style={stockStyle.bottomDiv}>
-            </div>
+            <UserFeed user={null}/>
         </div>
         )
     }
@@ -40,7 +40,7 @@ const stockStyle= { centerDiv: {
         background: "none",
         overflow: "scroll",
         margin: "10px",
-        background: "rgba(229, 229, 229, 0.6)",
+        background: "none",
         borderRadius: "10px"
     }, topDiv: {
         height: "300px",
@@ -69,12 +69,22 @@ const stockStyle= { centerDiv: {
         height: "100%",
         width: "200px",
         display: "flex",
+        padding: "15px",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
+        alignItems: "flex-start",
+        gap: "15px",
         // border: "thick solid black",
         boxSizing: "border-box",
         background: "none",
         // overflow: "scroll"
+    }, text:{
+        margin: "0px",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        // fontWeight: "bold",
+        fontSize: "18px",
+        outline: "none",
+        borderRadius: "10px"
     }
 }

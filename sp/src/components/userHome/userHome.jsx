@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {Link, useHistory} from "react-router-dom";
 import PopUp from '../popUp.jsx';
 import NavBar from './navBar.jsx';
-import UserFeed from './userFeed/userFeed.jsx';
+import UserFeed from './userFeed.jsx';
 import MessageBox from './messages/messageBox.jsx';
 import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { penSvg } from '../svgs.jsx';
 import EditableText from './editableText.jsx';
-import MyPosts from './myPosts.jsx';
+import UserFeed from '../userFeed.jsx';
 import ProfilePic from './profilePic.jsx';
 import SocialDetails from './socialDetails.jsx'
 
@@ -40,7 +40,7 @@ export default class UserProfile extends Component {
                     </div>
                     <SocialDetails />
                 </div>
-                <MyPosts user={this.state.user}/>
+                <UserFeed user={this.state.user}/>
             </div>
         )
     }
@@ -60,7 +60,7 @@ const userProfileStyle = {
         background: "none",
         overflow: "scroll",
         margin: "10px",
-        background: "rgba(229, 229, 229, 0.6)",
+        background: "none",
         borderRadius: "10px"
     }, topDiv: {
         height: "170px",
