@@ -157,6 +157,7 @@ const userHomeStyle = { mainDiv:{
         // border: "thick solid black",
         boxSizing: "border-box",
         background: "none",
-        marginBottom: "10px"
+        marginBottom: "10px",
+        overflow: "hidden"
     }
 }
