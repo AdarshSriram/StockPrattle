@@ -1,0 +1,48 @@
+{
+  "OHLC": [
+    {
+      "CLOSE": 1116.5,
+      "HIGH": 1119.6,
+      "LASTTRADETIME": 1391817600,
+      "LOW": 1102.1,
+      "OPEN": 1102.1,
+      "OPENINTEREST": 1887,
+      "QUOTATIONLOT": 15,
+      "TRADEDQTY": 310
+    },
+    {
+      "CLOSE": 1116.5,
+      "HIGH": 1119.6,
+      "LASTTRADETIME": 139817600,
+      "LOW": 1102.1,
+      "OPEN": 1102.1,
+      "OPENINTEREST": 1887,
+      "QUOTATIONLOT": 15,
+      "TRADEDQTY": 310
+    }
+  ],
+  "TICK": [
+    {
+      "BUYPRICE": 1115.1,
+      "BUYQTY": 1,
+      "LASTTRADEPRICE": 1115.8,
+      "LASTTRADETIME": 1391864127,
+      "OPENINTEREST": 1885,
+      "QUOTATIONLOT": 15,
+      "SELLPRICE": 1116,
+      "SELLQTY": 1,
+      "TRADEDQTY": -87
+    },
+    {
+      "BUYPRICE": 1115,
+      "BUYQTY": 1,
+      "LASTTRADEPRICE": 1115.1,
+      "LASTTRADETIME": 1391864128,
+      "OPENINTEREST": 1886,
+      "QUOTATIONLOT": 15,
+      "SELLPRICE": 1116,
+      "SELLQTY": 1,
+      "TRADEDQTY": -86
+    }
+  ]
+}
