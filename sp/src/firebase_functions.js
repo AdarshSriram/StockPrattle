@@ -273,7 +273,7 @@ export const get_follower_posts = async () => {
         const followersEmails = docRef.map(it => it.id)
         var post_arr = [];
         for (var email in followersEmails) {
-          post_arr.concat(await getPostsByEmail(email))
+          post_arr.concat(getPostsByEmail(email))
         }
         return post_arr
       })
