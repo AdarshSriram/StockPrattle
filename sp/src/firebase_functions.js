@@ -1,6 +1,7 @@
 import firebase from './utils/config'
 import fire from 'firebase'
 
+const fireInstance = firebase.firestore()
 const userCollection = firebase.firestore().collection('users')
 var storageRef = firebase.storage().ref();
 var providerG = new fire.auth.GoogleAuthProvider();
@@ -207,13 +208,13 @@ export const signUpExt = (google) => {
 }
 
 export const signInExt = (google) => {
-    firebase.auth().signInWithPopup((google) ? providerG : providerF).then(function (result) {
+  firebase.auth().signInWithPopup((google) ? providerG : providerF).then(function (result) {
     const user = firebase.auth().currentUser
     userCollection.doc(user.email).get().then((doc) => {
-        if (!doc.exists) {
-            user.delete();
-            console.log("user deleted")
-        }
+      if (!doc.exists) {
+        user.delete();
+        console.log("user deleted")
+      }
     })
     // This gives you a Google Access Token. You can use it to access the Google API.
     // The signed-in user info.
@@ -228,3 +229,59 @@ export const signInExt = (google) => {
     // ...
   })
 }
+
+export const addPost = async (post) => {
+  var user = firebase.auth().currentUser;
+  var email = user.email
+  var post_ref = fireInstance.collection("posts/" + email + "/userPosts");
+  post_ref
+    .doc(post.id).set(post)
+    .catch((err) => { console.log(err) })
+}
+
+export const addFollow = async (follower_email) => {
+  var user = firebase.auth().currentUser;
+  var follow_ref = fireInstance.collection("follows/" + user.email + "/userFollows");
+  follow_ref
+    .doc(user.email)
+    .set()
+    .catch((err) => { console.log(err) })
+}
+
+let getPosts = async (email) => {
+  const snapshot = await fireInstance.collection("posts/" + email + "/userPosts")
+    .orderBy("date", fire.Query.Direction.DESCENDING).limit(3).get()
+  return snapshot.docs.map(doc => doc.data());
+}
+
+export const get_follower_posts = async () => {
+  var user = firebase.auth().currentUser;
+  var follow_ref = fireInstance.collection("follows/" + user.email + "/userFollows");
+  follow_ref
+    .listDocuments()
+    .then(
+      (docRef) => {
+        const followersEmails = docRef.map(it => it.id).slice(0, Math.min(followersEmails.length, 5))
+        var post_arr = [];
+        for (var email in followersEmails) {
+          post_arr.concat(getPosts(email))
+        }
+        return post_arr
+      })
+    .catch((err) => { console.log(err) })
+}
+
+export const get_stock_comments = async (stockId) => {
+  const snapshot = await fireInstance.collection("comments/" + stockId + "/stockComments")
+    .orderBy("points", fire.Query.Direction.DESCENDING).get()
+  return snapshot.docs.map(doc => doc.data());
+}
+
+export const add_stock_comment = async (comment, stockId) => {
+  var user = firebase.auth().currentUser;
+  const comment_ref = fireInstance.collection("comments/" + stockId + "/stockComments")
+  comment_ref.doc(stockId)
+    .set(comment)
+    .catch((err) => { console.log(err) })
+}
+
