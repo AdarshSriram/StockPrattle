@@ -308,6 +308,21 @@ export const followUser = async (follower_email, follower_uname) => {
     .catch((err) => { console.log(err) })
 }
 
+export const unfollowUser = async (follower_email) => {
+  var user = firebase.auth().currentUser;
+  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollowing");
+  follow_ref
+    .doc(follower_email)
+    .delete()
+    .then(() => {
+      var following_ref = firebase.firestore().collection("follows/" + follower_email + "/userFollowing");
+      following_ref
+        .doc(user.email)
+        .delete()
+    })
+    .catch((err) => { console.log(err) })
+}
+
 export const getFollowing = async (userEmail = null, following = true) => {
   if (userEmail === null) {
     var user = firebase.auth().currentUser;
