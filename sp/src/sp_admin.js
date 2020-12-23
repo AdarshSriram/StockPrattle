@@ -1,4 +1,4 @@
-{
+export default {
   "type": "service_account",
   "project_id": "stockprattle",
   "private_key_id": "bd4ff4c96f53790d378f77d7d73029e0c10ab013",

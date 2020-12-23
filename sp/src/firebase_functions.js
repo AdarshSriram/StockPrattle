@@ -2,15 +2,16 @@ import firebase from './utils/config.js';
 import fire from 'firebase';
 import admin from 'firebase-admin';
 
-import * as serviceAccount from "./stock_prattle_admin_service_key.json"
+import serviceAccount from "./sp_admin.js"
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://stockprattle.firebaseio.com"
 });
-var firestore_admin = admin.firestore
+
 const fireInstance = firebase.firestore()
 const userCollection = firebase.firestore().collection('users')
-//var storageRef = firebase.storage().ref();
+var storageRef = firebase.storage().ref();
 var providerG = new fire.auth.GoogleAuthProvider();
 var providerF = new fire.auth.FacebookAuthProvider()
 
@@ -240,7 +241,7 @@ export const signInExt = (google) => {
 export const addPost = async (post) => {
   var user = firebase.auth().currentUser;
   var email = user.email
-  var post_ref = fireInstance.collection("posts/" + email + "/userPosts");
+  var post_ref = admin.firestore().collection("posts/" + email + "/userPosts");
   post_ref
     .doc(post.id).set(post)
     .catch((err) => { console.log(err) })
@@ -249,7 +250,7 @@ export const addPost = async (post) => {
 export const addFollow = async (follower_email) => {
   //var user = firebase.auth().currentUser;
   var email = "as2566@cornell.edu"
-  var follow_ref = firestore_admin.collection("follows/" + email + "/userFollows");
+  var follow_ref = admin.firestore().collection("follows/" + email + "/userFollows");
   follow_ref
     .doc(email)
     .set({})
@@ -258,7 +259,7 @@ export const addFollow = async (follower_email) => {
 
 export const getFollowers = async () => {
   var user = firebase.auth().currentUser;
-  var follow_ref = fireInstance.collection("follows/" + user.email + "/userFollows");
+  var follow_ref = admin.firestore().collection("follows/" + user.email + "/userFollows");
   follow_ref
     .listDocuments()
     .then((docRef) => docRef)
@@ -266,14 +267,14 @@ export const getFollowers = async () => {
 }
 
 let getPostsByEmail = async (email) => {
-  const snapshot = await fireInstance.collection("posts/" + email + "/userPosts")
+  const snapshot = await admin.firestore().collection("posts/" + email + "/userPosts")
     .orderBy("date", fire.Query.Direction.DESCENDING).limit(3).get()
   return snapshot.docs.map(doc => doc.data());
 }
 
 export const get_follower_posts = async () => {
   var user = firebase.auth().currentUser;
-  var follow_ref = fireInstance.collection("follows/" + user.email + "/userFollows");
+  var follow_ref = admin.firestore().collection("follows/" + user.email + "/userFollows");
   follow_ref
     .listDocuments()
     .then(
@@ -289,14 +290,14 @@ export const get_follower_posts = async () => {
 }
 
 export const get_stock_comments = async (stockId) => {
-  const snapshot = await fireInstance.collection("comments/" + stockId + "/stockComments")
+  const snapshot = await admin.firestore().collection("comments/" + stockId + "/stockComments")
     .orderBy("points", fire.Query.Direction.DESCENDING).get()
   return snapshot.docs.map(doc => doc.data());
 }
 
 export const add_stock_comment = async (comment, stockId) => {
   var user = firebase.auth().currentUser;
-  const comment_ref = fireInstance.collection("comments/" + stockId + "/stockComments")
+  const comment_ref = admin.firestore().collection("comments/" + stockId + "/stockComments")
   comment_ref.doc(stockId)
     .set(comment)
     .catch((err) => { console.log(err) })
