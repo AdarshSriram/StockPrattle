@@ -260,10 +260,10 @@ export const getFollowers = async () => {
     .catch((err) => { console.log(err) })
 }
 
-let getPostsByEmail = async (email) => {
+let getPostsByEmail = async (email, arr) => {
   const snapshot = await firebase.firestore().collection("posts/" + email + "/userPosts")
     .orderBy("createdAt").limit(3).get()
-  return snapshot.docs.map(doc => doc.data());
+  return snapshot.docs.map(doc => { console.log(doc.data()); doc.data() });
 }
 
 export const get_follower_posts = async () => {
@@ -276,10 +276,12 @@ export const get_follower_posts = async () => {
         var post_arr = [];
         docRef.forEach((doc) => {
           console.log(doc.id)
-          post_arr.push(getPostsByEmail(doc.id))
+          post_arr.push(getPostsByEmail(doc.id, post_arr))
         })
         console.log(post_arr)
-        return Promise.all(post_arr)
+        var res = Promise.all(post_arr)
+        console.log(res)
+        return res
       })
     .catch((err) => { console.log(err) })
 }
