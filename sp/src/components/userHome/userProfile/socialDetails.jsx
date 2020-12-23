@@ -11,7 +11,7 @@ export default class SocialDetails extends Component{
     }
 
     componentDidUpdate(prevProps){
-        if (prevProps.user != this.props.user){
+        if (prevProps.following != this.props.following || prevProps.user != this.props.user){
             this.setState({following: this.props.following})
         }
     }
