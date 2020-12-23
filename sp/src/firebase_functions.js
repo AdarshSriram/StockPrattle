@@ -260,22 +260,10 @@ export const getFollowers = async () => {
     .catch((err) => { console.log(err) })
 }
 
-<<<<<<< HEAD
-let getPostsByEmail = async (email, arr) => {
+let getPostsByEmail = async (email) => {
   const snapshot = await firebase.firestore().collection("posts/" + email + "/userPosts")
     .orderBy("createdAt").limit(3).get()
   return snapshot.docs.map(doc => { console.log(doc.data()); doc.data() });
-=======
-let getPostsByEmail = (email) => {
-  return firebase.firestore().collection("posts/" + email + "/userPosts")
-    .orderBy("createdAt").get().then((doc)=> {
-        if (!doc.exists){
-            console.log("Doc doesn't exist")
-        } else {
-            return doc.data()
-        }
-    })
->>>>>>> 10d1f226514d568d4d047d321e6a8d486410c42a
 }
 
 export const get_follower_posts = async () => {
@@ -285,19 +273,13 @@ export const get_follower_posts = async () => {
       (docRef) => {
         var post_arr = [];
         docRef.forEach((doc) => {
-<<<<<<< HEAD
           console.log(doc.id)
-          post_arr.push(getPostsByEmail(doc.id, post_arr))
+          post_arr.push(getPostsByEmail(doc.id))
         })
         console.log(post_arr)
         var res = Promise.all(post_arr)
         console.log(res)
         return res
-=======
-          post_arr.push(getPostsByEmail(doc.id))
-        })
-        return post_arr
->>>>>>> 10d1f226514d568d4d047d321e6a8d486410c42a
       })
     .catch((err) => { console.log(err) })
 }
