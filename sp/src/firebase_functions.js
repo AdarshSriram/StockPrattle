@@ -128,17 +128,7 @@ export const SignIn = (params) => {
 }
 
 export const getUserInfo = (email) => {
-  userCollection.doc(email)
-    .get()
-    .then((doc) => {
-      if (!doc.exists) {
-        console.log('No user found')
-      }
-      else {
-        return doc.data()
-      }
-    })
-    .catch((err) => console.log(err))
+    return userCollection.doc(email).get()
 }
 
 export const getCurrentUserInfo = () => {
