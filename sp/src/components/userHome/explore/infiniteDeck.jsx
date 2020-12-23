@@ -43,7 +43,7 @@ export default class InfiniteDeck extends Component{
                 i++;
             }
             this.setState({items: this.state.items.concat(toadd), cardCount: cardCount})
-        }, 2000);
+            }, 2000);
         }
     }
 
@@ -51,7 +51,7 @@ export default class InfiniteDeck extends Component{
     return (
         <div style={deckStyle.deckDiv} onScroll={this.checkAndFetch}>
             {this.state.items.map((i, index) => (
-                <div style={deckStyle.packDiv}>
+                <div name="pack" id={this.state.items.indexOf(i)} style={deckStyle.packDiv}>
                     <Card heading={i.h1} text={i.t1} onCardClick={this.props.onCardClick}/>
                     <Card heading={i.h2} text={i.t2} onCardClick={this.props.onCardClick}/>
                     <Card heading={i.h3} text={i.t3} onCardClick={this.props.onCardClick}/>

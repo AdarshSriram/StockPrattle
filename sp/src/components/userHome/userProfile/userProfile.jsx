@@ -24,10 +24,11 @@ export default class UserProfile extends Component {
     }
 
     render() {
-        return (
+        if (this.state.setUser != null){
+            return(
             <div style={userProfileStyle.centerDiv}>
                 <div id="top" style={userProfileStyle.topDiv}>
-                    <ProfilePic user={this.state.user} />
+                    <ProfilePic user={this.state.user} editable={true}/>
                     <div style={userProfileStyle.details}>
                         <EditableText type={'Username'} setUser={this.updateProfile} user={this.state.user}/>
                         <EditableText type={'Full Name'} setUser={this.updateProfile} user={this.state.user}/>
@@ -42,7 +43,57 @@ export default class UserProfile extends Component {
                 </div>
                 <UserFeed user={this.state.user}/>
             </div>
+        )} else {
+            return(
+            <div style={userProfileStyle.centerDiv}>
+                <div id="top" style={userProfileStyle.topDiv}>
+                    <ProfilePic user={this.state.user} editable={false}/>
+                    <div style={userProfileStyle.details}>
+                        <div style={userProfileStyle.editableTextDiv}>
+                            <label style={userProfileStyle.label}>{"Username: "}</label>
+                            <p style={userProfileStyle.textStyle}>{
+                                (this.state.user.username == null) ? "" : this.state.user.username
+                            }</p>
+                        </div>
+                        <div style={userProfileStyle.editableTextDiv}>
+                            <label style={userProfileStyle.label}>{"Full Name: "}</label>
+                            <p style={userProfileStyle.textStyle}>{
+                                (this.state.user.fullname == null) ? "" : this.state.user.fullname
+                            }</p>
+                        </div>
+                        <div style={userProfileStyle.editableTextDiv}>
+                            <label style={userProfileStyle.label}>{"Birthday: "}</label>
+                            <p style={userProfileStyle.textStyle}>{
+                                (this.state.user.birthday == null) ? "" : this.state.user.birthday
+                            }</p>
+                        </div>
+                    </div>
+                    <div style={userProfileStyle.details}>
+                        <div style={userProfileStyle.editableTextDiv}>
+                            <label style={userProfileStyle.label}>{"Title: "}</label>
+                            <p style={userProfileStyle.textStyle}>{
+                            (this.state.user.title == null) ? "" : this.state.user.title
+                            }</p>
+                        </div>
+                        <div style={userProfileStyle.editableTextDiv}>
+                            <label style={userProfileStyle.label}>{"Industry: "}</label>
+                            <p style={userProfileStyle.textStyle}>{
+                                (this.state.user.industry == null) ? "" : this.state.user.industry
+                            }</p>
+                        </div>
+                        <div style={userProfileStyle.editableTextDiv}>
+                            <label style={userProfileStyle.label}>{"Education: "}</label>
+                            <p style={userProfileStyle.textStyle}>{
+                                (this.state.user.education == null) ? "" : this.state.user.education
+                            }</p>
+                        </div>
+                    </div>
+                    <SocialDetails name={this.state.user.fullname}/>
+                </div>
+                <UserFeed user={this.state.user}/>
+            </div>
         )
+        }
     }
 }
 
@@ -94,6 +145,35 @@ const userProfileStyle = {
         justifyContent: "center",
         alignItems: "flex-start",
         // border: "thick solid black",
+        boxSizing: "border-box",
+        background: "none",
+        // overflow: "scroll"
+    }, label: {
+        padding: "2px",
+        margin: "0px",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        fontWeight: "bold",
+        fontSize: "18px",
+        outline: "none",
+        borderRadius: "10px"
+    }, textStyle: {
+        padding: "2px",
+        margin: "0px",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        fontWeight: "600px",
+        fontSize: "18px",
+        outline: "none",
+        borderRadius: "10px",
+        border: "none",
+    }, editableTextDiv: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        gap: "10px",
+        //border: "thick solid black",
         boxSizing: "border-box",
         background: "none",
         // overflow: "scroll"

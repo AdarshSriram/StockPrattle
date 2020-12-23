@@ -18,11 +18,11 @@ export default class SocialDetails extends Component{
         return(
         <div style={socialStyle.mainDiv}>
             <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
-            >Stocks You Follow</button>
+            >{(this.props.name == null) ? "Stocks You Follow" : "Stocks "+this.props.name.split(" ")[0]+" Follows"}</button>
             <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
-            >People You Follow</button>
+            >{(this.props.name == null) ? "People You Follow" : "People "+this.props.name.split(" ")[0]+" Follows"}</button>
             <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
-            >People Who Follow You</button>
+            >{(this.props.name == null) ? "People Who Follow You" : "People Who Follow "+this.props.name.split(" ")[0]}</button>
         </div>
         )
     }

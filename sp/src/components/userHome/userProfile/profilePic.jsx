@@ -10,6 +10,7 @@ export default class ProfilePic extends Component {
         this.state = { user: props.user, image: null }
         this.setStateImage = this.setStateImage.bind(this)
         this.handleUpload = this.handleUpload.bind(this)
+        this.handleIn = this.handleIn.bind(this)
     }
 
     async setStateImage() {
@@ -39,7 +40,9 @@ export default class ProfilePic extends Component {
 
     handleIn(event) {
         const elem = document.getElementById("ProfilePicEdit")
-        elem.style.visibility = "visible"
+        if (this.props.editable){
+            elem.style.visibility = "visible"
+        }
     }
 
     handleOut(event) {

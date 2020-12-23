@@ -15,7 +15,12 @@ export default class NavBar extends Component{
             }
             i++;
         }
-        this.state = {sbItems: toadd}
+        this.state = {sbItems: toadd, users: ["as2566@cornell.edu"]}
+    }
+
+    goTo(){
+        var togo = document.getElementById("searchBar").value
+        this.props.goTo(togo)
     }
 
     mouseIn(but){
@@ -37,7 +42,17 @@ export default class NavBar extends Component{
         <div id="headerFunction" style={navBarStyle.headerFunction}>
             <div id="otherHeaderStuff" style={navBarStyle.otherHeaderStuff}>
                 <div id="searchDiv" style={navBarStyle.searchDiv}>
-                    <input id="searchBar" type="text" placeholder = {"Search"} style={navBarStyle.searchBar}/>
+                    <form style={navBarStyle.searchBar} onSubmit={(event) => {
+                            event.preventDefault();
+                            this.goTo();
+                        }}>
+                        <input id="searchBar" type="text" list="users" placeholder = "Go To" style={navBarStyle.searchInput}/>
+                            <datalist id= "users">
+                                {this.state.users.map(item => (<option id={item} value={item}/>))}
+                            </datalist>
+                        <input id="searchSubmit" type="submit" value= "→" style={navBarStyle.goButton}
+                        onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}/>
+                    </form>
                 </div>
                 <button style={navBarStyle.button}>
                     {bellSvg}
@@ -127,7 +142,7 @@ const navBarStyle= { header: {
         height: "100%",
         width: "100%",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
         // border: "thick solid black",
@@ -147,20 +162,30 @@ const navBarStyle= { header: {
         height: "133.75px",
         width: "138.75px"
     }, searchBar:{
-        width: "600px",
+        width: "80%",
         height: "40px",
         // paddingLeft: "10px",
         background: "rgba(0, 177, 64, 0.05)",
         border: "1px solid #00B140",
         boxSizing: "border-box",
         borderRadius: "50px",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center"
+        // margin: "0px"
+    }, searchInput: {
+        width: "90%",
+        height: "100%",
+        background: "none",
         fontFamily: "Dosis",
         fontStyle: "normal",
         fontWeight: "bold",
         fontSize: "18px",
         textAlign: "center",
         outline: "none",
-        // margin: "0px"
+        borderRadius: "25px 0 0 25px",
+        borderWidth: "0px"
     }, button: {
         background: "none",
         width: "130px",
@@ -186,5 +211,18 @@ const navBarStyle= { header: {
         display: "flex",
         flexDirection: "row",
         gap: "10px"
+    }, goButton: {
+        background: "none",
+        width: "10%",
+        height: "100%",
+        borderRadius: "0 25px 25px 0",
+        border: "0px dashed #00B140",
+        color: "#00B140",
+        fontFamily: "Arial",
+        fontStyle: "normal",
+        fontWeight: "600px",
+        fontSize: "30px",
+        outline: "none",
+        cursor: "pointer"
     }
 }

@@ -14,13 +14,14 @@ import {getCurrentUserInfo, setCurrentUserInfo} from '../../firebase_functions.j
 export default class UserPage extends Component{
     constructor(props){
         super(props);
-        this.state = {current: "feed", user: null}
+        this.state = {current: "feed", user: null, goTo: "default"}
         this.profileButtonClick = this.profileButtonClick.bind(this);
         this.feedButtonClick = this.feedButtonClick.bind(this);
         this.messagesButtonClick = this.messagesButtonClick.bind(this);
         this.exploreButtonClick = this.exploreButtonClick.bind(this);
         this.updateUserInfo = this.updateUserInfo.bind(this);
         this.setStateUser = this.setStateUser.bind(this)
+        this.goTo = this.goTo.bind(this)
     }
 
     componentDidMount(){
@@ -28,6 +29,10 @@ export default class UserPage extends Component{
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
         this.setStateUser();
+    }
+
+    goTo(id){
+        this.exploreButtonClick(null, id)
     }
 
     setStateUser(){
@@ -69,7 +74,7 @@ export default class UserPage extends Component{
         this.setState({current: "profile"});
     }
 
-    exploreButtonClick(){
+    exploreButtonClick(event, goTo = "default"){
         var ids= ["feedButton","profileButton","messagesButton"]
         var but;
         for (var id of ids){
@@ -80,7 +85,7 @@ export default class UserPage extends Component{
         but = document.getElementById("exploreButton");
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
-        this.setState({current: "explore"});
+        this.setState({current: "explore", goTo: goTo});
     }
 
     feedButtonClick(){
@@ -116,7 +121,7 @@ export default class UserPage extends Component{
         if (this.state.current=="profile"){
             item= <UserProfile user={this.state.user} setUser={this.updateUserInfo}/>
         } else if (this.state.current=="explore"){
-            item= <ExplorePage />
+            item= <ExplorePage display={this.state.goTo}/>
         } else if (this.state.current=="messages"){
             item= <MessageBox />
         } else {
@@ -124,7 +129,7 @@ export default class UserPage extends Component{
         }
         return (
         <div id="wholeScreen" style={userHomeStyle.mainDiv}>
-            <NavBar />
+            <NavBar goTo={this.goTo}/>
             <div id="body" style={userHomeStyle.body}>
                 <LeftMenu history={this.props.history} pageState={this.state.current}
                 buttonClickFunctions={[this.profileButtonClick, this.feedButtonClick,
