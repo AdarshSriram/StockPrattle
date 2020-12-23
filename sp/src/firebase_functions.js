@@ -26,6 +26,13 @@ var providerF = new fire.auth.FacebookAuthProvider()
 // }
 
 // Update user profle details
+
+let getPostIdsByEmail = async (email) => {
+  const snapshot = await firebase.firestore().collection("posts/" + email + "/userPosts")
+    .orderBy("createdAt").get()
+  return snapshot.docs.map(doc => doc.id);
+}
+
 export const updateProfile = (fieldName, detail) => {
   var user = firebase.auth().currentUser;
   if (user != null) {
@@ -39,16 +46,41 @@ export const updateProfile = (fieldName, detail) => {
       .catch((err) => console.log(err))
 
     if (fieldName === 'username') {
+      console.log("hi")
       userCollection.where('username', '==', detail).get().then(
         (snap) => {
           if (snap.empty) {
             user.updateProfile({ displayName: detail })
-              .then(() => { console.log("User profile updated ") })
+              .then(() => {
+                console.log("User profile updated ");
+                getPostIdsByEmail(user.email)
+                  .then((idLIst) => {
+                    console.log(idLIst)
+                    idLIst.forEach(id => {
+                      firebase.firestore().collection("posts/" + user.email + "/userPosts")
+                        .doc(id)
+                        .update({ username: detail })
+                        .then(() => console.log("post updated"))
+                    })
+                  })
+              })
               .catch((error) => console.log("User profile could not be updated. Try again"))
           }
           else console.log('username taken')
         }
       )
+    }
+    else if (fieldName === "profile") {
+      firebase.firestore()
+        .collection("posts/" + user.email + "/userPosts")
+        .get()
+        .then((querySnap) => {
+          querySnap.forEach((doc) => {
+            doc.ref.update({
+              "propic": detail
+            })
+          })
+        })
     }
   }
 }
@@ -236,7 +268,7 @@ export const addPost = async (params) => {
     "text": params[1],
     "createdAt": (new Date()).toString(),
     "username": user.displayName,
-    "propic": pic
+    "propric": pic
   }
   var email = user.email
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
@@ -256,11 +288,10 @@ export const addFollow = async (follower_email) => {
 
 export const getFollowers = async () => {
   var user = firebase.auth().currentUser;
-  var follow_ref = firebase.firestore().collection("following/" + user.email + "/userFollowing");
-  follow_ref
-    .listDocuments()
-    .then((docRef) => docRef)
-    .catch((err) => { console.log(err) })
+  const snapshot = await firebase.firestore()
+    .collection("following/" + user.email + "/userFollowing")
+    .get()
+  return snapshot.docs.map(doc => doc.data().username)
 }
 
 let getPostsByEmail = async (email) => {
