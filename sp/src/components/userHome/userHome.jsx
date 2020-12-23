@@ -36,7 +36,7 @@ export default class UserPage extends Component{
     setData(){
         get_follower_posts().then((res)=>{
             getFollowing().then((restwo)=>{
-                this.setState({mainFeedData: res[0], follwing: restwo})
+                this.setState({mainFeedData: res[0], following: restwo})
             })
         })
     }
@@ -129,9 +129,9 @@ export default class UserPage extends Component{
     render(){
         var item;
         if (this.state.current=="profile"){
-            item= <UserProfile user={this.state.user} setUser={this.updateUserInfo} followings={this.state.following}/>
+            item= <UserProfile user={this.state.user} setUser={this.updateUserInfo} following={this.state.following}/>
         } else if (this.state.current=="explore"){
-            item= <ExplorePage display={this.state.goTo} followings={this.state.following}/>
+            item= <ExplorePage display={this.state.goTo} following={this.state.following}/>
         } else if (this.state.current=="messages"){
             item= <MessageBox />
         } else {

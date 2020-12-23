@@ -291,7 +291,7 @@ export const getFollowing = async () => {
   const snapshot = await firebase.firestore()
     .collection("following/" + user.email + "/userFollowing")
     .get()
-  return snapshot.docs.map(doc => doc.data().id)
+  return snapshot.docs.map(doc => doc.id)
 }
 
 let getPostsByEmail = async (email) => {
