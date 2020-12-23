@@ -21,58 +21,59 @@ function reversePress(event) {
     document.getElementById("header").style.filter = "none";
 }
 
-export default class UserFeed extends Component{
-    constructor(props){
+export default class UserFeed extends Component {
+    constructor(props) {
         super(props);
         var toadd = []; var i = 0;
-        while (i<5){
-            toadd.push(({user: "@username", text: "Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text."}));
+        while (i < 5) {
+            toadd.push(({ user: "@username", text: "Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text." }));
             i++;
         }
-        this.state = {items: toadd}
+        this.state = { items: toadd }
         this.checkAndFetch = this.checkAndFetch.bind(this)
     }
 
-    checkAndFetch(event){
+    checkAndFetch(event) {
         var element = event.target;
-        if (element.scrollHeight - element.scrollTop === element.clientHeight){
+        if (element.scrollHeight - element.scrollTop === element.clientHeight) {
             setTimeout(() => {
 
-            var toadd = []; var i = 0;
-            while (i<5){
-                toadd.push(({user: "@username", text: "Fake post text."}));
-                i++;
-            }
-            this.setState({items: this.state.items.concat(toadd)})
-        }, 2000);
+                var toadd = []; var i = 0;
+                while (i < 5) {
+                    toadd.push(({ user: "@username", text: "Fake post text." }));
+                    i++;
+                }
+                this.setState({ items: this.state.items.concat(toadd) })
+            }, 2000);
         }
     }
 
-    mouseIn(event){
+    mouseIn(event) {
         event.target.style.backgroundColor = "#00B140"
         event.target.style.color = "#FFFFFF"
     }
 
-    mouseOut(event){
+    mouseOut(event) {
         event.target.style.backgroundColor = "#FFFFFF"
         event.target.style.color = "#00B140"
     }
 
-    render(){
-    return (
-        <div id="usedFeedDiv" style={userFeedStyle.centerDiv} onScroll={this.checkAndFetch}>
-            <div style={userFeedStyle.topDiv}>
-                <button style={userFeedStyle.newPostButton} onMouseOver={this.mouseIn}
-                    onMouseLeave={this.mouseOut} onClick={(event) => { buttonPress("Login") }}>+</button>
+    render() {
+        return (
+            <div id="usedFeedDiv" style={userFeedStyle.centerDiv} onScroll={this.checkAndFetch}>
+                <div style={userFeedStyle.topDiv}>
+                    <button style={userFeedStyle.newPostButton} onMouseOver={this.mouseIn}
+                        onMouseLeave={this.mouseOut} onClick={(event) => { buttonPress("Login") }}>+</button>
+                </div>
+                {this.state.items.map((i, index) => (<Post key={index} user={i.username} text={i.text} />))}
+                <p style={userFeedStyle.loading}>Loading...</p>
             </div>
-            {this.state.items.map((i, index) => (<Post key={index} user={i.username} text={i.text}/>))}
-            <p style={userFeedStyle.loading}>Loading...</p>
-        </div>
         )
     }
 }
 
-const userFeedStyle= { centerDiv: {
+const userFeedStyle = {
+    centerDiv: {
         height: "100%",
         width: "100%",
         display: "flex",

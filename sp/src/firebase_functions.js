@@ -128,7 +128,7 @@ export const SignIn = (params) => {
 }
 
 export const getUserInfo = (email) => {
-    return userCollection.doc(email).get()
+  return userCollection.doc(email).get()
 }
 
 export const getCurrentUserInfo = () => {
@@ -261,7 +261,7 @@ export const getFollowers = async () => {
 
 let getPostsByEmail = async (email) => {
   const snapshot = await firebase.firestore().collection("posts/" + email + "/userPosts")
-    .orderBy("date", firebase.Query.Direction.DESCENDING).limit(3).get()
+    .orderBy("createdAt").limit(3).get()
   return snapshot.docs.map(doc => doc.data());
 }
 
