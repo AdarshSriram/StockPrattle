@@ -36,6 +36,13 @@ export default class CommentScroll extends Component {
     render(){
     return (
         <div id={this.state.id} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
+            <div style={commentsStyle.comment}>
+                <div style={commentsStyle.commentBody}>
+                    <p style={commentsStyle.usernameText}>{"@currentUserName"}</p>
+                    <input style={commentsStyle.commentInput} type="text" placeholder="Add Comment"/>
+                </div>
+                <div style={commentsStyle.whiteDiv}/>
+            </div>
             {this.state.items.map((i, index) => (
                 <div key={index} style={commentsStyle.comment}>
                     <div style={commentsStyle.commentBody}>
@@ -88,6 +95,17 @@ const commentsStyle= { centerDiv: {
         margin: "0px",
         fontFamily: "Dosis",
         fontStyle: "normal",
+        // fontWeight: "bold",
+        fontSize: "14px",
+        outline: "none",
+        borderRadius: "10px"
+    }, commentInput: {
+        width: "90%",
+        margin: "0px",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        borderWidth: "0px",
+        borderRadius: "5px",
         // fontWeight: "bold",
         fontSize: "14px",
         outline: "none",
