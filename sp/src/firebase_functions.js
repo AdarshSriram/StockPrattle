@@ -228,12 +228,13 @@ export const signInExt = (google) => {
 }
 
 export const addPost = async (params) => {
+  var user = firebase.auth().currentUser;
   const post = {
     "stocks": params[0],
     "body": params[1],
-    "createdAt": (new Date()).toString()
+    "createdAt": (new Date()).toString(),
+    "poster": user.email
   }
-  var user = firebase.auth().currentUser;
   var email = user.email
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
   post_ref
