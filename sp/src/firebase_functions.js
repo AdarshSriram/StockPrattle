@@ -282,7 +282,7 @@ export const addFollow = async (follower_email) => {
   var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollows");
   follow_ref
     .doc(user.email)
-    .set({})
+    .set({ username: user.displayName })
     .catch((err) => { console.log(err) })
 }
 
