@@ -45,8 +45,11 @@ export default class SocialDetails extends Component {
 
     followUnfollow() {
         const email = this.props.user.email
-        const uname = this.props.user.username
-        followUser(email, uname)
+        if (this.state.follow) { unfollowUser(email).then(() => console.log("Unfollowed")) }
+        else {
+            const uname = this.props.user.username
+            followUser(email, uname).then(() => console.log("Followed"))
+        }
         this.setState({ following: !this.state.following })
     }
 
@@ -55,7 +58,7 @@ export default class SocialDetails extends Component {
             <div style={{
                 height: "100%",
                 width: "100%",
-                gap: (this.props.name == null) ? "20px" : "10px",
+                gap: (this.props.user == null) ? "20px" : "10px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -67,12 +70,12 @@ export default class SocialDetails extends Component {
                 // overflow: "scroll"
             }}>
                 <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
-                >{(this.props.name == null) ? "Stocks You Follow" : "Stocks " + this.props.name.split(" ")[0] + " Follows"}</button>
+                >{(this.props.user == null) ? "Stocks You Follow" : "Stocks " + this.props.name.split(" ")[0] + " Follows"}</button>
                 <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
-                >{(this.props.name == null) ? "People You Follow" : "People " + this.props.name.split(" ")[0] + " Follows"}</button>
+                >{(this.props.user == null) ? "People You Follow" : "People " + this.props.name.split(" ")[0] + " Follows"}</button>
                 <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
-                >{(this.props.name == null) ? "People Who Follow You" : "People Who Follow " + this.props.name.split(" ")[0]}</button>
-                {(this.props.name == null) ? null : <button style={{
+                >{(this.props.user == null) ? "People Who Follow You" : "People Who Follow " + this.props.name.split(" ")[0]}</button>
+                {(this.props.user == null) ? null : <button style={{
                     background: (this.state.following) ? "#FFFFFF" : "#00B140",
                     width: "80px",
                     height: "35px",
