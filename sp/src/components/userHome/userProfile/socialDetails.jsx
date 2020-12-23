@@ -44,6 +44,7 @@ export default class SocialDetails extends Component{
 
     followUnfollow(){
         const email = this.props.user.email
+        
         this.setState({following: !this.state.following})
     }
 
