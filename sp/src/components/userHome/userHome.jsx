@@ -34,9 +34,7 @@ export default class UserPage extends Component{
     }
 
     setData(){
-        console.log("trace")
         get_follower_posts().then((res)=>{
-                console.log(res)
                 this.setState({mainFeedData: res})
             }
         )
