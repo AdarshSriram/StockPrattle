@@ -8,13 +8,13 @@ export default class NewPostPopUp extends Component {
         this.state = { stocks: ["NIFTY", "SENSEX"] }
     }
 
-    // subMouseIn(but) {
-    //     but.target.style.textDecoration = "underline";
-    // }
-    //
-    // subMouseOut(but) {
-    //     but.target.style.textDecoration = "none";
-    // }
+    mainMouseIn(but) {
+        but.target.style.background = "#009435";
+    }
+
+    mainMouseOut(but) {
+        but.target.style.background = "#00B140";
+    }
 
     add_post() {
         const inputs = document.getElementsByName("inputs"); var params = []; var val;
@@ -62,7 +62,7 @@ const newPostStyle = {
         width: "500px",
         height: "600px",
         backgroundColor: "#FFFFFF",
-        border: "2px solid rgba(0, 0, 0, 0.25)",
+        border: "0px solid rgba(0, 0, 0, 0.25)",
         boxSizing: "border-box",
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         display: "flex",

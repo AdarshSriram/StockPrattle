@@ -178,7 +178,7 @@ const popUpStyle = {
         width: "500px",
         height: "600px",
         backgroundColor: "#FFFFFF",
-        border: "2px solid rgba(0, 0, 0, 0.25)",
+        border: "0px solid rgba(0, 0, 0, 0.25)",
         boxSizing: "border-box",
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
         display: "flex",
