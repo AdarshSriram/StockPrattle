@@ -1,15 +1,13 @@
 import firebase from './utils/config.js';
 import fire from 'firebase';
-import admin from 'firebase-admin';
-
-import serviceAccount from "./sp_admin.js"
+const serviceAccount = require('./sp_admin.json');
+const admin = require('firebase-admin');
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://stockprattle.firebaseio.com"
+  credential: admin.credential.cert(serviceAccount)
 });
 
-const fireInstance = firebase.firestore()
+//const db = admin.firestore()
 const userCollection = firebase.firestore().collection('users')
 var storageRef = firebase.storage().ref();
 var providerG = new fire.auth.GoogleAuthProvider();
@@ -21,6 +19,7 @@ var providerF = new fire.auth.FacebookAuthProvider()
 //      username: demo,
 //      fullname: demo demo
 //      birthday: dd/mm/yyyy
+//      title: Demo at demo firm
 //      title: Demo at demo firm
 //      industry: Demo
 //      education: uptil demo years
@@ -238,28 +237,32 @@ export const signInExt = (google) => {
   })
 }
 
-export const addPost = async (post) => {
+export const addPost = async (params) => {
+  const post = {
+    "stocks": params[0],
+    "body": params[1],
+    "createdAt": (new Date()).toString()
+  }
   var user = firebase.auth().currentUser;
   var email = user.email
-  var post_ref = admin.firestore().collection("posts/" + email + "/userPosts");
+  var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
   post_ref
-    .doc(post.id).set(post)
+    .doc().set(post)
     .catch((err) => { console.log(err) })
 }
 
 export const addFollow = async (follower_email) => {
-  //var user = firebase.auth().currentUser;
-  var email = "as2566@cornell.edu"
-  var follow_ref = admin.firestore().collection("follows/" + email + "/userFollows");
+  var user = firebase.auth().currentUser;
+  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollows");
   follow_ref
-    .doc(email)
+    .doc(user.email)
     .set({})
     .catch((err) => { console.log(err) })
 }
 
 export const getFollowers = async () => {
   var user = firebase.auth().currentUser;
-  var follow_ref = admin.firestore().collection("follows/" + user.email + "/userFollows");
+  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollows");
   follow_ref
     .listDocuments()
     .then((docRef) => docRef)
@@ -267,14 +270,14 @@ export const getFollowers = async () => {
 }
 
 let getPostsByEmail = async (email) => {
-  const snapshot = await admin.firestore().collection("posts/" + email + "/userPosts")
-    .orderBy("date", fire.Query.Direction.DESCENDING).limit(3).get()
+  const snapshot = await firebase.firestore().collection("posts/" + email + "/userPosts")
+    .orderBy("date", firebase.Query.Direction.DESCENDING).limit(3).get()
   return snapshot.docs.map(doc => doc.data());
 }
 
 export const get_follower_posts = async () => {
   var user = firebase.auth().currentUser;
-  var follow_ref = admin.firestore().collection("follows/" + user.email + "/userFollows");
+  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollows");
   follow_ref
     .listDocuments()
     .then(
@@ -290,19 +293,15 @@ export const get_follower_posts = async () => {
 }
 
 export const get_stock_comments = async (stockId) => {
-  const snapshot = await admin.firestore().collection("comments/" + stockId + "/stockComments")
+  const snapshot = await firebase.firestore().collection("comments/" + stockId + "/stockComments")
     .orderBy("points", fire.Query.Direction.DESCENDING).get()
   return snapshot.docs.map(doc => doc.data());
 }
 
 export const add_stock_comment = async (comment, stockId) => {
   var user = firebase.auth().currentUser;
-  const comment_ref = admin.firestore().collection("comments/" + stockId + "/stockComments")
+  const comment_ref = firebase.firestore().collection("comments/" + stockId + "/stockComments")
   comment_ref.doc(stockId)
     .set(comment)
     .catch((err) => { console.log(err) })
 }
-
-addFollow("adarshsriram10@gmail.com")
-  .then(console.log("Following"))
-  .catch((err) => console.log(err))
