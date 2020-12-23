@@ -45,7 +45,7 @@ export default class NavBar extends Component{
     return (
         <div id="header" style={navBarStyle.header}>
         <div id="logoDiv" style={navBarStyle.logoDiv}>
-            <img src={require("../../images/LogoGreen.jpeg")} alt="Stock Prattle Logo" style={navBarStyle.logo}/>
+            <img src={require("../../images/LogoGreen.png")} alt="Stock Prattle Logo" style={navBarStyle.logo}/>
         </div>
         <div id="headerFunction" style={navBarStyle.headerFunction}>
             <div id="otherHeaderStuff" style={navBarStyle.otherHeaderStuff}>

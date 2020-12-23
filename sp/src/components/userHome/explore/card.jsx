@@ -27,7 +27,7 @@ export default class Card extends Component{
     }
 
     render(){
-        var img = require("../../../images/LogoGreen.jpeg");
+        var img = require("../../../images/LogoGreen.png");
         var topBarStyle = {...cardStyle.topBar}
         var imageStyle = {...cardStyle.image}
         if (this.props.heading == "Stock Prattle Team"){

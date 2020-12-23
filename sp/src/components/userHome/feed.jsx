@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import UserFeed from './userFeed.jsx'
 import NewPostPopUp from './newPost.jsx'
+import LoadingScreen from "./loadingDiv.jsx"
 
 function buttonPress(type = null) {
     var elem = document.getElementById("popUpContainer");
@@ -50,9 +51,7 @@ export default class Feed extends Component{
                 <button style={feedStyle.newPostButton} onMouseOver={this.mouseIn}
                     onMouseLeave={this.mouseOut} onClick={(event) => { buttonPress("Login") }}>+</button>
             </div>
-            {(this.state.data == null) ? (<div style={feedStyle.loadingDiv}>
-                <p>Loading...</p>
-            </div>) : <UserFeed data={this.state.data}/>}
+            {(this.state.data == null) ? <LoadingScreen /> : <UserFeed data={this.state.data}/>}
         </div>
     )}
 }

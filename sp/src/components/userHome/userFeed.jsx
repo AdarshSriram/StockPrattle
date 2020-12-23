@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Post from "./post.jsx";
-import NewPostPopUp from "./newPost.jsx"
+import NewPostPopUp from "./newPost.jsx";
 
 
 export default class UserFeed extends Component {

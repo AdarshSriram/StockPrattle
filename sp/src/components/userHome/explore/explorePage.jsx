@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import InfiniteDeck from './infiniteDeck.jsx'
 import StockPage from './stockPage.jsx'
 import UserProfile from '../userProfile/userProfile.jsx';
+import LoadingScreen from '../loadingDiv.jsx';
 import {getUserInfo} from '../../../firebase_functions.js'
 
 export default class ExploreFeed extends Component{
@@ -42,9 +43,7 @@ export default class ExploreFeed extends Component{
             return <InfiniteDeck onCardClick={this.goToProfile}/>
         } else if (this.state.loading){
             return (
-                <div style={explorePageStyle.centerDiv}>
-                    <p>Loading...</p>
-                </div>
+                <LoadingScreen />
             )
         } else {
             return this.state.type == "user" ?  <UserProfile user={this.state.currentDisp} following={this.props.following}/> : <StockPage stock={this.state.currentDisp}/>
