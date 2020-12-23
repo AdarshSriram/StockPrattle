@@ -88,7 +88,7 @@ export default class UserProfile extends Component {
                             }</p>
                         </div>
                     </div>
-                    <SocialDetails name={this.state.user.fullname} following={this.state.following.includes(this.state.user.email)}/>
+                    <SocialDetails user={this.props.user} name={this.state.user.fullname} following={this.state.following.includes(this.state.user.email)}/>
                 </div>
                 <UserFeed user={this.state.user}/>
             </div>
