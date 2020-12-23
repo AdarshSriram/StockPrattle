@@ -27,6 +27,12 @@ export default class Feed extends Component{
         this.state = {data: props.data}
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.data !== prevProps.data){
+            this.setState({data: this.props.data})
+        }
+    }
+
     mouseIn(event) {
         event.target.style.backgroundColor = "#00B140"
         event.target.style.color = "#FFFFFF"
