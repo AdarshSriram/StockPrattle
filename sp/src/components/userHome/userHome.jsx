@@ -35,7 +35,7 @@ export default class UserPage extends Component{
 
     setData(){
         get_follower_posts().then((res)=>{
-                this.setState({mainFeedData: res})
+                this.setState({mainFeedData: res[0]})
             }
         )
     }

@@ -7,20 +7,7 @@ import CommentScroll from './comments.jsx';
 export default class Post extends Component{
     constructor(props){
         super(props);
-        this.state = { user: props.user, image: null }
-        this.setStateImage = this.setStateImage.bind(this)
-    }
-
-    async setStateImage() {
-        await getPhoto(this.state.user.email).then((url) => {
-            this.setState({ image: url })
-        }).catch((error) => console.log(error))
-    }
-
-    componentDidMount() {
-        if (this.state.user != null){
-            this.setStateImage();
-        }
+        this.state = {user: props.user, image: props.propic}
     }
 
     render(){

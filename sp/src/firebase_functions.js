@@ -228,12 +228,14 @@ export const signInExt = (google) => {
 }
 
 export const addPost = async (params) => {
-  var user = firebase.auth().currentUser;
+  var user = firebase.auth().currentUser; var pic;
+  await getPhoto(user.email).then((res)=> pic = res)
   const post = {
     "stocks": params[0],
-    "body": params[1],
+    "text": params[1],
     "createdAt": (new Date()).toString(),
-    "poster": user.email
+    "username": user.displayName,
+    "propric": pic
   }
   var email = user.email
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
@@ -262,8 +264,8 @@ export const getFollowers = async () => {
 
 let getPostsByEmail = async (email) => {
   const snapshot = await firebase.firestore().collection("posts/" + email + "/userPosts")
-    .orderBy("createdAt").limit(3).get()
-  return snapshot.docs.map(doc => { console.log(doc.data()); doc.data() });
+    .orderBy("createdAt").get()
+  return snapshot.docs.map(doc => doc.data());
 }
 
 export const get_follower_posts = async () => {
@@ -273,12 +275,9 @@ export const get_follower_posts = async () => {
       (docRef) => {
         var post_arr = [];
         docRef.forEach((doc) => {
-          console.log(doc.id)
           post_arr.push(getPostsByEmail(doc.id))
         })
-        console.log(post_arr)
         var res = Promise.all(post_arr)
-        console.log(res)
         return res
       })
     .catch((err) => { console.log(err) })
