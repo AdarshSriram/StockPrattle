@@ -34,6 +34,12 @@ export default class ProfilePic extends Component {
         this.setStateImage()
     }
 
+    componentDidUpdate(prevProps){
+        if (this.props.user.email != prevProps.user.email){
+            this.setState({user: this.props.user, img: null}, this.componentDidMount)
+        }
+    }
+
     beginEdit(input) {
         document.getElementById('fileInput').click()
     }
