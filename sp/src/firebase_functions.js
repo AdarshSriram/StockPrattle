@@ -348,7 +348,7 @@ export const add_stock_comment = async (comment, stockId) => {
     .catch((err) => { console.log(err) })
 }
 
-export const allUsers = () => {
-  const snapshot = userCollection.get()
+export const allUsers = async () => {
+  const snapshot = await userCollection.get()
   return snapshot.docs.map(doc => doc.data());
 }

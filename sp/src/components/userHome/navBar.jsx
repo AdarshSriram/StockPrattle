@@ -15,8 +15,15 @@ export default class NavBar extends Component{
             }
             i++;
         }
-        this.state = {sbItems: toadd, users: ["as2566@cornell.edu"]}
+        this.state = {sbItems: toadd, users: (props.allUsers == null) ? [] : props.allUsers}
     }
+
+    componentDidUpdate(prevProps){
+        if (prevProps.allUsers != this.props.allUsers){
+            this.setState({users: this.props.allUsers})
+        }
+    }
+
 
     goTo(){
         var elem= document.getElementById("searchBar")
@@ -49,7 +56,7 @@ export default class NavBar extends Component{
                         }}>
                         <input id="searchBar" type="text" list="users" placeholder = "Go To" style={navBarStyle.searchInput}/>
                             <datalist id= "users">
-                                {this.state.users.map(item => (<option id={item} value={item}/>))}
+                                {this.state.users.map(item => (<option id={item.username} value={item.email}/>))}
                             </datalist>
                         <input id="searchSubmit" type="submit" value= "→" style={navBarStyle.goButton}
                         onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}/>
