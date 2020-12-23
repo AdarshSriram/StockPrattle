@@ -293,22 +293,29 @@ export const addPost = async (params) => {
     .catch((err) => { console.log(err) })
 }
 
-export const addFollow = async (follower_email, follower_uname) => {
+export const followUser = async (follower_email, follower_uname) => {
   var user = firebase.auth().currentUser;
-  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollows");
+  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollowing");
   follow_ref
     .doc(follower_email)
     .set({ username: follower_uname })
+    .then(() => {
+      var following_ref = firebase.firestore().collection("follows/" + follower_email + "/userFollowing");
+      following_ref
+        .doc(user.email)
+        .set({ username: user.displayName })
+    })
     .catch((err) => { console.log(err) })
 }
 
-export const getFollowing = async (userEmail = null) => {
+export const getFollowing = async (userEmail = null, following = true) => {
   if (userEmail === null) {
     var user = firebase.auth().currentUser;
     userEmail = user.email
   }
+  const suffix = following ? "/userFollowing" : "/userFollowers"
   const snapshot = await firebase.firestore()
-    .collection("following/" + userEmail + "/userFollowing")
+    .collection("following/" + userEmail + suffix)
     .get()
   return snapshot.docs.map(doc => doc.id)
 }
@@ -319,9 +326,10 @@ let getPostsByEmail = async (email) => {
   return snapshot.docs.map(doc => doc.data());
 }
 
-export const get_follower_posts = async () => {
+export const get_follower_posts = async (following = true) => {
   var user = firebase.auth().currentUser;
-  return firebase.firestore().collection("following/" + user.email + "/userFollowing").get()
+  const suffix = following ? "/userFollowing" : "/userFollowers"
+  return firebase.firestore().collection("following/" + user.email + suffix).get()
     .then(
       (docRef) => {
         var post_arr = [];
