@@ -53,16 +53,7 @@ export const updateProfile = (fieldName, detail) => {
             user.updateProfile({ displayName: detail })
               .then(() => {
                 console.log("User profile updated ");
-                getPostIdsByEmail(user.email)
-                  .then((idLIst) => {
-                    console.log(idLIst)
-                    idLIst.forEach(id => {
-                      firebase.firestore().collection("posts/" + user.email + "/userPosts")
-                        .doc(id)
-                        .update({ username: detail })
-                        .then(() => console.log("post updated"))
-                    })
-                  })
+
               })
               .catch((error) => console.log("User profile could not be updated. Try again"))
           }
@@ -185,6 +176,18 @@ export const setCurrentUserInfo = async (info) => {
     await userCollection.where('username', '==', info.username).get().then((snap) => {
       if (snap.empty) {
         user.updateProfile({ displayName: info.username })
+
+        getPostIdsByEmail(user.email)
+          .then((idLIst) => {
+            console.log(idLIst)
+            idLIst.forEach(id => {
+              firebase.firestore().collection("posts/" + user.email + "/userPosts")
+                .doc(id)
+                .update({ username: info.username })
+                .then(() => console.log("post updated"))
+            })
+          })
+
         return userCollection.doc(user.email).update(info)
       } else {
         alert("Username is already taken.")
@@ -194,13 +197,26 @@ export const setCurrentUserInfo = async (info) => {
       alert("Profile update was unsuccessful.");
       return userCollection.doc(user.email).get()
     })
-  } else {
+  }
+  else {
     return userCollection.doc(user.email).update(info)
   }
 }
 
 export const uploadPhoto = (email, photo) => {
-  return storageRef.child('profilePhoto/' + email).put(photo)
+  storageRef.child('profilePhoto/' + email).put(photo)
+    .then((x) => {
+      getPostIdsByEmail(email)
+        .then((idLIst) => {
+          console.log(idLIst)
+          idLIst.forEach(id => {
+            firebase.firestore().collection("posts/" + email + "/userPosts")
+              .doc(id)
+              .update({ propic: storageRef.child('profilePhoto/' + email).getDownloadURL() })
+          })
+        })
+    })
+  return storageRef.child('profilePhoto/' + email).getDownloadURL()
 }
 
 export const getPhoto = (email) => {
