@@ -277,12 +277,12 @@ export const addPost = async (params) => {
     .catch((err) => { console.log(err) })
 }
 
-export const addFollow = async (follower_email) => {
+export const addFollow = async (follower_email, follower_uname) => {
   var user = firebase.auth().currentUser;
   var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollows");
   follow_ref
-    .doc(user.email)
-    .set({ username: user.displayName })
+    .doc(follower_email)
+    .set({ username: follower_uname })
     .catch((err) => { console.log(err) })
 }
 
