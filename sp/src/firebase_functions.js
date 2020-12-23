@@ -2,15 +2,15 @@ import firebase from './utils/config.js';
 import fire from 'firebase';
 import admin from 'firebase-admin';
 
-import * as serviceAccount from "./stock_prattle_admin_service_key.json"
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://stockprattle.firebaseio.com"
-});
-var firestore_admin = admin.firestore
+// import * as serviceAccount from "./stock_prattle_admin_service_key.json"
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://stockprattle.firebaseio.com"
+// });
+// var firestore_admin = admin.firestore
 const fireInstance = firebase.firestore()
 const userCollection = firebase.firestore().collection('users')
-//var storageRef = firebase.storage().ref();
+var storageRef = firebase.storage().ref();
 var providerG = new fire.auth.GoogleAuthProvider();
 var providerF = new fire.auth.FacebookAuthProvider()
 
@@ -246,15 +246,15 @@ export const addPost = async (post) => {
     .catch((err) => { console.log(err) })
 }
 
-export const addFollow = async (follower_email) => {
-  //var user = firebase.auth().currentUser;
-  var email = "as2566@cornell.edu"
-  var follow_ref = firestore_admin.collection("follows/" + email + "/userFollows");
-  follow_ref
-    .doc(email)
-    .set({})
-    .catch((err) => { console.log(err) })
-}
+// export const addFollow = async (follower_email) => {
+//   //var user = firebase.auth().currentUser;
+//   var email = "as2566@cornell.edu"
+//   var follow_ref = firestore_admin.collection("follows/" + email + "/userFollows");
+//   follow_ref
+//     .doc(email)
+//     .set({})
+//     .catch((err) => { console.log(err) })
+// }
 
 export const getFollowers = async () => {
   var user = firebase.auth().currentUser;
@@ -301,7 +301,7 @@ export const add_stock_comment = async (comment, stockId) => {
     .set(comment)
     .catch((err) => { console.log(err) })
 }
-
-addFollow("adarshsriram10@gmail.com")
-  .then(console.log("Following"))
-  .catch((err) => console.log(err))
+//
+// addFollow("adarshsriram10@gmail.com")
+//   .then(console.log("Following"))
+//   .catch((err) => console.log(err))
