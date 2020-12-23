@@ -253,7 +253,7 @@ export const addFollow = async (follower_email) => {
 
 export const getFollowers = async () => {
   var user = firebase.auth().currentUser;
-  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollows");
+  var follow_ref = firebase.firestore().collection("following/" + user.email + "/userFollowing");
   follow_ref
     .listDocuments()
     .then((docRef) => docRef)
@@ -268,17 +268,18 @@ let getPostsByEmail = async (email) => {
 
 export const get_follower_posts = async () => {
   var user = firebase.auth().currentUser;
-  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollows");
+  var follow_ref = firebase.firestore().collection("following/" + user.email + "/userFollowing")
   follow_ref
-    .listDocuments()
+    .get()
     .then(
       (docRef) => {
-        const followersEmails = docRef.map(it => it.id)
         var post_arr = [];
-        for (var email in followersEmails) {
-          post_arr.concat(getPostsByEmail(email))
-        }
-        return post_arr
+        docRef.forEach((doc) => {
+          console.log(doc.id)
+          post_arr.push(getPostsByEmail(doc.id))
+        })
+        console.log(post_arr)
+        return Promise.all(post_arr)
       })
     .catch((err) => { console.log(err) })
 }
