@@ -6,27 +6,23 @@ import NewPostPopUp from "./newPost.jsx"
 export default class UserFeed extends Component {
     constructor(props) {
         super(props);
-        var toadd = []; var i = 0;
-        while (i < 5) {
-            toadd.push(({ user: "@username", text: "Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text.Fake post text." }));
-            i++;
+        if (this.props.data.length < 10){
+            this.state = {items: this.props.data, over: true}
+        } else {
+            this.state = {items: this.props.data.slice(0, 10), over: false}
         }
-        this.state = { items: toadd }
         this.checkAndFetch = this.checkAndFetch.bind(this)
     }
 
     checkAndFetch(event) {
         var element = event.target;
         if (element.scrollHeight - element.scrollTop === element.clientHeight) {
-            setTimeout(() => {
-
-                var toadd = []; var i = 0;
-                while (i < 5) {
-                    toadd.push(({ user: "@username", text: "Fake post text." }));
-                    i++;
-                }
-                this.setState({ items: this.state.items.concat(toadd) })
-            }, 2000);
+            var i = this.state.items.length - 1
+            if (i+10 >= this.props.data.length){
+                this.setState({items: this.props.data, over: true})
+            } else {
+                this.setState({items: this.state.items.concat(this.props.data.slice(i, i+10))})
+            }
         }
     }
 
@@ -34,7 +30,7 @@ export default class UserFeed extends Component {
         return (
             <div id="usedFeedDiv" style={userFeedStyle.centerDiv} onScroll={this.checkAndFetch}>
                 {this.state.items.map((i, index) => (<Post key={index} user={i.username} text={i.text} />))}
-                <p style={userFeedStyle.loading}>Loading...</p>
+                <p style={userFeedStyle.loading}>{(this.state.over) ? "Loading..." : "You have reached the end of your feed!"}</p>
             </div>
         )
     }

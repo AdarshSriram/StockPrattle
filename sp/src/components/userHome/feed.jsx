@@ -24,6 +24,7 @@ function reversePress(event) {
 export default class Feed extends Component{
     constructor(props){
         super(props);
+        this.state = {data: props.data}
     }
 
     mouseIn(event) {
@@ -43,7 +44,9 @@ export default class Feed extends Component{
                 <button style={feedStyle.newPostButton} onMouseOver={this.mouseIn}
                     onMouseLeave={this.mouseOut} onClick={(event) => { buttonPress("Login") }}>+</button>
             </div>
-            <UserFeed />
+            {(this.state.data == null) ? (<div style={feedStyle.loadingDiv}>
+                <p>Loading...</p>
+            </div>) : <UserFeed data={this.state.data}/>}
         </div>
     )}
 }
@@ -88,5 +91,18 @@ const feedStyle = {centerDiv: {
         fontSize: "30px",
         outline: "none",
         cursor: "pointer"
+    }, loadingDiv: {
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        // border: "thick solid black",
+        boxSizing: "border-box",
+        background: "rgba(229, 229, 229, 0.3)",
+        overflow: "scroll",
+        margin: "10px",
+        borderRadius: "10px"
     }
 }

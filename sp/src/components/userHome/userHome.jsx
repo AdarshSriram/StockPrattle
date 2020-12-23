@@ -9,12 +9,12 @@ import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
-import {getCurrentUserInfo, setCurrentUserInfo} from '../../firebase_functions.js'
+import {getCurrentUserInfo, setCurrentUserInfo, get_follower_posts} from '../../firebase_functions.js'
 
 export default class UserPage extends Component{
     constructor(props){
         super(props);
-        this.state = {current: "feed", user: null, goTo: "default"}
+        this.state = {current: "feed", user: null, goTo: "default", mainFeedData: null}
         this.profileButtonClick = this.profileButtonClick.bind(this);
         this.feedButtonClick = this.feedButtonClick.bind(this);
         this.messagesButtonClick = this.messagesButtonClick.bind(this);
@@ -22,6 +22,7 @@ export default class UserPage extends Component{
         this.updateUserInfo = this.updateUserInfo.bind(this);
         this.setStateUser = this.setStateUser.bind(this)
         this.goTo = this.goTo.bind(this)
+        this.setData = this.setData.bind(this)
     }
 
     componentDidMount(){
@@ -29,10 +30,11 @@ export default class UserPage extends Component{
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
         this.setStateUser();
+        this.setData();
     }
 
-    goTo(id){
-        this.exploreButtonClick(null, id)
+    setData(){
+        get_follower_posts().then((res)=>this.setState({mainFeedData: res}))
     }
 
     setStateUser(){
@@ -58,6 +60,10 @@ export default class UserPage extends Component{
         } catch {
             this.setStateUser();
         }
+    }
+
+    goTo(id){
+        this.exploreButtonClick(null, id)
     }
 
     profileButtonClick(){
@@ -125,7 +131,7 @@ export default class UserPage extends Component{
         } else if (this.state.current=="messages"){
             item= <MessageBox />
         } else {
-            item= <Feed />
+            item= <Feed data={this.state.mainFeedData}/>
         }
         return (
         <div id="wholeScreen" style={userHomeStyle.mainDiv}>
