@@ -8,13 +8,13 @@ export default class NewPostPopUp extends Component {
         this.state = { stocks: ["NIFTY", "SENSEX"] }
     }
 
-    // subMouseIn(but) {
-    //     but.target.style.textDecoration = "underline";
-    // }
-    //
-    // subMouseOut(but) {
-    //     but.target.style.textDecoration = "none";
-    // }
+    mainMouseIn(but) {
+        but.target.style.background = "#009435";
+    }
+
+    mainMouseOut(but) {
+        but.target.style.background = "#00B140";
+    }
 
     add_post() {
         const inputs = document.getElementsByName("inputs"); var params = []; var val;
