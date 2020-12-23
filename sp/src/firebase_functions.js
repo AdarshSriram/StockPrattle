@@ -209,10 +209,10 @@ export const uploadPhoto = (email, photo) => {
       getPostIdsByEmail(email)
         .then((idLIst) => {
           console.log(idLIst)
-          idLIst.forEach(id => {
+          idLIst.forEach(async id => {
             firebase.firestore().collection("posts/" + email + "/userPosts")
               .doc(id)
-              .update({ propic: storageRef.child('profilePhoto/' + email).getDownloadURL() })
+              .update({ propic: await storageRef.child('profilePhoto/' + email).getDownloadURL() })
           })
         })
     })
