@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {Link, useHistory} from "react-router-dom";
 import PopUp from '../popUp.jsx';
 import NavBar from './navBar.jsx';
-import UserFeed from './userFeed.jsx';
+import Feed from './feed.jsx';
 import MessageBox from './messages/messageBox.jsx';
 import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';
@@ -125,7 +125,7 @@ export default class UserPage extends Component{
         } else if (this.state.current=="messages"){
             item= <MessageBox />
         } else {
-            item= <UserFeed />
+            item= <Feed />
         }
         return (
         <div id="wholeScreen" style={userHomeStyle.mainDiv}>
