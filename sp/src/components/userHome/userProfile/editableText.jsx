@@ -56,10 +56,12 @@ export default class EditableText extends Component {
                 }
             }
             if (this.state.type==="username"){
+                elem.value = elem.value.replace(/ /g,'')
                 if (String(elem.value).includes("@")){
-                    this.state.user[this.state.type]= String(elem.value.replace(/ /g,'')).substring(1)
+                    console.log(elem.value.replace(/ /g,''))
+                    this.state.user[this.state.type]= String(elem.value).substring(1)
                 } else {
-                    this.state.user[this.state.type]= String(elem.value.replace(/ /g,''))
+                    this.state.user[this.state.type]= String(elem.value)
                     elem.value = "@"+String(elem.value)
                 }
             } else {
