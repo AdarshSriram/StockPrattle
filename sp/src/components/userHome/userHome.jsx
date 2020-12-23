@@ -9,12 +9,12 @@ import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
-import {getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing} from '../../firebase_functions.js'
+import {getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers} from '../../firebase_functions.js'
 
 export default class UserPage extends Component{
     constructor(props){
         super(props);
-        this.state = {current: "feed", user: null, goTo: "default", mainFeedData: null, following: null}
+        this.state = {current: "feed", user: null, goTo: "default", mainFeedData: null, following: null, allUsers: null}
         this.profileButtonClick = this.profileButtonClick.bind(this);
         this.feedButtonClick = this.feedButtonClick.bind(this);
         this.messagesButtonClick = this.messagesButtonClick.bind(this);
@@ -36,7 +36,9 @@ export default class UserPage extends Component{
     setData(){
         get_follower_posts().then((res)=>{
             getFollowing().then((restwo)=>{
-                this.setState({mainFeedData: res[0], following: restwo})
+                allUsers().then((resthree)=>{
+                    this.setState({mainFeedData: res[0], following: restwo, allUsers: resthree})
+                })
             })
         })
     }
@@ -139,7 +141,7 @@ export default class UserPage extends Component{
         }
         return (
         <div id="wholeScreen" style={userHomeStyle.mainDiv}>
-            <NavBar goTo={this.goTo}/>
+            <NavBar goTo={this.goTo} allUsers={this.state.allUsers}/>
             <div id="body" style={userHomeStyle.body}>
                 <LeftMenu history={this.props.history} pageState={this.state.current}
                 buttonClickFunctions={[this.profileButtonClick, this.feedButtonClick,
