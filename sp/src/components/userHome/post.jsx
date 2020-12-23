@@ -8,6 +8,7 @@ export default class Post extends Component{
     constructor(props){
         super(props);
         this.state = {user: props.user, image: props.propic}
+        console.log(this.state.image)
     }
 
     render(){
@@ -28,7 +29,7 @@ export default class Post extends Component{
                         {disp}
                     </div>
                     <p style={postStyle.textStyle}>
-                        {this.props.user==null ? "@stockprattle": "@"+this.props.user.username}
+                        {this.props.user==null ? "@stockprattle": "@"+this.props.user}
                     </p>
                 </div>
                 <div style={postStyle.contentDiv}>

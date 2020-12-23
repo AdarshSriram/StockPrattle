@@ -7,7 +7,6 @@ import NewPostPopUp from "./newPost.jsx"
 export default class UserFeed extends Component {
     constructor(props) {
         super(props);
-        console.log(props.data)
         if (this.props.data == null){
             this.state = {items: [], over: true}
         } else if (this.props.data.length < 10){
@@ -33,7 +32,7 @@ export default class UserFeed extends Component {
     render() {
         return (
             <div id="usedFeedDiv" style={userFeedStyle.centerDiv} onScroll={this.checkAndFetch}>
-                {this.state.items.map((i, index) => (<Post key={index} user={i.username} text={i.text} pp={i.propic}/>))}
+                {this.state.items.map((i, index) => (<Post key={index} user={i.username} text={i.text} propic={i.propic}/>))}
                 <p style={userFeedStyle.loading}>{(this.state.over) ? "You have reached the end of your feed!" : "Loading..."}</p>
             </div>
         )
