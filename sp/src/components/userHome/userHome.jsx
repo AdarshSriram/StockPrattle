@@ -34,7 +34,12 @@ export default class UserPage extends Component{
     }
 
     setData(){
-        get_follower_posts().then((res)=>this.setState({mainFeedData: res}))
+        console.log("trace")
+        get_follower_posts().then((res)=>{
+                console.log(res)
+                this.setState({mainFeedData: res})
+            }
+        )
     }
 
     setStateUser(){
