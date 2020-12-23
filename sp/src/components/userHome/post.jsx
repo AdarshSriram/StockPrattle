@@ -28,7 +28,7 @@ export default class Post extends Component{
                         {disp}
                     </div>
                     <p style={postStyle.textStyle}>
-                        {this.props.user==null ? "@stockprattle": "@"+this.props.user.username}
+                        {this.props.user==null ? "@stockprattle": "@"+this.props.user}
                     </p>
                 </div>
                 <div style={postStyle.contentDiv}>
