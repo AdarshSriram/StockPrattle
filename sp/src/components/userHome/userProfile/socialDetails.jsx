@@ -23,6 +23,7 @@ export default class SocialDetails extends Component{
             >{(this.props.name == null) ? "People You Follow" : "People "+this.props.name.split(" ")[0]+" Follows"}</button>
             <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
             >{(this.props.name == null) ? "People Who Follow You" : "People Who Follow "+this.props.name.split(" ")[0]}</button>
+            {(this.props.name == null) ? null : <button style={socialStyle.button} onMouseOver={this.followMouseIn} onMouseLeave={this.followMouseOut}>{"Follow"}</button>}
         </div>
         )
     }
