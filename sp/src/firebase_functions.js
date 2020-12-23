@@ -286,12 +286,12 @@ export const addFollow = async (follower_email) => {
     .catch((err) => { console.log(err) })
 }
 
-export const getFollowers = async () => {
+export const getFollowing = async () => {
   var user = firebase.auth().currentUser;
   const snapshot = await firebase.firestore()
     .collection("following/" + user.email + "/userFollowing")
     .get()
-  return snapshot.docs.map(doc => doc.data().username)
+  return snapshot.docs.map(doc => doc.data().id)
 }
 
 let getPostsByEmail = async (email) => {

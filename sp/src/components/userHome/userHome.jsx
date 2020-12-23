@@ -9,7 +9,7 @@ import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
-import {getCurrentUserInfo, setCurrentUserInfo, get_follower_posts} from '../../firebase_functions.js'
+import {getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing} from '../../firebase_functions.js'
 
 export default class UserPage extends Component{
     constructor(props){
@@ -35,9 +35,11 @@ export default class UserPage extends Component{
 
     setData(){
         get_follower_posts().then((res)=>{
-                this.setState({mainFeedData: res[0]})
-            }
-        )
+            getFollowers().then((restwo)=>{
+                console.log(restwo)
+                this.setState({mainFeedData: res[0], follwers: restwo})
+            })
+        })
     }
 
     setStateUser(){

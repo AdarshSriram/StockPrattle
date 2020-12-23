@@ -8,7 +8,6 @@ export default class Post extends Component{
     constructor(props){
         super(props);
         this.state = {user: props.user, image: props.propic}
-        console.log(this.state.image)
     }
 
     render(){
