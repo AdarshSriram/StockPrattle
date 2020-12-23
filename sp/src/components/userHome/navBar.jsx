@@ -19,8 +19,9 @@ export default class NavBar extends Component{
     }
 
     goTo(){
-        var togo = document.getElementById("searchBar").value
-        this.props.goTo(togo)
+        var elem= document.getElementById("searchBar")
+        this.props.goTo(elem.value)
+        elem.value= null
     }
 
     mouseIn(but){
