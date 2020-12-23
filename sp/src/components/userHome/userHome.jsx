@@ -14,7 +14,7 @@ import {getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing
 export default class UserPage extends Component{
     constructor(props){
         super(props);
-        this.state = {current: "feed", user: null, goTo: "default", mainFeedData: null}
+        this.state = {current: "feed", user: null, goTo: "default", mainFeedData: null, following: null}
         this.profileButtonClick = this.profileButtonClick.bind(this);
         this.feedButtonClick = this.feedButtonClick.bind(this);
         this.messagesButtonClick = this.messagesButtonClick.bind(this);
@@ -35,9 +35,8 @@ export default class UserPage extends Component{
 
     setData(){
         get_follower_posts().then((res)=>{
-            getFollowers().then((restwo)=>{
-                console.log(restwo)
-                this.setState({mainFeedData: res[0], follwers: restwo})
+            getFollowing().then((restwo)=>{
+                this.setState({mainFeedData: res[0], follwing: restwo})
             })
         })
     }
@@ -130,9 +129,9 @@ export default class UserPage extends Component{
     render(){
         var item;
         if (this.state.current=="profile"){
-            item= <UserProfile user={this.state.user} setUser={this.updateUserInfo}/>
+            item= <UserProfile user={this.state.user} setUser={this.updateUserInfo} followings={this.state.following}/>
         } else if (this.state.current=="explore"){
-            item= <ExplorePage display={this.state.goTo}/>
+            item= <ExplorePage display={this.state.goTo} followings={this.state.following}/>
         } else if (this.state.current=="messages"){
             item= <MessageBox />
         } else {
