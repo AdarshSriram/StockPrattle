@@ -8,7 +8,9 @@ export default class UserFeed extends Component {
     constructor(props) {
         super(props);
         console.log(props.data)
-        if (this.props.data.length < 10){
+        if (this.props.data == null){
+            this.state = {items: [], over: true}
+        } else if (this.props.data.length < 10){
             this.state = {items: this.props.data, over: true}
         } else {
             this.state = {items: this.props.data.slice(0, 10), over: false}

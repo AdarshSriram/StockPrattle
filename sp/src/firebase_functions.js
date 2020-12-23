@@ -229,6 +229,7 @@ export const signInExt = (google) => {
 
 export const addPost = async (params) => {
   var user = firebase.auth().currentUser; var pic;
+  console.log(user.displayName, user.username)
   await getPhoto(user.email).then((res)=> pic = res)
   const post = {
     "stocks": params[0],
