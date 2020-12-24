@@ -289,9 +289,10 @@ export const addPost = async (params) => {
   const post = {
     "stocks": params[0],
     "text": params[1],
-    "createdAt": (new Date()).toString(),
+    "createdAt": fire.firestore.Timestamp.fromDate(new Date()),
     "username": user.displayName,
-    "propic": pic
+    "propic": pic,
+    "likes": 1
   }
   var email = user.email
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
@@ -366,7 +367,7 @@ export const get_follower_posts = async (following = true) => {
 
 export const get_stock_comments = async (stockId) => {
   const snapshot = await firebase.firestore().collection("comments/" + stockId + "/stockComments")
-    .orderBy("points", fire.Query.Direction.DESCENDING).get()
+    .orderBy("likes", fire.Query.Direction.DESCENDING).get()
   return snapshot.docs.map(doc => doc.data());
 }
 
