@@ -44,7 +44,9 @@ export default class SocialDetails extends Component {
     }
 
     followUnfollow() {
-        if (this.state.follow) { unfollowUser(email).then(() => console.log("Unfollowed")) }
+        const email = this.props.user.email
+        console.log(this.state.following)
+        if (this.state.following) { unfollowUser(email).then(() => console.log("Unfollowed")) }
         else {
             const uname = this.props.user.username
             followUser(email, uname).then(() => console.log("Followed"))

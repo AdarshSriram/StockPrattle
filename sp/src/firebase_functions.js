@@ -113,6 +113,13 @@ export const SignUp = (params) => {
       alert("A user with this email already exists.")
     }
   }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
+
+  var follow_ref = firebase.firestore().collection("following/" + email + "/userFollowing");
+  follow_ref
+    .doc("stockprattle@gmail.com")
+    .set({ username: "stockprattleAdmin" })
+    .then(() => console.log("Following admin"))
+    .catch((err) => { console.log(err) })
 }
 
 export const SignIn = (params) => {
@@ -295,12 +302,12 @@ export const addPost = async (params) => {
 
 export const followUser = async (follower_email, follower_uname) => {
   var user = firebase.auth().currentUser;
-  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollowing");
+  var follow_ref = firebase.firestore().collection("following/" + user.email + "/userFollowing");
   follow_ref
     .doc(follower_email)
     .set({ username: follower_uname })
     .then(() => {
-      var following_ref = firebase.firestore().collection("follows/" + follower_email + "/userFollowing");
+      var following_ref = firebase.firestore().collection("following/" + follower_email + "/userFollowers");
       following_ref
         .doc(user.email)
         .set({ username: user.displayName })
@@ -310,12 +317,12 @@ export const followUser = async (follower_email, follower_uname) => {
 
 export const unfollowUser = async (follower_email) => {
   var user = firebase.auth().currentUser;
-  var follow_ref = firebase.firestore().collection("follows/" + user.email + "/userFollowing");
+  var follow_ref = firebase.firestore().collection("following/" + user.email + "/userFollowing");
   follow_ref
     .doc(follower_email)
     .delete()
     .then(() => {
-      var following_ref = firebase.firestore().collection("follows/" + follower_email + "/userFollowing");
+      var following_ref = firebase.firestore().collection("following/" + follower_email + "/userFollowers");
       following_ref
         .doc(user.email)
         .delete()
