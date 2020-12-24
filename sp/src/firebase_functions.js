@@ -284,12 +284,12 @@ export const signInExt = (google) => {
 
 export const addPost = async (params) => {
   var user = firebase.auth().currentUser; var pic;
-  console.log(user.displayName, user.username)
   await getPhoto(user.email).then((res) => pic = res)
+  const time = new Date()
   const post = {
     "stocks": params[0],
     "text": params[1],
-    "createdAt": fire.firestore.Timestamp.fromDate(new Date()),
+    "createdAt": fire.firestore.Timestamp.fromDate(time),
     "username": user.displayName,
     "propic": pic,
     "likes": 1
@@ -297,7 +297,16 @@ export const addPost = async (params) => {
   var email = user.email
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
   post_ref
-    .doc().set(post)
+    .doc(/*user.email + "-" + time.toString()*/).set(post)
+    .catch((err) => { console.log(err) })
+}
+
+export const likeUnlikePost = async (id, poster_email, like = true) => {
+  var post_ref = firebase.firestore().collection("posts/" + poster_email + "/userPosts");
+  const incr = like ? 1 : -1
+  post_ref
+    .doc(id)
+    .update({ likes: fire.firestore.FieldValue.increment(incr) })
     .catch((err) => { console.log(err) })
 }
 
@@ -345,7 +354,7 @@ export const getFollowing = async (userEmail = null, following = true) => {
 
 let getPostsByEmail = async (email) => {
   const snapshot = await firebase.firestore().collection("posts/" + email + "/userPosts")
-    .orderBy("createdAt").get()
+    .orderBy("createdAt", "desc").get()
   return snapshot.docs.map(doc => doc.data());
 }
 
@@ -367,7 +376,7 @@ export const get_follower_posts = async (following = true) => {
 
 export const get_stock_comments = async (stockId) => {
   const snapshot = await firebase.firestore().collection("comments/" + stockId + "/stockComments")
-    .orderBy("likes", fire.Query.Direction.DESCENDING).get()
+    .orderBy("likes", "desc").get()
   return snapshot.docs.map(doc => doc.data());
 }
 
