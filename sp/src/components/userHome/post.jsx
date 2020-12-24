@@ -7,7 +7,24 @@ import CommentScroll from './comments.jsx';
 export default class Post extends Component{
     constructor(props){
         super(props);
-        this.state = {user: props.user, image: props.propic}
+        this.state = {user: props.user, image: props.propic, liked: props.liked}
+        // this.componentDidMount = this.componentDidMount.bind(this)
+        this.like = this.like.bind(this)
+    }
+
+    componentDidMount(){
+        if (this.state.liked){
+            document.getElementById(this.props.text+"like").style.fill = "#00B140"
+        }
+    }
+
+    like(){
+        if (this.state.liked){
+            document.getElementById(this.props.text+"like").style.fill = "black"
+        } else {
+            document.getElementById(this.props.text+"like").style.fill = "#00B140"
+        }
+        this.setState({liked: !this.state.liked})
     }
 
     render(){
@@ -35,13 +52,15 @@ export default class Post extends Component{
                     <p style={postStyle.textStyle}>{this.props.text}</p>
                 </div>
                 <div style={postStyle.bottomBar}>
-                    {thumbsupSvg}
-                    {sendSvg}
-                    {replySvg}
-                    {shareSvg}
+                    <button style={postStyle.bottomButton} onClick={this.like}>
+                        {thumbsupSvg(this.props.text+"like")}</button>
+                    <button style={postStyle.bottomButton} hidden>{sendSvg}</button>
+                    <button style={postStyle.bottomButton} hidden>
+                        {replySvg(this.props.text+"comment")}</button>
+                    <button style={postStyle.bottomButton} hidden>{shareSvg}</button>
                 </div>
             </div>
-            <CommentScroll />
+            <CommentScroll user={this.props.curuser} postId={this.props.text}/>
         </div>
         )
     }
@@ -135,5 +154,11 @@ const postStyle= {mainDiv: {
         border: "thin solid lightGray",
         // marginLeft: "10px",
         overflow: "hidden"
+    }, bottomButton: {
+        height: "100%",
+        outline: "none",
+        cursor: "pointer",
+        background: "none",
+        borderWidth: "0px"
     }
 }

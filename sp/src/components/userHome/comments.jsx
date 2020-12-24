@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import {thumbsupSvg, replySvg} from './svgs.jsx';
 
 export default class CommentScroll extends Component {
     constructor(props){
@@ -9,12 +10,13 @@ export default class CommentScroll extends Component {
             toadd.push(({user: "@username", text: "Fake comment text!"}));
             i++;
         }
-        this.state = {items: toadd, id: Math.random()}
+        this.state = {items: toadd}
         this.checkAndFetch = this.checkAndFetch.bind(this)
+        this.comment = this.comment.bind(this)
     }
 
     componentDidMount(){
-        const elem = document.getElementById(this.state.id)
+        const elem = document.getElementById(this.props.postId+"comments")
         elem.style.height = ""+elem.parentElement.offsetHeight+"px"
     }
 
@@ -33,28 +35,78 @@ export default class CommentScroll extends Component {
         }
     }
 
+    comment(text){
+        this.setState({items: [{user: "@currentUser", text: text}].concat(this.state.items)})
+    }
+
     render(){
     return (
-        <div id={this.state.id} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
-            <div style={commentsStyle.comment}>
-                <div style={commentsStyle.commentBody}>
-                    <p style={commentsStyle.usernameText}>{"@currentUserName"}</p>
-                    <input style={commentsStyle.commentInput} type="text" placeholder="Add Comment"/>
-                </div>
-                <div style={commentsStyle.whiteDiv}/>
-            </div>
+        <div id={this.props.postId+"comments"} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
+            <Comment user={"@currentUser"} postComm={this.comment} id={Math.random()}/>
             {this.state.items.map((i, index) => (
-                <div key={index} style={commentsStyle.comment}>
-                    <div style={commentsStyle.commentBody}>
-                        <p style={commentsStyle.usernameText}>{i.user}</p>
-                        <p style={commentsStyle.text}>{i.text}</p>
-                    </div>
-                    <div style={commentsStyle.whiteDiv}/>
-                </div>
+                <Comment user={i.user} text={i.text} id={Math.random()} liked={false}/>
             ))}
             <p style={commentsStyle.loading}>Loading...</p>
         </div>
         )
+    }
+}
+
+class Comment extends Component{
+    constructor(props){
+        super(props);
+        this.state = {liked: props.liked}
+        this.like = this.like.bind(this)
+        this.comment = this.comment.bind(this)
+        this.mouseIn = this.mouseIn.bind(this)
+        this.mouseOut = this.mouseOut.bind(this)
+    }
+
+    like(){
+        if (this.state.liked){
+            document.getElementById(this.props.id).style.fill = "black"
+        } else {
+            document.getElementById(this.props.id).style.fill = "#00B140"
+        }
+        this.setState({liked: !this.state.liked})
+    }
+
+    comment(){
+        const elem = document.getElementById(this.props.id+"inp")
+        this.props.postComm(elem.value)
+        elem.value = null
+    }
+
+    mouseIn(){
+        document.getElementById(this.props.id).style.fill = "#00B140"
+    }
+
+    mouseOut(){
+        document.getElementById(this.props.id).style.fill = "black"
+    }
+
+    render(){
+        if (this.props.postComm != null){
+            return (
+            <div style={commentsStyle.comment}>
+                <div style={commentsStyle.commentBody}>
+                    <p style={commentsStyle.usernameText}>{this.props.user}</p>
+                    <input id={this.props.id+"inp"} style={commentsStyle.commentInput} type="text" placeholder="Add Comment"/>
+                </div>
+                <button style={commentsStyle.rightButton} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
+                    onClick={this.comment}>{replySvg(this.props.id)}</button>
+            </div>
+        )} else {
+            return (
+            <div style={commentsStyle.comment}>
+                <div style={commentsStyle.commentBody}>
+                    <p style={commentsStyle.usernameText}>{this.props.user}</p>
+                    <p style={commentsStyle.text}>{this.props.text}</p>
+                </div>
+                <button style={commentsStyle.rightButton} onClick={this.like}>
+                    {thumbsupSvg(this.props.id)}</button>
+            </div>)
+        }
     }
 }
 
@@ -130,11 +182,17 @@ const commentsStyle= { centerDiv: {
         background: "none",
         borderRadius: "10px",
         // border: "thin solid black",
-    }, whiteDiv: {
+    }, rightButton: {
         height: "100%",
-        width: "10%",
+        width: "20%",
         background: "#FFFFFF",
         borderRadius: "20px 0 0 20px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderWidth: "0px",
+        outline: "none",
+        cursor: "pointer"
         // border: "thin solid black",
     }
 }
