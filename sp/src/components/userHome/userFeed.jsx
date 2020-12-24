@@ -32,7 +32,8 @@ export default class UserFeed extends Component {
     render() {
         return (
             <div id="usedFeedDiv" style={userFeedStyle.centerDiv} onScroll={this.checkAndFetch}>
-                {this.state.items.map((i, index) => (<Post key={index} user={i.username} text={i.text} propic={i.propic}/>))}
+                {this.state.items.map((i, index) => (
+                    <Post key={index} user={i.username} text={i.text} propic={i.propic} liked={false}/>))}
                 <p style={userFeedStyle.loading}>{(this.state.over) ? "You have reached the end of your feed!" : "Loading..."}</p>
             </div>
         )

@@ -30,7 +30,8 @@ export default class Feed extends Component{
 
     componentDidUpdate(prevProps) {
         if (this.props.data !== prevProps.data){
-            this.setState({data: this.props.data})
+            // this.setState({data: this.props.data})
+            this.setState({data: [{"text": "Sample Post", "username": "StockPrattle"}]})
         }
     }
 
