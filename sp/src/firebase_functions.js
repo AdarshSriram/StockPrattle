@@ -305,7 +305,7 @@ export const addPost = async (params) => {
   var email = user.email
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
   post_ref
-    .doc(user.email + "-" + time.toString()).set(post)
+    .doc(user.email + "-" + time).set(post)
     .catch((err) => { console.log(err) })
 }
 
