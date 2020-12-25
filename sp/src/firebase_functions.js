@@ -326,7 +326,7 @@ export const likeUnlikePost = async (id, like = true, post = true) => {
   like_ref
     .doc(id)
     .set({})
-    .catch((err) => { console.log(err) })
+    .catch((err) => console.log(err))
 }
 
 export const followUser = async (follower_email, follower_uname) => {
