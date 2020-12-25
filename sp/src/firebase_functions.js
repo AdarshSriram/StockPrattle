@@ -324,7 +324,7 @@ export const likeUnlikePost = async (id, like = true, post = true) => {
   var user = firebase.auth().currentUser;
   var like_ref = firebase.firestore().collection("likes/" + user.email + "/userLikes");
   like_ref
-    .doc(postId)
+    .doc(id)
     .set({})
     .catch((err) => { console.log(err) })
 }
