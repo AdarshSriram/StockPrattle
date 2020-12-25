@@ -7,7 +7,7 @@ import CommentScroll from './comments.jsx';
 export default class Post extends Component {
     constructor(props) {
         super(props);
-        this.state = { user: props.user, image: props.propic, liked: props.liked, id: props.id}
+        this.state = { user: props.user, image: props.propic, liked: props.liked, id: props.id }
         // this.componentDidMount = this.componentDidMount.bind(this)
         this.like = this.like.bind(this)
     }
@@ -21,10 +21,10 @@ export default class Post extends Component {
     like() {
         if (this.state.liked) {
             document.getElementById(this.props.text + "like").style.fill = "black"
-            likeUnlikePost("", this.props.text, false).then(() => console.log("post liked"))
+            likeUnlikePost(this.state.id, false).then(() => console.log("post liked"))
         } else {
             document.getElementById(this.props.text + "like").style.fill = "#00B140"
-            likeUnlikePost("", this.user, true).then(() => console.log("post liked"))
+            likeUnlikePost(this.state.id, true).then(() => console.log("post liked"))
         }
         this.setState({ liked: !this.state.liked })
     }
