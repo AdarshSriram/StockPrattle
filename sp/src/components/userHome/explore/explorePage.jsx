@@ -46,7 +46,7 @@ export default class ExploreFeed extends Component{
                 <LoadingScreen />
             )
         } else {
-            return this.state.type == "user" ?  <UserProfile user={this.state.currentDisp} following={this.props.following}/> : <StockPage stock={this.state.currentDisp}/>
+            return this.state.type == "user" ?  <UserProfile user={this.state.currentDisp} following={this.props.following}/> : <StockPage stock={this.state.currentDisp} following={false}/>
         }
     }
 }
