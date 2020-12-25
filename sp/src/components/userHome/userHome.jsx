@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {Link, useHistory} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import PopUp from '../popUp.jsx';
 import NavBar from './navBar.jsx';
 import Feed from './feed.jsx';
@@ -9,12 +9,12 @@ import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
-import {getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers} from '../../firebase_functions.js'
+import { getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers } from '../../firebase_functions.js'
 
-export default class UserPage extends Component{
-    constructor(props){
+export default class UserPage extends Component {
+    constructor(props) {
         super(props);
-        this.state = {current: "feed", user: null, goTo: "default", mainFeedData: null, following: null, allUsers: null}
+        this.state = { current: "feed", user: null, goTo: "default", mainFeedData: null, following: null, allUsers: null }
         this.profileButtonClick = this.profileButtonClick.bind(this);
         this.feedButtonClick = this.feedButtonClick.bind(this);
         this.messagesButtonClick = this.messagesButtonClick.bind(this);
@@ -25,7 +25,7 @@ export default class UserPage extends Component{
         this.setData = this.setData.bind(this)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const but = document.getElementById("feedButton");
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
@@ -33,49 +33,51 @@ export default class UserPage extends Component{
         this.setData();
     }
 
-    setData(){
-        get_follower_posts().then((res)=>{
-            getFollowing().then((restwo)=>{
-                allUsers().then((resthree)=>{
-                    this.setState({mainFeedData: res[0], following: restwo, allUsers: resthree})
+    setData() {
+        get_follower_posts().then((res) => {
+            console.log(res)
+            getFollowing().then((restwo) => {
+                allUsers().then((resthree) => {
+                    this.setState({ mainFeedData: res.flat(), following: restwo, allUsers: resthree })
                 })
             })
         })
     }
 
-    setStateUser(){
+    setStateUser() {
         getCurrentUserInfo().then((doc) => {
-        if (!doc.exists) {
-            console.log('No user found')
-        } else {
-            var user = doc.data()
-            if (user.passwordChange){
-                var elem = document.getElementById("popUpContainer");
-                ReactDOM.render(<PopUp type={"Set Password"}  user={user} func={this.updateUserInfo}/>, elem);
-                document.getElementById("header").style.filter = "blur(4px)";
-                document.getElementById("body").style.filter = "blur(4px)";
+            if (!doc.exists) {
+                console.log('No user found')
+            } else {
+                var user = doc.data()
+                if (user.passwordChange) {
+                    var elem = document.getElementById("popUpContainer");
+                    ReactDOM.render(<PopUp type={"Set Password"} user={user} func={this.updateUserInfo} />, elem);
+                    document.getElementById("header").style.filter = "blur(4px)";
+                    document.getElementById("body").style.filter = "blur(4px)";
+                }
+                this.setState({ user: user })
             }
-            this.setState({user: user})
-        }}).catch((err) => console.log(err))
+        }).catch((err) => console.log(err))
     }
 
-    updateUserInfo(obj){
-        try{
+    updateUserInfo(obj) {
+        try {
             setCurrentUserInfo(obj).then((res) => this.setStateUser())
-            .catch((err) => alert("Details couldn't be updated!"))
+                .catch((err) => alert("Details couldn't be updated!"))
         } catch {
             this.setStateUser();
         }
     }
 
-    goTo(id){
+    goTo(id) {
         this.exploreButtonClick(null, id)
     }
 
-    profileButtonClick(){
-        var ids= ["feedButton","exploreButton","messagesButton"]
+    profileButtonClick() {
+        var ids = ["feedButton", "exploreButton", "messagesButton"]
         var but;
-        for (var id of ids){
+        for (var id of ids) {
             but = document.getElementById(id);
             but.style.background = 'none';
             but.style.color = '#00B140';
@@ -83,13 +85,13 @@ export default class UserPage extends Component{
         but = document.getElementById("profileButton");
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
-        this.setState({current: "profile"});
+        this.setState({ current: "profile" });
     }
 
-    exploreButtonClick(event, goTo = "default"){
-        var ids= ["feedButton","profileButton","messagesButton"]
+    exploreButtonClick(event, goTo = "default") {
+        var ids = ["feedButton", "profileButton", "messagesButton"]
         var but;
-        for (var id of ids){
+        for (var id of ids) {
             but = document.getElementById(id);
             but.style.background = 'none';
             but.style.color = '#00B140';
@@ -97,13 +99,13 @@ export default class UserPage extends Component{
         but = document.getElementById("exploreButton");
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
-        this.setState({current: "explore", goTo: goTo});
+        this.setState({ current: "explore", goTo: goTo });
     }
 
-    feedButtonClick(){
-        var ids= ["profileButton","exploreButton","messagesButton"]
+    feedButtonClick() {
+        var ids = ["profileButton", "exploreButton", "messagesButton"]
         var but;
-        for (var id of ids){
+        for (var id of ids) {
             but = document.getElementById(id);
             but.style.background = 'none';
             but.style.color = '#00B140';
@@ -111,13 +113,13 @@ export default class UserPage extends Component{
         but = document.getElementById("feedButton");
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
-        this.setState({current: "feed"});
+        this.setState({ current: "feed" });
     }
 
-    messagesButtonClick(){
-        var ids= ["profileButton","exploreButton","feedButton"]
+    messagesButtonClick() {
+        var ids = ["profileButton", "exploreButton", "feedButton"]
         var but;
-        for (var id of ids){
+        for (var id of ids) {
             but = document.getElementById(id);
             but.style.background = 'none';
             but.style.color = '#00B140';
@@ -125,39 +127,40 @@ export default class UserPage extends Component{
         but = document.getElementById("messagesButton");
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
-        this.setState({current: "messages"});
+        this.setState({ current: "messages" });
     }
 
-    render(){
+    render() {
         var item;
-        if (this.state.current=="profile"){
-            item= <UserProfile user={this.state.user} setUser={this.updateUserInfo} following={this.state.following}/>
-        } else if (this.state.current=="explore"){
-            item= <ExplorePage display={this.state.goTo} following={this.state.following}/>
-        } else if (this.state.current=="messages"){
-            item= <MessageBox />
+        if (this.state.current == "profile") {
+            item = <UserProfile user={this.state.user} setUser={this.updateUserInfo} following={this.state.following} />
+        } else if (this.state.current == "explore") {
+            item = <ExplorePage display={this.state.goTo} following={this.state.following} />
+        } else if (this.state.current == "messages") {
+            item = <MessageBox />
         } else {
-            item= <Feed data={this.state.mainFeedData}/>
+            item = <Feed data={this.state.mainFeedData} />
         }
         return (
-        <div id="wholeScreen" style={userHomeStyle.mainDiv}>
-            <NavBar goTo={this.goTo} allUsers={this.state.allUsers}/>
-            <div id="body" style={userHomeStyle.body}>
-                <LeftMenu history={this.props.history} pageState={this.state.current}
-                buttonClickFunctions={[this.profileButtonClick, this.feedButtonClick,
-                    this.exploreButtonClick, this.messagesButtonClick]}/>
-                {item}
-                <Watchlist />
+            <div id="wholeScreen" style={userHomeStyle.mainDiv}>
+                <NavBar goTo={this.goTo} allUsers={this.state.allUsers} />
+                <div id="body" style={userHomeStyle.body}>
+                    <LeftMenu history={this.props.history} pageState={this.state.current}
+                        buttonClickFunctions={[this.profileButtonClick, this.feedButtonClick,
+                        this.exploreButtonClick, this.messagesButtonClick]} />
+                    {item}
+                    <Watchlist />
+                </div>
+                <div id="popUpContainer" style={{ top: "100%", left: "100%" }} />
             </div>
-        <div id="popUpContainer" style={{top:"100%", left:"100%"}}/>
-        </div>
         );
     }
 }
 
-const userHomeStyle = { mainDiv:{
-        width:"100vw",
-        height:"100vh",
+const userHomeStyle = {
+    mainDiv: {
+        width: "100vw",
+        height: "100vh",
         overflow: "none",
         backgroundColor: "#FFFFFF",
         display: "flex",
