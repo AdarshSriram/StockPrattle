@@ -428,7 +428,7 @@ export const add_comment = async (params, postId) => {
 export const hasUserLiked = (postId) => {
   var user = firebase.auth().currentUser;
   var like_ref = firebase.firestore().collection("likes/" + user.email + "/userLikes");
-  like_ref
+  return like_ref
     .doc(postId)
     .get()
     .then((doc) => { return doc.exists })
