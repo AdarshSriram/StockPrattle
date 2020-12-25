@@ -35,7 +35,6 @@ export default class UserPage extends Component {
 
     setData() {
         get_follower_posts().then((res) => {
-            console.log(res)
             getFollowing().then((restwo) => {
                 allUsers().then((resthree) => {
                     this.setState({ mainFeedData: res.flat(), following: restwo, allUsers: resthree })
