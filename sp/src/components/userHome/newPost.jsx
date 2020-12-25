@@ -23,7 +23,7 @@ export default class NewPostPopUp extends Component {
             if (val === '') { val = null }
             params.push(val);
         }
-        addPost(params).then(document.getElementById("wholeScreen").click())
+        addPost(params).then(() => { console.log("added"); document.getElementById("wholeScreen").click() })
     }
 
     render() {
