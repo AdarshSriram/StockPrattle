@@ -290,15 +290,16 @@ export const allUsers = async () => {
 }
 
 export const addPost = async (params) => {
-  var user = firebase.auth().currentUser; var pic;
-  await getPhoto(user.email).then((res) => pic = res).catch(err => console.log(err))
+  var user = firebase.auth().currentUser;
+  var pic = await getPhoto(user.email).then(res => res).catch(err => { console.log(err); return "" })
+  console.log(pic)
   const time = Date.now()
   const post = {
     "stocks": params[0],
     "text": params[1],
     "createdAt": time,
     "username": user.displayName,
-    "propic": pic,
+    "propic": pic ? pic : "",
     "likes": 1,
     "id": user.email + "-" + time
   }
