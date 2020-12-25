@@ -292,7 +292,8 @@ export const addPost = async (params) => {
     "createdAt": time,
     "username": user.displayName,
     "propic": pic,
-    "likes": 1
+    "likes": 1,
+    "id": user.email + "-" + time
   }
   var email = user.email
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
