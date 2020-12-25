@@ -285,11 +285,11 @@ export const signInExt = (google) => {
 export const addPost = async (params) => {
   var user = firebase.auth().currentUser; var pic;
   await getPhoto(user.email).then((res) => pic = res)
-  const time = new Date()
+  const time = Date.now()
   const post = {
     "stocks": params[0],
     "text": params[1],
-    "createdAt": fire.firestore.Timestamp.fromDate(time),
+    "createdAt": time,
     "username": user.displayName,
     "propic": pic,
     "likes": 1
