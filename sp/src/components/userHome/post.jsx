@@ -7,7 +7,7 @@ import CommentScroll from './comments.jsx';
 export default class Post extends Component {
     constructor(props) {
         super(props);
-        this.state = { user: props.user, image: props.propic, liked: props.liked }
+        this.state = { user: props.user, image: props.propic, liked: props.liked, id: props.id}
         // this.componentDidMount = this.componentDidMount.bind(this)
         this.like = this.like.bind(this)
     }
