@@ -1,72 +1,75 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {smallnopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg} from './svgs.jsx';
-import { getPhoto } from '../../firebase_functions';
+import { smallnopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg } from './svgs.jsx';
+import { getPhoto, likeUnlikePost } from '../../firebase_functions';
 import CommentScroll from './comments.jsx';
 
-export default class Post extends Component{
-    constructor(props){
+export default class Post extends Component {
+    constructor(props) {
         super(props);
-        this.state = {user: props.user, image: props.propic, liked: props.liked}
+        this.state = { user: props.user, image: props.propic, liked: props.liked }
         // this.componentDidMount = this.componentDidMount.bind(this)
         this.like = this.like.bind(this)
     }
 
-    componentDidMount(){
-        if (this.state.liked){
-            document.getElementById(this.props.text+"like").style.fill = "#00B140"
+    componentDidMount() {
+        if (this.state.liked) {
+            document.getElementById(this.props.text + "like").style.fill = "#00B140"
         }
     }
 
-    like(){
-        if (this.state.liked){
-            document.getElementById(this.props.text+"like").style.fill = "black"
+    like() {
+        if (this.state.liked) {
+            document.getElementById(this.props.text + "like").style.fill = "black"
+            likeUnlikePost("", this.props.text, false).then(() => console.log("post liked"))
         } else {
-            document.getElementById(this.props.text+"like").style.fill = "#00B140"
+            document.getElementById(this.props.text + "like").style.fill = "#00B140"
+            likeUnlikePost("", this.user, true).then(() => console.log("post liked"))
         }
-        this.setState({liked: !this.state.liked})
+        this.setState({ liked: !this.state.liked })
     }
 
-    render(){
+    render() {
         var error = false; var disp;
-        if (this.props.logo || this.props.user==null){
-            disp = <img src={require("../../images/LogoGreen.png")} alt="Stock Prattle Green" style={postStyle.image}/>
+        if (this.props.logo || this.props.user == null) {
+            disp = <img src={require("../../images/LogoGreen.png")} alt="Stock Prattle Green" style={postStyle.image} />
         } else {
             disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
             if (this.state.image == null || error) {
                 disp = smallnopicSvg;
             }
         }
-    return (
-        <div id={this.props.text} style={postStyle.mainDiv}>
-            <div style={postStyle.postDiv}>
-                <div style={postStyle.topBar}>
-                    <div style={postStyle.imageDiv}>
-                        {disp}
+        return (
+            <div id={this.props.text} style={postStyle.mainDiv}>
+                <div style={postStyle.postDiv}>
+                    <div style={postStyle.topBar}>
+                        <div style={postStyle.imageDiv}>
+                            {disp}
+                        </div>
+                        <p style={postStyle.textStyle}>
+                            {this.props.user == null ? "@stockprattle" : "@" + this.props.user}
+                        </p>
                     </div>
-                    <p style={postStyle.textStyle}>
-                        {this.props.user==null ? "@stockprattle": "@"+this.props.user}
-                    </p>
+                    <div style={postStyle.contentDiv}>
+                        <p style={postStyle.textStyle}>{this.props.text}</p>
+                    </div>
+                    <div style={postStyle.bottomBar}>
+                        <button style={postStyle.bottomButton} onClick={this.like}>
+                            {thumbsupSvg(this.props.text + "like")}</button>
+                        <button style={postStyle.bottomButton} hidden>{sendSvg}</button>
+                        <button style={postStyle.bottomButton} hidden>
+                            {replySvg(this.props.text + "comment")}</button>
+                        <button style={postStyle.bottomButton} hidden>{shareSvg}</button>
+                    </div>
                 </div>
-                <div style={postStyle.contentDiv}>
-                    <p style={postStyle.textStyle}>{this.props.text}</p>
-                </div>
-                <div style={postStyle.bottomBar}>
-                    <button style={postStyle.bottomButton} onClick={this.like}>
-                        {thumbsupSvg(this.props.text+"like")}</button>
-                    <button style={postStyle.bottomButton} hidden>{sendSvg}</button>
-                    <button style={postStyle.bottomButton} hidden>
-                        {replySvg(this.props.text+"comment")}</button>
-                    <button style={postStyle.bottomButton} hidden>{shareSvg}</button>
-                </div>
+                <CommentScroll user={this.props.curuser} postId={this.props.text} />
             </div>
-            <CommentScroll user={this.props.curuser} postId={this.props.text}/>
-        </div>
         )
     }
 }
 
-const postStyle= {mainDiv: {
+const postStyle = {
+    mainDiv: {
         width: "80%",
         backgroundColor: "#FFFFFF",
         border: "0px solid rgba(0, 0, 0, 0.25)",

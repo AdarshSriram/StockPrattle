@@ -297,15 +297,15 @@ export const addPost = async (params) => {
   var email = user.email
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
   post_ref
-    .doc(/*user.email + "-" + time.toString()*/).set(post)
+    .doc(user.email + "-" + time.toString()).set(post)
     .catch((err) => { console.log(err) })
 }
 
-export const likeUnlikePost = async (id, poster_email, like = true) => {
+export const likeUnlikePost = async (time, poster_email, like = true) => {
   var post_ref = firebase.firestore().collection("posts/" + poster_email + "/userPosts");
   const incr = like ? 1 : -1
   post_ref
-    .doc(id)
+    .doc(poster_email + time)
     .update({ likes: fire.firestore.FieldValue.increment(incr) })
     .catch((err) => { console.log(err) })
 }
@@ -374,16 +374,25 @@ export const get_follower_posts = async (following = true) => {
     .catch((err) => { console.log(err) })
 }
 
-export const get_stock_comments = async (stockId) => {
-  const snapshot = await firebase.firestore().collection("comments/" + stockId + "/stockComments")
+export const get_post_comments = async (postId) => {
+  const email = postId.slice(0, postId.find('-'))
+  const snapshot = await firebase.firestore().collection("comments/" + email + "/userComments")
     .orderBy("likes", "desc").get()
   return snapshot.docs.map(doc => doc.data());
 }
 
-export const add_stock_comment = async (comment, stockId) => {
+export const add_comment = async (params, postId) => {
   var user = firebase.auth().currentUser;
-  const comment_ref = firebase.firestore().collection("comments/" + stockId + "/stockComments")
-  comment_ref.doc(stockId)
+  const comment_ref = firebase.firestore().collection("comments/" + user.email + "/userComments")
+  const time = new Date()
+  const comment = {
+    "postId": params[0],
+    "text": params[1],
+    "createdAt": fire.firestore.Timestamp.fromDate(time),
+    "username": user.displayName,
+    "likes": 1
+  }
+  comment_ref.doc(postId + user.email)
     .set(comment)
     .catch((err) => { console.log(err) })
 }
