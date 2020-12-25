@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { smallnopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg } from './svgs.jsx';
-import { getPhoto, likeUnlikePost } from '../../firebase_functions';
+import { getPhoto, likeUnlikePost, hasUserLiked} from '../../firebase_functions';
 import CommentScroll from './comments.jsx';
 
 export default class Post extends Component {
     constructor(props) {
         super(props);
-        this.state = { user: props.user, image: props.propic, liked: props.liked, id: props.id }
+        this.state = { user: props.user, image: props.propic, liked: false, id: props.id }
         // this.componentDidMount = this.componentDidMount.bind(this)
         this.like = this.like.bind(this)
     }
 
     componentDidMount() {
-        if (this.state.liked) {
-            document.getElementById(this.props.text + "like").style.fill = "#00B140"
-        }
+        hasUserLiked(this.state.id).then(res => {
+            if (res) {
+                document.getElementById(this.props.text + "like").style.fill = "#00B140"
+                this.setState({liked:true})
+            }
+        })
     }
 
     like() {
@@ -31,11 +34,11 @@ export default class Post extends Component {
 
     render() {
         var error = false; var disp;
-        if (this.props.logo || this.props.user == null) {
+        if (this.props.user == null) {
             disp = <img src={require("../../images/LogoGreen.png")} alt="Stock Prattle Green" style={postStyle.image} />
         } else {
             disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
-            if (this.state.image == null || error) {
+            if ([null, ""].includes(this.state.image) || error) {
                 disp = smallnopicSvg;
             }
         }
