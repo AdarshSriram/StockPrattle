@@ -7,7 +7,7 @@ import CommentScroll from './comments.jsx';
 export default class Post extends Component {
     constructor(props) {
         super(props);
-        this.state = { user: props.user, image: props.propic, liked: false, id: props.id }
+        this.state = { user: props.user, liked: false, id: props.id}
         // this.componentDidMount = this.componentDidMount.bind(this)
         this.like = this.like.bind(this)
     }
@@ -34,13 +34,9 @@ export default class Post extends Component {
 
     render() {
         var error = false; var disp;
-        if (this.props.user == null) {
-            disp = <img src={require("../../images/LogoGreen.png")} alt="Stock Prattle Green" style={postStyle.image} />
-        } else {
-            disp = <img src={this.state.image} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
-            if ([null, ""].includes(this.state.image) || error) {
-                disp = smallnopicSvg;
-            }
+        disp = <img src={this.props.propic} alt="Profile Pic" onError={() => error = true} style={postStyle.image} />
+        if ([null, ""].includes(this.props.propic) || error) {
+            disp = smallnopicSvg;
         }
         return (
             <div id={this.props.text} style={postStyle.mainDiv}>

@@ -13,20 +13,6 @@ var storageRef = firebase.storage().ref();
 var providerG = new fire.auth.GoogleAuthProvider();
 var providerF = new fire.auth.FacebookAuthProvider()
 
-// Demo user object:
-//  {
-//      email: demo@demo.com,
-//      username: demo,
-//      fullname: demo demo
-//      birthday: dd/mm/yyyy
-//      title: Demo at demo firm
-//      title: Demo at demo firm
-//      industry: Demo
-//      education: uptil demo years
-// }
-
-// Update user profle details
-
 let getPostIdsByEmail = async (email) => {
   const snapshot = await firebase.firestore().collection("posts/" + email + "/userPosts")
     .orderBy("createdAt").get()
@@ -292,7 +278,6 @@ export const allUsers = async () => {
 export const addPost = async (params) => {
   var user = firebase.auth().currentUser;
   var pic = await getPhoto(user.email).then(res => res).catch(err => { console.log(err); return "" })
-  console.log(pic)
   const time = Date.now()
   const post = {
     "stocks": params[0],
@@ -300,13 +285,13 @@ export const addPost = async (params) => {
     "createdAt": time,
     "username": user.displayName,
     "propic": pic ? pic : "",
-    "likes": 1,
+    "likes": 0,
     "id": user.email + "-" + time
   }
   var email = user.email
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
-  post_ref
-    .doc(user.email + "-" + time).set(post)
+  return post_ref
+    .doc(user.email + "-" + time).set(post).then((res)=>post)
     .catch((err) => { console.log(err) })
 }
 

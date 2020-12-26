@@ -8,11 +8,11 @@ export default class UserFeed extends Component {
     constructor(props) {
         super(props);
         if (this.props.data == null) {
-            this.state = { items: [], over: true }
+            this.state = {items: [], over: true}
         } else if (this.props.data.length < 10) {
-            this.state = { items: this.props.data, over: true }
+            this.state = {items: this.props.data, over: true}
         } else {
-            this.state = { items: this.props.data.slice(0, 10), over: false }
+            this.state = {items: this.props.data.slice(0, 10), over: false}
         }
         this.checkAndFetch = this.checkAndFetch.bind(this)
     }
@@ -29,11 +29,23 @@ export default class UserFeed extends Component {
         }
     }
 
+    componentDidUpdate(prevProps){
+        if (prevProps.data != this.props.data){
+            if (this.props.data == null) {
+                this.setState({items: [], over: true})
+            } else if (this.props.data.length < 10) {
+                this.setState({items: this.props.data, over: true})
+            } else {
+                this.setState({items: this.props.data.slice(0, 10), over: false})
+            }
+        }
+    }
+
     render() {
         return (
             <div id="usedFeedDiv" style={userFeedStyle.centerDiv} onScroll={this.checkAndFetch}>
                 {this.state.items.map((i, index) => (
-                    <Post key={index} user={i.username} text={i.text} propic={i.propic} id={i.id}/>))}
+                    <Post curuser = {this.props.user} key={index} user={i.username} text={i.text} propic={i.propic} id={i.id}/>))}
                 <p style={userFeedStyle.loading}>{(this.state.over) ? "You have reached the end of your feed!" : "Loading..."}</p>
             </div>
         )

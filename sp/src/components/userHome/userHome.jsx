@@ -138,7 +138,7 @@ export default class UserPage extends Component {
         } else if (this.state.current == "messages") {
             item = <MessageBox />
         } else {
-            item = <Feed data={this.state.mainFeedData} />
+            item = <Feed user={this.state.user} data={this.state.mainFeedData} />
         }
         return (
             <div id="wholeScreen" style={userHomeStyle.mainDiv}>

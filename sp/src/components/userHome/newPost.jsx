@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { addPost } from "./../../firebase_functions"
 
 export default class NewPostPopUp extends Component {
     constructor(props) {
@@ -16,14 +15,14 @@ export default class NewPostPopUp extends Component {
         but.target.style.background = "#00B140";
     }
 
-    add_post() {
+    addPost() {
         const inputs = document.getElementsByName("inputs"); var params = []; var val;
         for (var obj of inputs) {
             val = obj.value;
             if (val === '') { val = null }
             params.push(val);
         }
-        addPost(params).then(() => { console.log("added"); document.getElementById("wholeScreen").click() })
+        this.props.addPost(params)
     }
 
     render() {
@@ -32,7 +31,7 @@ export default class NewPostPopUp extends Component {
                 <div id="popUpBox" style={newPostStyle.popUpBox}>
                     <form id="popUpForm" onSubmit={(event) => {
                         event.preventDefault();
-                        this.add_post()
+                        this.addPost()
                     }} style={newPostStyle.form}>
                         <input name="inputs" id="stockInput" placeholder="Select Stock" list="stocks" style={newPostStyle.inputs} required />
                         <datalist id="stocks">

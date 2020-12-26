@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import UserFeed from './userFeed.jsx'
 import NewPostPopUp from './newPost.jsx'
 import LoadingScreen from "./loadingDiv.jsx"
+import {getPhoto, addPost} from '../../firebase_functions.js'
 
 function buttonPress(type = null) {
     var elem = document.getElementById("popUpContainer");
-    ReactDOM.render(<NewPostPopUp type={type} />, elem);
+    ReactDOM.render(<NewPostPopUp addPost={type} />, elem);
     document.getElementById("wholeScreen").addEventListener('click', reversePress);
     document.getElementById("body").style.filter = "blur(4px)";
     document.getElementById("header").style.filter = "blur(4px)";
@@ -26,6 +27,7 @@ export default class Feed extends Component{
     constructor(props){
         super(props);
         this.state = {data: props.data}
+        this.addPostFront = this.addPostFront.bind(this)
     }
 
     componentDidUpdate(prevProps) {
@@ -33,6 +35,14 @@ export default class Feed extends Component{
             this.setState({data: this.props.data})
             // this.setState({data: [{"text": "Sample Post", "username": "StockPrattle"}]})
         }
+    }
+
+    addPostFront(params){
+        const time = Date.now()
+        addPost(params).then((res) => {
+            document.getElementById("wholeScreen").click()
+            this.setState({data: [res].concat(this.state.data)})
+        }).catch((error) => console.log(error))
     }
 
     mouseIn(event) {
@@ -50,9 +60,9 @@ export default class Feed extends Component{
         <div style={feedStyle.centerDiv}>
             <div style={feedStyle.topDiv}>
                 <button style={feedStyle.newPostButton} onMouseOver={this.mouseIn}
-                    onMouseLeave={this.mouseOut} onClick={(event) => { buttonPress("Login") }}>+</button>
+                    onMouseLeave={this.mouseOut} onClick={(event) => buttonPress(this.addPostFront)}>+</button>
             </div>
-            {(this.state.data == null) ? <LoadingScreen /> : <UserFeed data={this.state.data}/>}
+            {(this.state.data == null) ? <LoadingScreen /> : <UserFeed user={this.props.user} data={this.state.data}/>}
         </div>
     )}
 }

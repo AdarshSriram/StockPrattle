@@ -5,12 +5,13 @@ import {thumbsupSvg, replySvg} from './svgs.jsx';
 export default class CommentScroll extends Component {
     constructor(props){
         super(props);
-        var toadd = []; var i = 0;
-        while (i<5){
-            toadd.push(({user: "@username", text: "Fake comment text!"}));
-            i++;
+        if (this.props.data == null) {
+            this.state = { items: [], over: true}
+        } else if (this.props.data.length < 10) {
+            this.state = { items: this.props.data, over: true}
+        } else {
+            this.state = { items: this.props.data.slice(0, 10), over: false}
         }
-        this.state = {items: toadd}
         this.checkAndFetch = this.checkAndFetch.bind(this)
         this.comment = this.comment.bind(this)
     }
@@ -23,30 +24,27 @@ export default class CommentScroll extends Component {
     checkAndFetch(event){
         var element = event.target;
         if (element.scrollHeight - element.scrollTop === element.clientHeight){
-            setTimeout(() => {
-
-            var toadd = []; var i = 0;
-            while (i<5){
-                toadd.push(({user: "@username", text: "Fake comment text!"}));
-                i++;
+            var i = this.state.items.length - 1
+            if (i + 10 >= this.props.data.length) {
+                this.setState({ items: this.props.data, over: true })
+            } else {
+                this.setState({ items: this.state.items.concat(this.props.data.slice(i, i + 10)) })
             }
-            this.setState({items: this.state.items.concat(toadd)})
-        }, 2000);
         }
     }
 
     comment(text){
-        this.setState({items: [{user: "@currentUser", text: text}].concat(this.state.items)})
+        this.setState({items: [{user: "@"+this.props.user.username, text: text}].concat(this.state.items)})
     }
 
     render(){
     return (
         <div id={this.props.postId+"comments"} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
-            <Comment user={"@currentUser"} postComm={this.comment} id={Math.random()}/>
+            <Comment user={"@"+this.props.user.username} postComm={this.comment} id={Math.random()}/>
             {this.state.items.map((i, index) => (
                 <Comment user={i.user} text={i.text} id={Math.random()} liked={false}/>
             ))}
-            <p style={commentsStyle.loading}>Loading...</p>
+            {(this.state.over) ? null : <p style={commentsStyle.loading}>{"Loading..."}</p>}
         </div>
         )
     }
