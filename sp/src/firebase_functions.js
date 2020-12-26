@@ -408,7 +408,7 @@ export const add_comment = async (postId, text) => {
     "id": user.email + postId,
     "likes": 0
   }
-  comment_ref.doc(user.email + time)
+  comment_ref.doc(user.email + ",," + time)
     .set(comment)
     .catch((err) => { console.log(err) })
 }
