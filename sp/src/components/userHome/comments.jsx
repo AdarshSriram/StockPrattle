@@ -1,38 +1,40 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import {thumbsupSvg, replySvg} from './svgs.jsx';
-import {add_comment, get_post_comments} from '../../firebase_functions.js'
+import { thumbsupSvg, replySvg } from './svgs.jsx';
+import { add_comment, get_post_comments, likeUnlikePost } from '../../firebase_functions.js'
 
 export default class CommentScroll extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {data: null, items:null, over:true}
+        this.state = { data: null, items: null, over: true }
         this.checkAndFetch = this.checkAndFetch.bind(this)
         this.comment = this.comment.bind(this)
     }
 
-    componentDidMount(){
-        const elem = document.getElementById(this.props.postId+"comments")
-        elem.style.height = elem.parentElement.offsetHeight+"px"
-        get_post_comments(this.props.postId).then((res)=> {
+    componentDidMount() {
+        const elem = document.getElementById(this.props.postId + "comments")
+        elem.style.height = elem.parentElement.offsetHeight + "px"
+        get_post_comments(this.props.postId).then((res) => {
             var items, over;
             if (res == null) {
                 items = []; over = true;
             } else if (res.length < 10) {
-                items = res; over= true;
+                items = res; over = true;
             } else {
-                items = res.slice(0, 10); over= false;
+                items = res.slice(0, 10); over = false;
             }
             console.log(res)
-            this.setState({data: res, items: items, over: over},
-            ()=>{const elem = document.getElementById(this.props.postId+"comments")
-            elem.style.height = elem.parentElement.offsetHeight+"px"})
+            this.setState({ data: res, items: items, over: over },
+                () => {
+                    const elem = document.getElementById(this.props.postId + "comments")
+                    elem.style.height = elem.parentElement.offsetHeight + "px"
+                })
         })
     }
 
-    checkAndFetch(event){
+    checkAndFetch(event) {
         var element = event.target;
-        if (element.scrollHeight - element.scrollTop === element.clientHeight){
+        if (element.scrollHeight - element.scrollTop === element.clientHeight) {
             var i = this.state.items.length - 1
             if (i + 10 >= this.state.data.length) {
                 this.setState({ items: this.state.data, over: true })
@@ -42,123 +44,128 @@ export default class CommentScroll extends Component {
         }
     }
 
-    comment(text){
-        add_comment(this.props.postId, text).then(()=>{
-            this.setState({items: [{user: "@"+this.props.user.username, text: text}].concat(this.state.items)})
+    comment(text) {
+        add_comment(this.props.postId, text).then(() => {
+            this.setState({ items: [{ user: "@" + this.props.user.username, text: text }].concat(this.state.items) })
         })
     }
 
-    render(){
-        if (this.state.items == null){
+    render() {
+        if (this.state.items == null) {
             return (
                 <LoadingComments id={this.props.postId} />)
         }
-    return (
-        <div id={this.props.postId+"comments"} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
-            <Comment user={"@"+this.props.user.username} postComm={this.comment} id={Math.random()}/>
-            {this.state.items.map((i, index) => (
-                <Comment user={i.user} text={i.text} id={Math.random()} liked={false}/>
-            ))}
-            {(this.state.over) ? null : <p style={commentsStyle.loading}>{"Loading..."}</p>}
-        </div>
+        return (
+            <div id={this.props.postId + "comments"} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
+                <Comment user={"@" + this.props.user.username} postComm={this.comment} id={Math.random()} />
+                {this.state.items.map((i, index) => (
+                    <Comment user={i.user} text={i.text} id={Math.random()} liked={false} />
+                ))}
+                {(this.state.over) ? null : <p style={commentsStyle.loading}>{"Loading..."}</p>}
+            </div>
         )
     }
 }
 
-class Comment extends Component{
-    constructor(props){
+class Comment extends Component {
+    constructor(props) {
         super(props);
-        this.state = {liked: props.liked}
+        this.state = { liked: props.liked }
         this.like = this.like.bind(this)
         this.comment = this.comment.bind(this)
         this.mouseIn = this.mouseIn.bind(this)
         this.mouseOut = this.mouseOut.bind(this)
     }
 
-    like(){
-        if (this.state.liked){
+    like() {
+        if (this.state.liked) {
             document.getElementById(this.props.id).style.fill = "black"
+            likeUnlikePost(this.props.id, false, false)
         } else {
             document.getElementById(this.props.id).style.fill = "#00B140"
+            likeUnlikePost(this.props.id, true, false)
         }
-        this.setState({liked: !this.state.liked})
+        this.setState({ liked: !this.state.liked })
     }
 
-    comment(){
-        const elem = document.getElementById(this.props.id+"inp")
+    comment() {
+        const elem = document.getElementById(this.props.id + "inp")
         this.props.postComm(elem.value)
         elem.value = null
     }
 
-    mouseIn(){
+    mouseIn() {
         document.getElementById(this.props.id).style.fill = "#00B140"
     }
 
-    mouseOut(){
+    mouseOut() {
         document.getElementById(this.props.id).style.fill = "black"
     }
 
-    render(){
-        if (this.props.postComm != null){
+    render() {
+        if (this.props.postComm != null) {
             return (
-            <div style={commentsStyle.comment}>
-                <div style={commentsStyle.commentBody}>
-                    <p style={commentsStyle.usernameText}>{this.props.user}</p>
-                    <input id={this.props.id+"inp"} style={commentsStyle.commentInput} type="text" placeholder="Add Comment"/>
+                <div style={commentsStyle.comment}>
+                    <div style={commentsStyle.commentBody}>
+                        <p style={commentsStyle.usernameText}>{this.props.user}</p>
+                        <input id={this.props.id + "inp"} style={commentsStyle.commentInput} type="text" placeholder="Add Comment" />
+                    </div>
+                    <button style={commentsStyle.rightButton} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
+                        onClick={this.comment}>{replySvg(this.props.id)}</button>
                 </div>
-                <button style={commentsStyle.rightButton} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
-                    onClick={this.comment}>{replySvg(this.props.id)}</button>
-            </div>
-        )} else {
+            )
+        } else {
             return (
-            <div style={commentsStyle.comment}>
-                <div style={commentsStyle.commentBody}>
-                    <p style={commentsStyle.usernameText}>{this.props.user}</p>
-                    <p style={commentsStyle.text}>{this.props.text}</p>
-                </div>
-                <button style={commentsStyle.rightButton} onClick={this.like}>
-                    {thumbsupSvg(this.props.id)}</button>
-            </div>)
+                <div style={commentsStyle.comment}>
+                    <div style={commentsStyle.commentBody}>
+                        <p style={commentsStyle.usernameText}>{this.props.user}</p>
+                        <p style={commentsStyle.text}>{this.props.text}</p>
+                    </div>
+                    <button style={commentsStyle.rightButton} onClick={this.like}>
+                        {thumbsupSvg(this.props.id)}</button>
+                </div>)
         }
     }
 }
 
-class LoadingComments extends Component{
-    constructor(props){
+class LoadingComments extends Component {
+    constructor(props) {
         super(props);
-        this.state = {intervalID: null}
+        this.state = { intervalID: null }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const id = setInterval(this.flicker, 500)
-        this.setState({intervalID: id})
+        this.setState({ intervalID: id })
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         clearInterval(this.state.intervalID)
     }
 
-    flicker(){
+    flicker() {
         var img = document.getElementById("loadingCommentsImage")
-        if(img.style.visibility == 'hidden'){
+        if (img.style.visibility == 'hidden') {
             img.style.visibility = 'visible';
-        }else{
+        } else {
             img.style.visibility = 'hidden';
         }
     }
 
-    render(){
+    render() {
         return (
-            <div id={this.props.id+"comments"} style={commentsStyle.loadingDiv}>
+            <div id={this.props.id + "comments"} style={commentsStyle.loadingDiv}>
                 <img id="loadingCommentsImage" src={require("../../images/LogoGreen.png")} alt="Stock Prattle Logo" style={{
-                    height: 2*133.75/3+"px",
-                    width: 2*138.75/3+"px"}}/>
+                    height: 2 * 133.75 / 3 + "px",
+                    width: 2 * 138.75 / 3 + "px"
+                }} />
             </div>
         )
     }
 }
 
-const commentsStyle= { centerDiv: {
+const commentsStyle = {
+    centerDiv: {
         height: "0px",
         width: "100%",
         maxHeight: "100%",

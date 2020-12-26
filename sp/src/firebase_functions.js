@@ -1,13 +1,6 @@
 import firebase from './utils/config.js';
 import fire from 'firebase';
-const serviceAccount = require('./sp_admin.json');
-const admin = require('firebase-admin');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
-
-//const db = admin.firestore()
 const userCollection = firebase.firestore().collection('users')
 var storageRef = firebase.storage().ref();
 var providerG = new fire.auth.GoogleAuthProvider();
