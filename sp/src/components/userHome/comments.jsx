@@ -14,20 +14,20 @@ export default class CommentScroll extends Component {
     componentDidMount(){
         const elem = document.getElementById(this.props.postId+"comments")
         elem.style.height = elem.parentElement.offsetHeight+"px"
-        // get_post_comments(this.props.postId).then((res)=> {
-        //     var items, over;
-        //     if (res == null) {
-        //         items = []; over = true;
-        //     } else if (res.length < 10) {
-        //         items = res; over= true;
-        //     } else {
-        //         items = res.slice(0, 10); over= false;
-        //     }
-        //     console.log(res)
-        //     this.setState({data: res, items: items, over: over},
-        //     ()=>{const elem = document.getElementById(this.props.postId+"comments")
-        //     elem.style.height = elem.parentElement.offsetHeight+"px"})
-        // })
+        get_post_comments(this.props.postId).then((res)=> {
+            var items, over;
+            if (res == null) {
+                items = []; over = true;
+            } else if (res.length < 10) {
+                items = res; over= true;
+            } else {
+                items = res.slice(0, 10); over= false;
+            }
+            console.log(res)
+            this.setState({data: res, items: items, over: over},
+            ()=>{const elem = document.getElementById(this.props.postId+"comments")
+            elem.style.height = elem.parentElement.offsetHeight+"px"})
+        })
     }
 
     checkAndFetch(event){
