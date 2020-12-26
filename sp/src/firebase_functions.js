@@ -396,7 +396,7 @@ export const get_post_comments = async (id) => {
   return snapshot.docs.map(doc => doc.data());
 }
 
-export const add_comment = async (text, postId) => {
+export const add_comment = async (postId, text) => {
   var user = firebase.auth().currentUser;
   const comment_ref = firebase.firestore().collection("comments/" + postId + "/postComments")
   const time = Date.now()
@@ -405,7 +405,7 @@ export const add_comment = async (text, postId) => {
     "text": text,
     "createdAt": time,
     "username": user.displayName,
-    "id": user.email + id,
+    "id": user.email + postId,
     "likes": 0
   }
   comment_ref.doc(user.email + time)
