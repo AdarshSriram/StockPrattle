@@ -110,7 +110,6 @@ export default class PopUp extends Component {
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
                 placeholder={"Password"} style={popUpStyle.inputs} required/>)
         } else if (this.state.type === "Set Password") {
-            ls.push(<input name="inputs" id="usernameField" placeholder={"Username"} style={popUpStyle.inputs} required/>)
             ls.push(<input name="inputs" id="fullnameField" type="text" placeholder={"Full Name"} style={popUpStyle.inputs}
             required/>)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
