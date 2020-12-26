@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import UserFeed from './userFeed.jsx'
 import NewPostPopUp from './newPost.jsx'
 import LoadingScreen from "./loadingDiv.jsx"
-import {getPhoto, addPost} from '../../firebase_functions.js'
+import { getPhoto, addPost } from '../../firebase_functions.js'
 
 function buttonPress(type = null) {
     var elem = document.getElementById("popUpContainer");
@@ -23,26 +23,31 @@ function reversePress(event) {
     document.getElementById("header").style.filter = "none";
 }
 
-export default class Feed extends Component{
-    constructor(props){
+export default class Feed extends Component {
+    constructor(props) {
         super(props);
-        this.state = {data: props.data}
+        this.state = { data: props.data }
         this.addPostFront = this.addPostFront.bind(this)
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.data !== prevProps.data){
-            this.setState({data: this.props.data})
+        if (this.props.data !== prevProps.data) {
+            this.setState({ data: this.props.data })
             // this.setState({data: [{"text": "Sample Post", "username": "StockPrattle"}]})
         }
     }
 
-    addPostFront(params){
-        const time = Date.now()
-        addPost(params).then((res) => {
-            document.getElementById("wholeScreen").click()
-            this.setState({data: [res].concat(this.state.data)})
-        }).catch((error) => console.log(error))
+    addPostFront(params) {
+        if (params[0] && params[1]) {
+            const time = Date.now()
+            addPost(params).then((res) => {
+                document.getElementById("wholeScreen").click()
+                this.setState({ data: [res].concat(this.state.data) })
+            }).catch((error) => console.log(error))
+        }
+        else {
+            alert("Associated stocks and post text caannot be empty")
+        }
     }
 
     mouseIn(event) {
@@ -55,19 +60,21 @@ export default class Feed extends Component{
         event.target.style.color = "#00B140"
     }
 
-    render(){
+    render() {
         return (
-        <div style={feedStyle.centerDiv}>
-            <div style={feedStyle.topDiv}>
-                <button style={feedStyle.newPostButton} onMouseOver={this.mouseIn}
-                    onMouseLeave={this.mouseOut} onClick={(event) => buttonPress(this.addPostFront)}>+</button>
+            <div style={feedStyle.centerDiv}>
+                <div style={feedStyle.topDiv}>
+                    <button style={feedStyle.newPostButton} onMouseOver={this.mouseIn}
+                        onMouseLeave={this.mouseOut} onClick={(event) => buttonPress(this.addPostFront)}>+</button>
+                </div>
+                {(this.state.data == null) ? <LoadingScreen /> : <UserFeed user={this.props.user} data={this.state.data} />}
             </div>
-            {(this.state.data == null) ? <LoadingScreen /> : <UserFeed user={this.props.user} data={this.state.data}/>}
-        </div>
-    )}
+        )
+    }
 }
 
-const feedStyle = {centerDiv: {
+const feedStyle = {
+    centerDiv: {
         height: "100%",
         width: "100%",
         display: "flex",

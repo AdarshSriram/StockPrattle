@@ -18,25 +18,33 @@ export default class PopUp extends Component {
         const pass = String(document.getElementById("passwordField").value)
         const cfm = String(document.getElementById("cfmPasswordField").value)
         const fullname = String(document.getElementById("fullnameField").value)
+        const uname = String(document.getElementById("usernameField").value)
         if (cfm !== pass) {
             alert("Passwords do not match!");
             return;
         }
-        const user = firebase.auth().currentUser
-        const userdb = this.props.user
-        const upd = this.props.func
-        user.updatePassword(pass).then(()=> {
-            userdb.passwordChange = false
-            userdb.fullname = fullname
-            upd(userdb)
-            ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
-            document.getElementById("header").style.filter = "none";
-            document.getElementById("body").style.filter = "none";
+        if (pass.length >= 8) {
+            const user = firebase.auth().currentUser
+            const userdb = this.props.user
+            const upd = this.props.func
+            user.updatePassword(pass).then(() => {
+                userdb.passwordChange = false
+                userdb.fullname = fullname
+                userdb.username = uname
+                upd(userdb)
+                ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
+                document.getElementById("header").style.filter = "none";
+                document.getElementById("body").style.filter = "none";
+                console.log("signed up")
 
-        }).catch(function (error) {
-            console.log(error)
-            alert("Sorry passwords couldn't be updated.")
-        });
+            }).catch(function (error) {
+                console.log(error)
+                alert("Sorry passwords couldn't be updated.")
+            });
+        }
+        else {
+            alert("Password must be at least 8 characters")
+        }
     }
 
     handleSignUp() {
@@ -106,27 +114,29 @@ export default class PopUp extends Component {
     render() {
         var ls = []; var txt;
         if (this.state.type === "Login") {
-            ls.push(<input name="inputs" id="emailField" type="text" placeholder={"Username or Email"} style={popUpStyle.inputs} required/>)
+            ls.push(<input name="inputs" id="emailField" type="text" placeholder={"Username or Email"} style={popUpStyle.inputs} required />)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
-                placeholder={"Password"} style={popUpStyle.inputs} required/>)
+                placeholder={"Password"} style={popUpStyle.inputs} required />)
         } else if (this.state.type === "Set Password") {
+            ls.push(<input name="inputs" id="usernameField" type="text" placeholder={"Username"} style={popUpStyle.inputs}
+                required />)
             ls.push(<input name="inputs" id="fullnameField" type="text" placeholder={"Full Name"} style={popUpStyle.inputs}
-            required/>)
+                required />)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
-                placeholder={"Password"} style={popUpStyle.inputs} required/>)
+                placeholder={"Password"} style={popUpStyle.inputs} required />)
             ls.push(<input name="inputs" id="cfmPasswordField" type="password" minLength={8}
-                placeholder={"Confirm Password"} style={popUpStyle.inputs} required/>)
+                placeholder={"Confirm Password"} style={popUpStyle.inputs} required />)
         } else {
             ls.push(<input name="inputs" id="usernameField" type="text" placeholder={"Username"} style={popUpStyle.inputs}
-            required/>)
+                required />)
             ls.push(<input name="inputs" id="fullnameField" type="text" placeholder={"Full Name"} style={popUpStyle.inputs}
-            required/>)
+                required />)
             ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs}
-            required/>)
+                required />)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
-                placeholder={"Password"} style={popUpStyle.inputs} required/>)
+                placeholder={"Password"} style={popUpStyle.inputs} required />)
             ls.push(<input name="inputs" id="cfmPasswordField" type="password" minLength={8}
-                placeholder={"Confirm Password"} style={popUpStyle.inputs} required/>)
+                placeholder={"Confirm Password"} style={popUpStyle.inputs} required />)
         }
         return (
             <div style={popUpStyle.wholeScreen}>
@@ -143,7 +153,8 @@ export default class PopUp extends Component {
                     }}
                         style={popUpStyle.form}>
                         {ls.map(item => (item))}
-                        <input id="submitButton" type="submit" style={popUpStyle.submitButton} value={this.state.type}
+                        <input id="submitButton" type="submit" style={popUpStyle.submitButton}
+                            value={this.state.type === "Set Password" ? "Create Profile" : this.state.type}
                             onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut} />
                     </form>
                     {(this.state.type === "Set Password") ? null : (
@@ -152,16 +163,16 @@ export default class PopUp extends Component {
                     {(this.state.type === "Set Password") ? null : (
                         <div id="altLayer" style={popUpStyle.alternativeLayer}>
                             <p id="altText" style={popUpStyle.altText}>
-                                {(this.state.type==="Login") ? "Sign In With: " : "Sign Up With: "}
+                                {(this.state.type === "Login") ? "Sign In With: " : "Sign Up With: "}
                             </p>
                             <button id="googleButton" style={popUpStyle.subButton} onMouseOver={this.gMouseIn}
                                 onMouseLeave={this.gMouseOut}
-                                onClick={()=>(this.state.type==="Login") ? signInExt(true) : signUpExt(true)}>
+                                onClick={() => (this.state.type === "Login") ? signInExt(true) : signUpExt(true)}>
                                 {googleSvg}
                             </button>
                             <button id="facebookButton" style={popUpStyle.subButton} onMouseOver={this.fMouseIn}
                                 onMouseLeave={this.fMouseOut}
-                                onClick={()=>(this.state.type==="Login") ? signInExt(false) : signUpExt(false)}>
+                                onClick={() => (this.state.type === "Login") ? signInExt(false) : signUpExt(false)}>
                                 {facebookSvg}
                             </button>
                         </div>
