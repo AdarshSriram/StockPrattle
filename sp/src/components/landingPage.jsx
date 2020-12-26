@@ -13,8 +13,8 @@ function buttonPress(type = null) {
 }
 
 function reversePress(event) {
-    const exclusions = ["emailField", "passwordField", "popUpBox", "popUpForm",
-        "submitButton", "subLayer", "subText", "subButton", "usernameField",
+    const exclusions = ["emailField", "passwordField", "cfmPasswordField", "popUpBox", "popUpForm",
+        "submitButton", "subLayer", "subText", "subButton", "usernameField", "fullnameField",
         "altLayer", "googleButton", "facebookButton", "googleSvg", "facebookSvg",
         "orText", "altText", "googlePath", "facebookPath", "facebookRect"];
     if (exclusions.includes(event.target.id)) { return; }

@@ -15,8 +15,9 @@ export default class PopUp extends Component {
     }
 
     handlePasswordChange() {
-        var pass = String(document.getElementById("passwordField").value)
-        var cfm = String(document.getElementById("cfmPasswordField").value)
+        const pass = String(document.getElementById("passwordField").value)
+        const cfm = String(document.getElementById("cfmPasswordField").value)
+        const fullname = String(document.getElementById("fullnameField").value)
         if (cfm !== pass) {
             alert("Passwords do not match!");
             return;
@@ -24,12 +25,14 @@ export default class PopUp extends Component {
         const user = firebase.auth().currentUser
         const userdb = this.props.user
         const upd = this.props.func
-        user.updatePassword(pass).then(function () {
+        user.updatePassword(pass).then(()=> {
             userdb.passwordChange = false
+            userdb.fullname = fullname
             upd(userdb)
             ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
             document.getElementById("header").style.filter = "none";
             document.getElementById("body").style.filter = "none";
+
         }).catch(function (error) {
             console.log(error)
             alert("Sorry passwords couldn't be updated.")
@@ -37,6 +40,12 @@ export default class PopUp extends Component {
     }
 
     handleSignUp() {
+        var pass = String(document.getElementById("passwordField").value)
+        var cfm = String(document.getElementById("cfmPasswordField").value)
+        if (cfm !== pass) {
+            alert("Passwords do not match!");
+            return;
+        }
         const inputs = document.getElementsByName("inputs"); var params = []; var val;
         for (var obj of inputs) {
             val = obj.value;
@@ -47,6 +56,7 @@ export default class PopUp extends Component {
     }
 
     handleSignIn() {
+        alert()
         const inputs = document.getElementsByName("inputs"); var params = []; var val;
         for (var obj of inputs) {
             val = obj.value;
@@ -96,19 +106,28 @@ export default class PopUp extends Component {
     render() {
         var ls = []; var txt;
         if (this.state.type === "Login") {
-            ls.push(<input name="inputs" id="emailField" type="text" placeholder={"Username or Email"} style={popUpStyle.inputs} />)
+            ls.push(<input name="inputs" id="emailField" type="text" placeholder={"Username or Email"} style={popUpStyle.inputs} required/>)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
-                placeholder={"Password"} style={popUpStyle.inputs} />)
+                placeholder={"Password"} style={popUpStyle.inputs} required/>)
         } else if (this.state.type === "Set Password") {
+            ls.push(<input name="inputs" id="usernameField" placeholder={"Username"} style={popUpStyle.inputs} required/>)
+            ls.push(<input name="inputs" id="fullnameField" type="text" placeholder={"Full Name"} style={popUpStyle.inputs}
+            required/>)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
-                placeholder={"Password"} style={popUpStyle.inputs} />)
+                placeholder={"Password"} style={popUpStyle.inputs} required/>)
             ls.push(<input name="inputs" id="cfmPasswordField" type="password" minLength={8}
-                placeholder={"Confirm Password"} style={popUpStyle.inputs} />)
+                placeholder={"Confirm Password"} style={popUpStyle.inputs} required/>)
         } else {
-            ls.push(<input name="inputs" id="usernameField" type="text" placeholder={"Username"} style={popUpStyle.inputs} />)
-            ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs} />)
+            ls.push(<input name="inputs" id="usernameField" type="text" placeholder={"Username"} style={popUpStyle.inputs}
+            required/>)
+            ls.push(<input name="inputs" id="fullnameField" type="text" placeholder={"Full Name"} style={popUpStyle.inputs}
+            required/>)
+            ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs}
+            required/>)
             ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
-                placeholder={"Password"} style={popUpStyle.inputs} />)
+                placeholder={"Password"} style={popUpStyle.inputs} required/>)
+            ls.push(<input name="inputs" id="cfmPasswordField" type="password" minLength={8}
+                placeholder={"Confirm Password"} style={popUpStyle.inputs} required/>)
         }
         return (
             <div style={popUpStyle.wholeScreen}>
