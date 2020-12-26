@@ -152,6 +152,23 @@ export const getCurrentUserInfo = () => {
   }
 }
 
+export const setUserExtSignup = async (info) => {
+  const user = firebase.auth().currentUser;
+  console.log(info)
+  userCollection
+    .where('username', '==', info.username).get().then((snap) => {
+      if (snap.empty) {
+        return userCollection
+          .doc(user.email)
+          .update(info)
+      }
+      else {
+        snap.forEach(doc => console.log(doc.data()))
+        alert("This username is taken")
+      }
+    })
+}
+
 export const setCurrentUserInfo = async (info) => {
   const user = firebase.auth().currentUser;
   if (info.username != user.displayName) {
@@ -227,6 +244,7 @@ export const signUpExt = (google) => {
       username: user.email.replace("@", "."),
       passwordChange: true
     })
+    console.log("User signed up externally")
   }).catch(function (error) {
     // Handle Errors here.
     var errorCode = error.code;

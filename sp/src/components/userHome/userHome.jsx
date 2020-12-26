@@ -9,7 +9,7 @@ import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
-import { getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers } from '../../firebase_functions.js'
+import { getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers, setUserExtSignup } from '../../firebase_functions.js'
 
 export default class UserPage extends Component {
     constructor(props) {
@@ -43,30 +43,31 @@ export default class UserPage extends Component {
         })
     }
 
-    setStateUser() {
+    setStateUser(passchange = true) {
+        console.log("here")
         getCurrentUserInfo().then((doc) => {
             if (!doc.exists) {
                 console.log('No user found')
             } else {
                 var user = doc.data()
-                if (user.passwordChange) {
+                if (passchange) {
                     var elem = document.getElementById("popUpContainer");
                     ReactDOM.render(<PopUp type={"Set Password"} user={user} func={this.updateUserInfo} />, elem);
                     document.getElementById("header").style.filter = "blur(4px)";
                     document.getElementById("body").style.filter = "blur(4px)";
+                    console.log(doc.data())
                 }
-                this.setState({ user: user })
+                getCurrentUserInfo().then(doc => this.setState({ user: doc.data(0) }))
+
             }
         }).catch((err) => console.log(err))
     }
 
     updateUserInfo(obj) {
-        try {
-            setCurrentUserInfo(obj).then((res) => this.setStateUser())
-                .catch((err) => alert("Details couldn't be updated!"))
-        } catch {
-            this.setStateUser();
-        }
+        setUserExtSignup(obj)
+            .then(() => { console.log("finished sign up"); this.setStateUser(false) })
+            .catch((err) => { alert("Details couldn't be updated!"); this.setStateUser(); })
+
     }
 
     goTo(id) {
