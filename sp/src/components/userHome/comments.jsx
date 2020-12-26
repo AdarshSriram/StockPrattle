@@ -23,7 +23,6 @@ export default class CommentScroll extends Component {
             } else {
                 items = res.slice(0, 10); over= false;
             }
-            console.log(res)
             this.setState({data: res, items: items, over: over},
             ()=>{const elem = document.getElementById(this.props.postId+"comments")
             elem.style.height = elem.parentElement.offsetHeight+"px"})
@@ -49,6 +48,7 @@ export default class CommentScroll extends Component {
     }
 
     render(){
+        console.log(this.props.postId)
         if (this.state.items == null){
             return (
                 <LoadingComments id={this.props.postId} />)
@@ -57,7 +57,7 @@ export default class CommentScroll extends Component {
         <div id={this.props.postId+"comments"} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
             <Comment user={"@"+this.props.user.username} postComm={this.comment} id={Math.random()}/>
             {this.state.items.map((i, index) => (
-                <Comment user={i.user} text={i.text} id={Math.random()} liked={false}/>
+                <Comment user={"@"+i.username} text={i.text} id={Math.random()} liked={false}/>
             ))}
             {(this.state.over) ? null : <p style={commentsStyle.loading}>{"Loading..."}</p>}
         </div>
