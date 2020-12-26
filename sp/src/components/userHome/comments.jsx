@@ -1,43 +1,61 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {thumbsupSvg, replySvg} from './svgs.jsx';
+import {add_comment, get_post_comments} from '../../firebase_functions.js'
 
 export default class CommentScroll extends Component {
     constructor(props){
         super(props);
-        if (this.props.data == null) {
-            this.state = { items: [], over: true}
-        } else if (this.props.data.length < 10) {
-            this.state = { items: this.props.data, over: true}
-        } else {
-            this.state = { items: this.props.data.slice(0, 10), over: false}
-        }
+        this.state = {data: null, items:null, over:true}
         this.checkAndFetch = this.checkAndFetch.bind(this)
         this.comment = this.comment.bind(this)
     }
 
     componentDidMount(){
         const elem = document.getElementById(this.props.postId+"comments")
-        elem.style.height = ""+elem.parentElement.offsetHeight+"px"
+        elem.style.height = elem.parentElement.offsetHeight+"px"
+        // get_post_comments(this.props.postId).then((res)=> {
+        //     var items, over;
+        //     if (res == null) {
+        //         items = []; over = true;
+        //     } else if (res.length < 10) {
+        //         items = res; over= true;
+        //     } else {
+        //         items = res.slice(0, 10); over= false;
+        //     }
+        //     console.log(res)
+        //     this.setState({data: res, items: items, over: over},
+        //     ()=>{const elem = document.getElementById(this.props.postId+"comments")
+        //     elem.style.height = elem.parentElement.offsetHeight+"px"})
+        // })
     }
 
     checkAndFetch(event){
         var element = event.target;
         if (element.scrollHeight - element.scrollTop === element.clientHeight){
             var i = this.state.items.length - 1
-            if (i + 10 >= this.props.data.length) {
-                this.setState({ items: this.props.data, over: true })
+            if (i + 10 >= this.state.data.length) {
+                this.setState({ items: this.state.data, over: true })
             } else {
-                this.setState({ items: this.state.items.concat(this.props.data.slice(i, i + 10)) })
+                this.setState({ items: this.state.items.concat(this.state.data.slice(i, i + 10)) })
             }
         }
     }
 
     comment(text){
-        this.setState({items: [{user: "@"+this.props.user.username, text: text}].concat(this.state.items)})
+        add_comment(this.props.postId, text).then(()=>{
+            this.setState({items: [{user: "@"+this.props.user.username, text: text}].concat(this.state.items)})
+        })
     }
 
     render(){
+        if (this.state.items == null){
+            return (<div id={this.props.postId+"comments"} style={commentsStyle.loadingDiv}>
+                <img id="loadingImage" src={require("../../images/LogoGreen.png")} alt="Stock Prattle Logo" style={{
+                    height: 2*133.75/3+"px",
+                    width: 2*138.75/3+"px"}}/>
+                </div>)
+        }
     return (
         <div id={this.props.postId+"comments"} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
             <Comment user={"@"+this.props.user.username} postComm={this.comment} id={Math.random()}/>
@@ -192,5 +210,18 @@ const commentsStyle= { centerDiv: {
         outline: "none",
         cursor: "pointer"
         // border: "thin solid black",
+    }, loadingDiv: {
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        // border: "thick solid black",
+        boxSizing: "border-box",
+        background: "none",
+        overflow: "scroll",
+
+        borderRadius: "10px"
     }
 }

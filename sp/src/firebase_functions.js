@@ -392,18 +392,17 @@ export const get_follower_posts = async (following = true) => {
 
 export const get_post_comments = async (id) => {
   const email = id.substring(0, id.indexOf(','))
-  const snapshot = await firebase.firestore().collection("comments/" + email + "/userComments")
-    .orderBy("likes", "desc").get()
+  const snapshot = await firebase.firestore().collection("comments/" + email + "/userComments").get()
   return snapshot.docs.map(doc => doc.data());
 }
 
-export const add_comment = async (params, postId) => {
+export const add_comment = async (postId, text) => {
   var user = firebase.auth().currentUser;
   const comment_ref = firebase.firestore().collection("comments/" + user.email + "/userComments")
   const time = Date.now()
   const comment = {
-    "postId": params[0],
-    "text": params[1],
+    "postId": postId,
+    "text": text,
     "createdAt": time,
     "username": user.displayName,
     "likes": 0

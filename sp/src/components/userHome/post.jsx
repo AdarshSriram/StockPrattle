@@ -61,7 +61,7 @@ export default class Post extends Component {
                         <button style={postStyle.bottomButton} hidden>{shareSvg}</button>
                     </div>
                 </div>
-                <CommentScroll user={this.props.curuser} postId={this.props.text} />
+                <CommentScroll user={this.props.curuser} postId={this.state.id} />
             </div>
         )
     }
