@@ -300,7 +300,7 @@ export const addPost = async (params) => {
 
 export const likeUnlikePost = async (id, like = true, post = true) => {
   const email = id.substring(0, id.indexOf(','))
-  const suffix = post ? "/userPosts" : "/userComments"
+  const suffix = post ? "/userPosts" : "/postComments"
   const prefix = post ? "posts/" : "comments/"
   console.log(email)
   var post_ref = firebase.firestore().collection(prefix + email + suffix);
@@ -391,24 +391,24 @@ export const get_follower_posts = async (following = true) => {
 }
 
 export const get_post_comments = async (id) => {
-  const email = id.substring(0, id.indexOf(','))
-  const snapshot = await firebase.firestore().collection("comments/" + email + "/userComments")
+  const snapshot = await firebase.firestore().collection("comments/" + id + "/postComments")
     .orderBy("likes", "desc").get()
   return snapshot.docs.map(doc => doc.data());
 }
 
-export const add_comment = async (params, postId) => {
+export const add_comment = async (text, postId) => {
   var user = firebase.auth().currentUser;
-  const comment_ref = firebase.firestore().collection("comments/" + user.email + "/userComments")
+  const comment_ref = firebase.firestore().collection("comments/" + postId + "/postComments")
   const time = Date.now()
   const comment = {
-    "postId": params[0],
-    "text": params[1],
+    "postId": postId,
+    "text": text,
     "createdAt": time,
     "username": user.displayName,
+    "id": user.email + id,
     "likes": 0
   }
-  comment_ref.doc(postId + ",," + time)
+  comment_ref.doc(user.email + time)
     .set(comment)
     .catch((err) => { console.log(err) })
 }
