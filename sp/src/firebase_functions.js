@@ -65,8 +65,10 @@ export const updateProfile = (fieldName, detail) => {
 // SignUp User
 export const SignUp = (params) => {
   const username = params[0]
-  const email = params[1]
-  const password = params[2]
+  const name = params[1]
+  const email = params[2]
+  const password = params[3]
+
   if (params.includes(null)) { alert("Sign up unsuccessful. Please try again!"); return }
   if (username.includes("@")) { alert("Username cannot include \"@\"."); return }
 
@@ -78,6 +80,7 @@ export const SignUp = (params) => {
             .then(userCollection.doc(email).set({
               username: username,
               email: email,
+              fullname: name
             }).then(() => {
               alert(`Sign Up Successful!`)
               firebase.auth().onAuthStateChanged(function (user) {
