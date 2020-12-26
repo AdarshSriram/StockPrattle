@@ -309,10 +309,18 @@ export const likeUnlikePost = async (id, like = true, post = true) => {
 
   var user = firebase.auth().currentUser;
   var like_ref = firebase.firestore().collection("likes/" + user.email + "/userLikes");
-  like_ref
-    .doc(id)
-    .set({})
-    .catch((err) => console.log(err))
+  if (like) {
+    like_ref
+      .doc(id)
+      .set({})
+      .catch((err) => console.log(err))
+  }
+  else {
+    like_ref
+      .doc(id)
+      .delete()
+      .catch((err) => console.log(err))
+  }
 }
 
 export const followUser = async (follower_email, follower_uname) => {

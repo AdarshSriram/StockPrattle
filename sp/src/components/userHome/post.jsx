@@ -24,7 +24,7 @@ export default class Post extends Component {
     like() {
         if (this.state.liked) {
             document.getElementById(this.props.text + "like").style.fill = "black"
-            likeUnlikePost(this.state.id, false).then(() => console.log("post liked"))
+            likeUnlikePost(this.state.id, false).then(() => console.log("post unliked"))
         } else {
             document.getElementById(this.props.text + "like").style.fill = "#00B140"
             likeUnlikePost(this.state.id, true).then(() => console.log("post liked"))
