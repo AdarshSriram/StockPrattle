@@ -50,11 +50,8 @@ export default class CommentScroll extends Component {
 
     render(){
         if (this.state.items == null){
-            return (<div id={this.props.postId+"comments"} style={commentsStyle.loadingDiv}>
-                <img id="loadingImage" src={require("../../images/LogoGreen.png")} alt="Stock Prattle Logo" style={{
-                    height: 2*133.75/3+"px",
-                    width: 2*138.75/3+"px"}}/>
-                </div>)
+            return (
+                <LoadingComments id={this.props.postId} />)
         }
     return (
         <div id={this.props.postId+"comments"} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
@@ -123,6 +120,41 @@ class Comment extends Component{
                     {thumbsupSvg(this.props.id)}</button>
             </div>)
         }
+    }
+}
+
+class LoadingComments extends Component{
+    constructor(props){
+        super(props);
+        this.state = {intervalID: null}
+    }
+
+    componentDidMount(){
+        const id = setInterval(this.flicker, 500)
+        this.setState({intervalID: id})
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.state.intervalID)
+    }
+
+    flicker(){
+        var img = document.getElementById("loadingCommentsImage")
+        if(img.style.visibility == 'hidden'){
+            img.style.visibility = 'visible';
+        }else{
+            img.style.visibility = 'hidden';
+        }
+    }
+
+    render(){
+        return (
+            <div id={this.props.id+"comments"} style={commentsStyle.loadingDiv}>
+                <img id="loadingCommentsImage" src={require("../../images/LogoGreen.png")} alt="Stock Prattle Logo" style={{
+                    height: 2*133.75/3+"px",
+                    width: 2*138.75/3+"px"}}/>
+            </div>
+        )
     }
 }
 
