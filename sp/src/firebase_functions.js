@@ -185,7 +185,6 @@ export const setCurrentUserInfo = async (info) => {
 
         getPostIdsByEmail(user.email)
           .then((idLIst) => {
-            console.log(idLIst)
             idLIst.forEach(id => {
               firebase.firestore().collection("posts/" + user.email + "/userPosts")
                 .doc(id)
@@ -313,7 +312,6 @@ export const likeUnlikePost = async (id, like = true, post = true) => {
   const email = id.substring(0, id.indexOf(','))
   const suffix = post ? "/userPosts" : "/postComments"
   const prefix = post ? "posts/" : "comments/"
-  console.log(email)
   var post_ref = firebase.firestore().collection(prefix + email + suffix);
   const incr = like ? 1 : -1
   post_ref

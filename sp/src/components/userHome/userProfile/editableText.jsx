@@ -24,6 +24,7 @@ export default class EditableText extends Component {
         } else {
             text = this.state.user[this.state.type]
         }
+        if (!text){text=null}
         elem.value = text
         elem.disabled = true
         elem.style.color = "black"
@@ -33,7 +34,7 @@ export default class EditableText extends Component {
     componentDidUpdate(prevProps){
         if (this.state.type === "username"){
             // console.log(this.props.user.username)
-            if (this.props.user.username != String(document.getElementById("username").value.substring(1))){
+            if (this.props.user.username != prevProps.user.username){
                 this.setState({user: this.props.user})
             }
         }
@@ -113,7 +114,7 @@ export default class EditableText extends Component {
             <div style={editStyle.editableTextDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
                 <label style={editStyle.label}>{this.props.type + ": "}</label>
                 <input id={this.state.type} style={editStyle.textStyle} type="text"
-                placeholder={this.state.type === "birthday" ? "DD/MM/YYYY" : this.props.text} />
+                placeholder={this.state.type === "birthday" ? "DD/MM/YYYY" : "Add "+this.props.type} />
                 <button name={this.state.type} style={editStyle.editButton} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
                     {(this.state.editing) ? tickSvg : penSvg}

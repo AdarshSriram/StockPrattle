@@ -43,31 +43,31 @@ export default class UserPage extends Component {
         })
     }
 
-    setStateUser(passchange = true) {
-        console.log("here")
+    setStateUser() {
         getCurrentUserInfo().then((doc) => {
             if (!doc.exists) {
                 console.log('No user found')
             } else {
                 var user = doc.data()
-                if (passchange) {
+                if (user.passwordChange) {
                     var elem = document.getElementById("popUpContainer");
                     ReactDOM.render(<PopUp type={"Set Password"} user={user} func={this.updateUserInfo} />, elem);
                     document.getElementById("header").style.filter = "blur(4px)";
                     document.getElementById("body").style.filter = "blur(4px)";
                     console.log(doc.data())
                 }
-                getCurrentUserInfo().then(doc => this.setState({ user: doc.data(0) }))
-
+                this.setState({ user: user })
             }
         }).catch((err) => console.log(err))
     }
 
     updateUserInfo(obj) {
-        setUserExtSignup(obj)
-            .then(() => { console.log("finished sign up"); this.setStateUser(false) })
-            .catch((err) => { alert("Details couldn't be updated!"); this.setStateUser(); })
-
+        try {
+            setCurrentUserInfo(obj).then((res) => this.setStateUser())
+                .catch((err) => alert("Details couldn't be updated!"))
+        } catch {
+            this.setStateUser();
+        }
     }
 
     goTo(id) {

@@ -23,7 +23,6 @@ export default class CommentScroll extends Component {
             } else {
                 items = res.slice(0, 10); over = false;
             }
-            console.log(res)
             this.setState({ data: res, items: items, over: over },
                 () => {
                     const elem = document.getElementById(this.props.postId + "comments")
@@ -45,23 +44,20 @@ export default class CommentScroll extends Component {
     }
 
     comment(text) {
-        if (text) {
-            add_comment(this.props.postId, text).then(() => {
-                this.setState({ items: [{ user: "@" + this.props.user.username, text: text }].concat(this.state.items) })
-            })
-        }
+        add_comment(this.props.postId, text).then(() => {
+            this.setState({ items: [{ user: "@" + this.props.user.username, text: text }].concat(this.state.items) })
+        })
     }
 
     render() {
         if (this.state.items == null) {
-            return (
-                <LoadingComments id={this.props.postId} />)
+            return <LoadingComments id={this.props.postId} />
         }
         return (
             <div id={this.props.postId + "comments"} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
-                <Comment user={"@" + this.props.user.username} postComm={this.comment} id={Math.random()} />
+                <Comment user={"@" + this.props.user.username} postComm={this.comment} id={Math.random()} post={this.props.postId}/>
                 {this.state.items.map((i, index) => (
-                    <Comment user={i.user} text={i.text} id={Math.random()} liked={false} />
+                    <Comment user={"@"+i.username} text={i.text} id={Math.random()} liked={false} post={this.props.postId}/>
                 ))}
                 {(this.state.over) ? null : <p style={commentsStyle.loading}>{"Loading..."}</p>}
             </div>
@@ -82,10 +78,10 @@ class Comment extends Component {
     like() {
         if (this.state.liked) {
             document.getElementById(this.props.id).style.fill = "black"
-            likeUnlikePost(this.props.id, false, false)
+            likeUnlikePost(this.props.post, false, false)
         } else {
             document.getElementById(this.props.id).style.fill = "#00B140"
-            likeUnlikePost(this.props.id, true, false)
+            likeUnlikePost(this.props.post, true, false)
         }
         this.setState({ liked: !this.state.liked })
     }
@@ -110,7 +106,7 @@ class Comment extends Component {
                 <div style={commentsStyle.comment}>
                     <div style={commentsStyle.commentBody}>
                         <p style={commentsStyle.usernameText}>{this.props.user}</p>
-                        <input id={this.props.id + "inp"} style={commentsStyle.commentInput} type="text" placeholder="Add Comment" />
+                        <input id={this.props.id + "inp"} style={commentsStyle.commentInput} type="text" placeholder="Add Comment" minLength={1}/>
                     </div>
                     <button style={commentsStyle.rightButton} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
                         onClick={this.comment}>{replySvg(this.props.id)}</button>

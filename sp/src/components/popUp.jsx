@@ -23,28 +23,22 @@ export default class PopUp extends Component {
             alert("Passwords do not match!");
             return;
         }
-        if (pass.length >= 8) {
-            const user = firebase.auth().currentUser
-            const userdb = this.props.user
-            const upd = this.props.func
-            user.updatePassword(pass).then(() => {
-                userdb.passwordChange = false
-                userdb.fullname = fullname
-                userdb.username = uname
-                upd(userdb)
-                ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
-                document.getElementById("header").style.filter = "none";
-                document.getElementById("body").style.filter = "none";
-                console.log("signed up")
-
+        const user = firebase.auth().currentUser
+        const userdb = this.props.user
+        const upd = this.props.func
+        user.updatePassword(pass).then(() => {
+            userdb.passwordChange = false
+            userdb.fullname = fullname
+            userdb.username = uname
+            upd(userdb)
+            ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
+            document.getElementById("header").style.filter = "none";
+            document.getElementById("body").style.filter = "none";
+            console.log("signed up")
             }).catch(function (error) {
                 console.log(error)
                 alert("Sorry passwords couldn't be updated.")
             });
-        }
-        else {
-            alert("Password must be at least 8 characters")
-        }
     }
 
     handleSignUp() {
@@ -64,7 +58,6 @@ export default class PopUp extends Component {
     }
 
     handleSignIn() {
-        alert()
         const inputs = document.getElementsByName("inputs"); var params = []; var val;
         for (var obj of inputs) {
             val = obj.value;
