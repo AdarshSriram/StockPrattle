@@ -23,8 +23,7 @@ export default class Post extends Component {
 
     componentDidUpdate(prevProps){
         if (this.props.id != this.state.id){
-            this.setState({id: this.props.id, user: this.props.user, liked: false},
-            this.componentDidMount)
+            this.setState({id: this.props.id})
         }
     }
 
