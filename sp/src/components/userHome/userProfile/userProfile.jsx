@@ -30,7 +30,7 @@ export default class UserProfile extends Component {
                 <div id="top" style={userProfileStyle.topDiv}>
                     <ProfilePic user={this.state.user} editable={true}/>
                     <div style={userProfileStyle.details}>
-                        <EditableText type={'Username'} setUser={this.updateProfile} user={this.state.user}/>
+                        <EditableText type={'Username'} setUser={this.updateProfile} user={this.state.user} />
                         <EditableText type={'Full Name'} setUser={this.updateProfile} user={this.state.user}/>
                         <EditableText type={'Birthday'} setUser={this.updateProfile} user={this.state.user}/>
                     </div>
@@ -52,7 +52,7 @@ export default class UserProfile extends Component {
                         <div style={userProfileStyle.editableTextDiv}>
                             <label style={userProfileStyle.label}>{"Username: "}</label>
                             <p style={userProfileStyle.textStyle}>{
-                                (this.state.user.username == null) ? "" : this.state.user.username
+                                (this.state.user.username == null) ? "" : "@"+this.state.user.username
                             }</p>
                         </div>
                         <div style={userProfileStyle.editableTextDiv}>

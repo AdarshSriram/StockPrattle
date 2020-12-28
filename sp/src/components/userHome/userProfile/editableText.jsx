@@ -33,8 +33,9 @@ export default class EditableText extends Component {
 
     componentDidUpdate(prevProps){
         if (this.state.type === "username"){
-            // console.log(this.props.user.username)
             if (this.props.user.username != prevProps.user.username){
+                const elem = document.getElementById(this.state.type)
+                elem.value = "@"+this.props.user.username
                 this.setState({user: this.props.user})
             }
         }
@@ -51,19 +52,38 @@ export default class EditableText extends Component {
                 var regex = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
                 if (!regex.test(String(elem.value))){
                     alert("Input is not a valid date in dd/mm/yyyy format.")
-                    elem.value = this.state.user.birthday
+                    if (this.state.user.birthday){elem.value = this.state.user.birthday}
+                    else {elem.value = null}
                     this.setState({editing: false })
                     return
                 }
             }
-            if (this.state.type==="username"){
+            else if (this.state.type==="username"){
                 elem.value = elem.value.replace(/ /g,'')
                 if (String(elem.value).includes("@")){
-                    console.log(elem.value.replace(/ /g,''))
+                    if (elem.value.length<=5){
+                        alert("Username must be atleast 5 characters long.")
+                        elem.value = "@"+this.state.user.username
+                        this.setState({editing: false })
+                        return
+                    }
                     this.state.user[this.state.type]= String(elem.value).substring(1)
                 } else {
+                    if (elem.value.length<=4){
+                        alert("Username must be atleast 5 characters long.")
+                        elem.value = "@"+this.state.user.username
+                        this.setState({editing: false })
+                        return
+                    }
                     this.state.user[this.state.type]= String(elem.value)
                     elem.value = "@"+String(elem.value)
+                }
+            } else if (this.state.type==="fullname"){
+                if ([null, ""].includes(elem.value)){
+                    alert("Name cannot be empty.")
+                    elem.value = this.state.user.fullname
+                    this.setState({editing: false })
+                    return
                 }
             } else {
                 this.state.user[this.state.type]= String(elem.value)
@@ -114,7 +134,8 @@ export default class EditableText extends Component {
             <div style={editStyle.editableTextDiv} onMouseOver={this.handleIn} onMouseLeave={this.handleOut}>
                 <label style={editStyle.label}>{this.props.type + ": "}</label>
                 <input id={this.state.type} style={editStyle.textStyle} type="text"
-                placeholder={this.state.type === "birthday" ? "DD/MM/YYYY" : "Add "+this.props.type} />
+                placeholder={this.state.type === "birthday" ? "DD/MM/YYYY" : "Add "+this.props.type}
+                minLength={1}/>
                 <button name={this.state.type} style={editStyle.editButton} onClick={this.beginEdit}
                     onMouseOver={this.editIn} onMouseLeave={this.editOut}>
                     {(this.state.editing) ? tickSvg : penSvg}

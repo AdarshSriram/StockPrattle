@@ -15,18 +15,25 @@ export default class Post extends Component {
     componentDidMount() {
         hasUserLiked(this.state.id).then(res => {
             if (res) {
-                document.getElementById(this.props.text + "like").style.fill = "#00B140"
+                document.getElementById(this.state.id + "like").style.fill = "#00B140"
                 this.setState({liked:true})
             }
         })
     }
 
+    componentDidUpdate(prevProps){
+        if (this.props.id != this.state.id){
+            this.setState({id: this.props.id, user: this.props.user, liked: false},
+            this.componentDidMount)
+        }
+    }
+
     like() {
         if (this.state.liked) {
-            document.getElementById(this.props.text + "like").style.fill = "black"
+            document.getElementById(this.state.id + "like").style.fill = "black"
             likeUnlikePost(this.state.id, false).then(() => console.log("post unliked"))
         } else {
-            document.getElementById(this.props.text + "like").style.fill = "#00B140"
+            document.getElementById(this.state.id + "like").style.fill = "#00B140"
             likeUnlikePost(this.state.id, true).then(() => console.log("post liked"))
         }
         this.setState({ liked: !this.state.liked })
@@ -39,7 +46,7 @@ export default class Post extends Component {
             disp = smallnopicSvg;
         }
         return (
-            <div id={this.props.text} style={postStyle.mainDiv}>
+            <div id={this.state.id} style={postStyle.mainDiv}>
                 <div style={postStyle.postDiv}>
                     <div style={postStyle.topBar}>
                         <div style={postStyle.imageDiv}>
@@ -54,10 +61,10 @@ export default class Post extends Component {
                     </div>
                     <div style={postStyle.bottomBar}>
                         <button style={postStyle.bottomButton} onClick={this.like}>
-                            {thumbsupSvg(this.props.text + "like")}</button>
+                            {thumbsupSvg(this.state.id + "like")}</button>
                         <button style={postStyle.bottomButton} hidden>{sendSvg}</button>
                         <button style={postStyle.bottomButton} hidden>
-                            {replySvg(this.props.text + "comment")}</button>
+                            {replySvg(this.state.id + "comment")}</button>
                         <button style={postStyle.bottomButton} hidden>{shareSvg}</button>
                     </div>
                 </div>
