@@ -309,6 +309,7 @@ export const addPost = async (params) => {
 }
 
 export const likeUnlikePost = async (id, like = true, post = true) => {
+  console.log(id)
   const email = id.substring(0, id.indexOf(','))
   const suffix = post ? "/userPosts" : "/postComments"
   const prefix = post ? "posts/" : "comments/"
