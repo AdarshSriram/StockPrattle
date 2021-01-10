@@ -27,4 +27,10 @@ const func = () => {
     .catch(err => console.log(err))
 }
 
-func()
+export const get_deets = (jsonData) => {
+  const arr = jsonData["EXCHANGESNAPSHOTITEMS"][0]["SNAPSHOTITEMS"]
+  return arr.map(obj => {
+    var id = obj["INSTRUMENTIDENTIFIER"]
+    return [id, obj["OPEN"]]
+  })
+}
