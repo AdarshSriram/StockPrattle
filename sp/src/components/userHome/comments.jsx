@@ -45,7 +45,7 @@ export default class CommentScroll extends Component {
 
     comment(text) {
         add_comment(this.props.postId, text).then(() => {
-            this.setState({ items: [{ user: "@" + this.props.user.username, text: text }].concat(this.state.items) })
+            this.setState({ items: [{ username: this.props.user.username, text: text }].concat(this.state.items) })
         })
     }
 
