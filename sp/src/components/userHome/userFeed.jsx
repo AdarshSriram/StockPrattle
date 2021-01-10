@@ -42,9 +42,6 @@ export default class UserFeed extends Component {
     }
 
     render() {
-        for (var i of this.state.items){
-            console.log(i.createdAt)
-        }
         return (
             <div id="usedFeedDiv" style={userFeedStyle.centerDiv} onScroll={this.checkAndFetch}>
                 {this.state.items.map((i, index) => (

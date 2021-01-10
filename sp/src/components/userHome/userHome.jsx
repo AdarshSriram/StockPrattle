@@ -10,6 +10,7 @@ import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
 import { getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers, setUserExtSignup } from '../../firebase_functions.js'
+import {get_deets} from './stock_functions.js'
 
 export default class UserPage extends Component {
     constructor(props) {
@@ -37,7 +38,8 @@ export default class UserPage extends Component {
         get_follower_posts().then((res) => {
             getFollowing().then((restwo) => {
                 allUsers().then((resthree) => {
-                    this.setState({ mainFeedData: res.flat(), following: restwo, allUsers: resthree })
+                    var data = require('./stock_sample_data/GetExchangeSnapshot_1Min_JSON/GetExchangeSnapshot_1Min_JSON.json')
+                    this.setState({ mainFeedData: res.flat(), following: restwo, allUsers: resthree, marketSnapshot: get_deets(data)})
                 })
             })
         })
@@ -135,7 +137,7 @@ export default class UserPage extends Component {
         if (this.state.current == "profile") {
             item = <UserProfile user={this.state.user} setUser={this.updateUserInfo} following={this.state.following} />
         } else if (this.state.current == "explore") {
-            item = <ExplorePage display={this.state.goTo} following={this.state.following} />
+            item = <ExplorePage display={this.state.goTo} following={this.state.following} marketSnapshot={this.state.marketSnapshot}/>
         } else if (this.state.current == "messages") {
             item = <MessageBox />
         } else {

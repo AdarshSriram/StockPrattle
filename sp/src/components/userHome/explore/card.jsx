@@ -11,13 +11,13 @@ export default class Card extends Component{
     }
 
     mouseIn(){
-        document.getElementById(this.props.heading).style.textDecoration = "underline"
+        document.getElementById(this.props.item.INSTRUMENTIDENTIFIER).style.textDecoration = "underline"
         // document.getElementById(this.props.text).style.width = "205px"
         // document.getElementById(this.props.text).style.height = "305px"
     }
 
     mouseOut(){
-        document.getElementById(this.props.heading).style.textDecoration = "none"
+        document.getElementById(this.props.item.INSTRUMENTIDENTIFIER).style.textDecoration = "none"
         // document.getElementById(this.props.text).style.width = "200px"
         // document.getElementById(this.props.text).style.height = "300px"
     }
@@ -30,7 +30,7 @@ export default class Card extends Component{
         var img = require("../../../images/LogoGreen.png");
         var topBarStyle = {...cardStyle.topBar}
         var imageStyle = {...cardStyle.image}
-        if (this.props.heading == "Stock Prattle Team"){
+        if (this.props.item != null){
             img = require("../../../images/Logo.png")
             topBarStyle.backgroundColor = "#00B140"
             imageStyle.maxWidth = "80%"
@@ -43,8 +43,8 @@ export default class Card extends Component{
                 <img src={img} alt="Stock Prattle Logo" style={imageStyle}/>
             </div>
             <div style={cardStyle.contentDiv}>
-                <p id={this.props.heading} style={cardStyle.headingStyle}>{this.props.heading}</p>
-                <p style={cardStyle.textStyle}>{this.props.text}</p>
+                <p id={this.props.item.INSTRUMENTIDENTIFIER} style={cardStyle.headingStyle}>{this.props.item.INSTRUMENTIDENTIFIER}</p>
+                <p style={cardStyle.textStyle}>{this.props.item.OPEN}</p>
             </div>
         </div>
         )
@@ -55,7 +55,7 @@ const cardStyle= {mainDiv: {
         width: "200px",
         height: "300px",
         backgroundColor: "#FFFFFF",
-        border: "1px solid rgba(0, 0, 0, 0.25)",
+        border: "0px solid rgba(0, 0, 0, 0.25)",
         boxSizing: "border-box",
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.15)",
         display: "flex",

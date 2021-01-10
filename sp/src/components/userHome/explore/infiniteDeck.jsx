@@ -5,60 +5,55 @@ import Card from './card.jsx';
 export default class InfiniteDeck extends Component{
     constructor(props){
         super(props);
-        var i = 1; var toadd = [{
-            h1: "Stock Prattle Team", t1: "Find out about us!",
-            h2: "Sample Stock Page 1", t2: "This is the 1st sample stock page.",
-            h3: "Sample Stock Page 2", t3: "This is the 2nd sample stock page.",
-            h4: "Sample Stock Page 3", t4: "This is the 3rd sample stock page."
-        }];
-        var cardCount = 4
-        while (i<2){
-            cardCount+=4
-            toadd.push(({
-                h1: "Sample Stock Page "+(cardCount-4), t1: "This is the "+(cardCount-4)+"th sample stock page.",
-                h2: "Sample Stock Page "+(cardCount-3), t2: "This is the "+(cardCount-3)+"th sample stock page.",
-                h3: "Sample Stock Page "+(cardCount-2), t3: "This is the "+(cardCount-2)+"th sample stock page.",
-                h4: "Sample Stock Page "+(cardCount-1), t4: "This is the "+(cardCount-1)+"th sample stock page.",
-            }));
-            i++;
+        if (this.props.data == null) {
+            this.state = {items: [], over: true}
+        } else if (this.props.data.length < 10) {
+            this.state = {items: this.props.data, over: true}
+        } else {
+            this.state = {items: this.props.data.slice(0, 10), over: false}
         }
-        this.state = {items: toadd, cardCount: cardCount}
         this.checkAndFetch = this.checkAndFetch.bind(this)
     }
 
     checkAndFetch(event){
         var element = event.target;
-        if (element.scrollHeight - element.scrollTop === element.clientHeight){
-            setTimeout(() => {
-            var cardCount = this.state.cardCount
-            var toadd = []; var i = 0;
-            while (i<2){
-                cardCount+=4
-                toadd.push(({
-                    h1: "Sample Stock Page "+(cardCount-4), t1: "This is the "+(cardCount-4)+"th sample stock page.",
-                    h2: "Sample Stock Page "+(cardCount-3), t2: "This is the "+(cardCount-3)+"th sample stock page.",
-                    h3: "Sample Stock Page "+(cardCount-2), t3: "This is the "+(cardCount-2)+"th sample stock page.",
-                    h4: "Sample Stock Page "+(cardCount-1), t4: "This is the "+(cardCount-1)+"th sample stock page.",
-                }));
-                i++;
+        if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+            var i = this.state.items.length - 1
+            if (i + 10 >= this.props.data.length) {
+                this.setState({ items: this.props.data, over: true })
+            } else {
+                this.setState({ items: this.state.items.concat(this.props.data.slice(i, i + 10)) })
             }
-            this.setState({items: this.state.items.concat(toadd), cardCount: cardCount})
-            }, 2000);
         }
     }
 
     render(){
+    var ls = []
+    for (var ind =0;  ind<this.state.items.length-4; ind+=4){
+        ls.push(
+            <div name="pack" id={ind} style={deckStyle.packDiv}>
+                <Card item={this.state.items[ind]} onCardClick={this.props.onCardClick}/>
+                <Card item={this.state.items[ind+1]} onCardClick={this.props.onCardClick}/>
+                <Card item={this.state.items[ind+2]} onCardClick={this.props.onCardClick}/>
+                <Card item={this.state.items[ind+3]} onCardClick={this.props.onCardClick}/>
+            </div>
+        )
+    }
+    var subls = []
+    for (var subind =ind;  subind<this.state.items.length; subind++){
+        subls.push(
+            <Card item={this.state.items[subind]} onCardClick={this.props.onCardClick}/>
+        )
+    }
+    ls.push(
+        <div name="pack" id={ind} style={deckStyle.packDiv}>
+            {subls}
+        </div>
+    )
     return (
         <div style={deckStyle.deckDiv} onScroll={this.checkAndFetch}>
-            {this.state.items.map((i, index) => (
-                <div name="pack" id={this.state.items.indexOf(i)} style={deckStyle.packDiv}>
-                    <Card heading={i.h1} text={i.t1} onCardClick={this.props.onCardClick}/>
-                    <Card heading={i.h2} text={i.t2} onCardClick={this.props.onCardClick}/>
-                    <Card heading={i.h3} text={i.t3} onCardClick={this.props.onCardClick}/>
-                    <Card heading={i.h4} text={i.t4} onCardClick={this.props.onCardClick}/>
-                </div>
-            ))}
-            <p style={deckStyle.loading}>Loading...</p>
+            {ls}
+            <p style={deckStyle.loading}>{(this.state.over) ? "You have reached the end of your explore!" : "Loading..."}</p>
         </div>
         )
     }
@@ -90,5 +85,13 @@ const deckStyle= { deckDiv: {
         background: "none",
         margin: "10px",
         borderRadius: "10px"
-    },
+    }, loading: {
+        margin: "0px",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        // fontWeight: "bold",
+        fontSize: "18px",
+        outline: "none",
+        borderRadius: "10px"
+    }
 }

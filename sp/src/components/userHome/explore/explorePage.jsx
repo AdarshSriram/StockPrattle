@@ -9,7 +9,7 @@ import {getUserInfo} from '../../../firebase_functions.js'
 export default class ExploreFeed extends Component{
     constructor(props){
         super(props);
-        this.state = {currentDisp: props.display, type: "loading"}
+        this.state = {currentDisp: props.display, type: "loading", marketSnapshot: props.marketSnapshot}
         this.goToProfile = this.goToProfile.bind(this)
     }
 
@@ -40,7 +40,7 @@ export default class ExploreFeed extends Component{
 
     render(){
         if (this.state.currentDisp == "default"){
-            return <InfiniteDeck onCardClick={this.goToProfile}/>
+            return <InfiniteDeck onCardClick={this.goToProfile} data={this.state.marketSnapshot}/>
         } else if (this.state.loading){
             return (
                 <LoadingScreen />
