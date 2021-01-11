@@ -37,7 +37,7 @@ export default class NewPostPopUp extends Component {
                         <datalist id="stocks">
                             {this.state.stocks.map(item => (<option id={item} value={item} />))}
                         </datalist>
-                        <textarea name="inputs" id="postText" type="text" placeholder={"Write Something..."} style={newPostStyle.inputs2} rows={10}/>
+                        <textarea name="inputs" id="postText" type="text" placeholder={"Write Something..."} style={newPostStyle.inputs2} rows={10} required/>
                         <input id="submitButton" type="submit" style={newPostStyle.submitButton} value="Create Post"
                             onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut} />
                     </form>
