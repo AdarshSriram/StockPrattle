@@ -37,7 +37,7 @@ export default class NewPostPopUp extends Component {
                         <datalist id="stocks">
                             {this.state.stocks.map(item => (<option id={item} value={item} />))}
                         </datalist>
-                        <input name="inputs" id="postText" type="text" placeholder={"Post Text"} style={newPostStyle.inputs} />
+                        <textarea name="inputs" id="postText" type="text" placeholder={"Write Something..."} style={newPostStyle.inputs2} rows={10}/>
                         <input id="submitButton" type="submit" style={newPostStyle.submitButton} value="Create Post"
                             onMouseOver={this.mainMouseIn} onMouseLeave={this.mainMouseOut} />
                     </form>
@@ -82,6 +82,19 @@ const newPostStyle = {
         height: "45px",
         paddingLeft: "10px",
         background: "rgba(0, 177, 64, 0.05)",
+        border: "1px solid #00B140",
+        boxSizing: "border-box",
+        borderRadius: "22.5px",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        fontWeight: "600px",
+        fontSize: "18px",
+        outline: "none"
+    }, inputs2: {
+        width: "404px",
+        height: "180px",
+        padding: "10px",
+        background: "none",
         border: "1px solid #00B140",
         boxSizing: "border-box",
         borderRadius: "22.5px",

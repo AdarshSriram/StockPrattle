@@ -31,6 +31,12 @@ export default class CommentScroll extends Component {
         })
     }
 
+    componentDidUpdate(prevProps){
+        if (this.props.postId != prevProps.postId){
+            this.componentDidMount()
+        }
+    }
+
     checkAndFetch(event) {
         var element = event.target;
         if (element.scrollHeight - element.scrollTop === element.clientHeight) {
