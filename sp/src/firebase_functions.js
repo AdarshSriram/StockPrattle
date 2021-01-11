@@ -310,10 +310,13 @@ export const addPost = async (params) => {
 
 export const likeUnlikePost = async (id, like = true, post = true) => {
   console.log(id)
-  const email = id.substring(0, id.indexOf(','))
+  const delimitter = post ? "," : ",,"
+  const email = id.substring(0, id.indexOf(delimitter))
+  const postId = post ? id.substring(id.indexOf(",") - 1, id.indexOf(",,")) : ""
   const suffix = post ? "/userPosts" : "/postComments"
   const prefix = post ? "posts/" : "comments/"
-  var post_ref = firebase.firestore().collection(prefix + email + suffix);
+  const ref = post ? prefix + email + suffix : prefix + postId + suffix
+  var post_ref = firebase.firestore().collection(ref);
   const incr = like ? 1 : -1
   post_ref
     .doc(id)
@@ -415,13 +418,13 @@ export const add_comment = async (postId, text) => {
     "text": text,
     "createdAt": time,
     "username": user.displayName,
-    "id": user.email + postId + time,
+    "id": user.email + ',,' + postId + "," + time,
     "likes": 0
   }
   comment_ref.doc(user.email + ",," + time)
     .set(comment)
     .catch((err) => { console.log(err) })
-    return comment
+  return comment
 }
 
 export const hasUserLiked = (postId) => {
