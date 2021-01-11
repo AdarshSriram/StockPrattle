@@ -6,21 +6,13 @@ import Ticker from 'react-ticker';
 export default class NavBar extends Component{
     constructor(props){
         super(props);
-        var toadd = []; var i = 0;
-        while (i<20){
-            if (i%2 == 0){
-                toadd.push(({name:"SENSEX", value: "$$$", color: "#00B140"}));
-            } else {
-                toadd.push(({name:"NIFTY", value: "$$$", color: "#E21010"}));
-            }
-            i++;
-        }
-        this.state = {sbItems: toadd, users: (props.allUsers == null) ? [] : props.allUsers}
+        this.state = {sbItems: (props.marketSnapshot == null) ? [] : props.marketSnapshot,
+             users: (props.allUsers == null) ? [] : props.allUsers}
     }
 
     componentDidUpdate(prevProps){
-        if (prevProps.allUsers != this.props.allUsers){
-            this.setState({users: this.props.allUsers})
+        if (prevProps.allUsers != this.props.allUsers || prevProps.marketSnapshot != this.props.marketSnapshot){
+            this.setState({users: this.props.allUsers, sbItems: this.props.marketSnapshot})
         }
     }
 
@@ -77,7 +69,7 @@ export default class NavBar extends Component{
         <marquee style={navBarStyle.stockTicker}>
         <div id="stockBar" style={navBarStyle.stockBar}>
             {this.state.sbItems.map((i, index) => (
-                <p key={index} style={navBarStyle.sbTitle}>{i.name}<p style={{color: i.color, margin: 0}}>{i.value}</p></p>
+                <p key={index} style={navBarStyle.sbTitle}>{i.INSTRUMENTIDENTIFIER}<p style={{color: (index%2==0) ? '#00B140':"red", margin: 0}}>{i.OPEN}</p></p>
             ))}
         </div>
         </marquee>
