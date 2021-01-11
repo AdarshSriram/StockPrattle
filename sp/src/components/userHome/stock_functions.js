@@ -24,7 +24,12 @@ export const get_name_and_price = () => {
 //     .catch(err => console.log(err))
 // }
 
-export const get_deets = (jsonData) => {
+export const getSnapshot = (jsonData) => {
   const arr = jsonData["EXCHANGESNAPSHOTITEMS"][0]["SNAPSHOTITEMS"]
   return arr
+}
+
+export const getInstruments = (jsonData) => {
+  const arr = jsonData["EXCHANGESNAPSHOTITEMS"][0]["SNAPSHOTITEMS"]
+  return arr.map(obj=>obj.INSTRUMENTIDENTIFIER)
 }
