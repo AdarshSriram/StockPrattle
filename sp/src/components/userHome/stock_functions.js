@@ -1,4 +1,4 @@
-import axios from 'axios'
+// import axios from 'axios'
 
 const test = "http://test.lisuns.com:4531/GetExchangeSnapshot/?accessKey=f5813be3-3d4b-4624-b4d0-06f37763a469&exchange=NSE&periodicity=Minute&period=15&from=1610100000&to=1610110198"
 

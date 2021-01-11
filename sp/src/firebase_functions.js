@@ -421,6 +421,7 @@ export const add_comment = async (postId, text) => {
   comment_ref.doc(user.email + ",," + time)
     .set(comment)
     .catch((err) => { console.log(err) })
+    return comment
 }
 
 export const hasUserLiked = (postId) => {

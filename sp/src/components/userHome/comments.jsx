@@ -50,8 +50,8 @@ export default class CommentScroll extends Component {
     }
 
     comment(text) {
-        add_comment(this.props.postId, text).then(() => {
-            this.setState({ data: [{ username: this.props.user.username, text: text }].concat(this.state.data) },
+        add_comment(this.props.postId, text).then((res) => {
+            this.setState({ data: [res].concat(this.state.data) },
             this.componentDidMount)
         })
     }
@@ -96,7 +96,6 @@ class Comment extends Component {
     comment() {
         const elem = document.getElementById(this.props.id + "inp")
         if (elem.value.length!=0){
-            console.log(elem.value.length)
             this.props.postComm(elem.value)
             elem.value = null
         }
