@@ -17,13 +17,16 @@ export default class Post extends Component {
             if (res) {
                 document.getElementById(this.state.id + "like").style.fill = "#00B140"
                 this.setState({liked:true})
+            } else {
+                document.getElementById(this.state.id + "like").style.fill = "black"
+                this.setState({liked:false})
             }
         })
     }
 
     componentDidUpdate(prevProps){
         if (this.props.id != this.state.id){
-            this.setState({id: this.props.id})
+            this.setState({id: this.props.id}, this.componentDidMount)
         }
     }
 

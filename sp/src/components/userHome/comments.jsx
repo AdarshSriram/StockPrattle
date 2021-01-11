@@ -51,7 +51,8 @@ export default class CommentScroll extends Component {
 
     comment(text) {
         add_comment(this.props.postId, text).then(() => {
-            this.setState({ items: [{ username: this.props.user.username, text: text }].concat(this.state.items) })
+            this.setState({ data: [{ username: this.props.user.username, text: text }].concat(this.state.data) },
+            this.componentDidMount)
         })
     }
 
@@ -63,7 +64,7 @@ export default class CommentScroll extends Component {
             <div id={this.props.postId + "comments"} style={commentsStyle.centerDiv} onScroll={this.checkAndFetch}>
                 <Comment user={"@" + this.props.user.username} postComm={this.comment} id={Math.random()} post={this.props.postId} />
                 {this.state.items.map((i, index) => (
-                    <Comment user={"@" + i.username} text={i.text} id={Math.random()} liked={false} post={this.props.postId} />
+                    <Comment user={"@" + i.username} text={i.text} id={i.id} liked={false} post={this.props.postId} />
                 ))}
                 {(this.state.over) ? null : <p style={commentsStyle.loading}>{"Loading..."}</p>}
             </div>
@@ -94,8 +95,11 @@ class Comment extends Component {
 
     comment() {
         const elem = document.getElementById(this.props.id + "inp")
-        this.props.postComm(elem.value)
-        elem.value = null
+        if (elem.value.length!=0){
+            console.log(elem.value.length)
+            this.props.postComm(elem.value)
+            elem.value = null
+        }
     }
 
     mouseIn() {
