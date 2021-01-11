@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 export default class NewPostPopUp extends Component {
     constructor(props) {
         super(props);
-        this.state = { stocks: ["NIFTY", "SENSEX"] }
+        this.state = { stocks: this.props.instruments }
     }
 
     mainMouseIn(but) {
