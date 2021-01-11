@@ -415,7 +415,7 @@ export const add_comment = async (postId, text) => {
     "text": text,
     "createdAt": time,
     "username": user.displayName,
-    "id": user.email + postId,
+    "id": user.email + postId + time,
     "likes": 0
   }
   comment_ref.doc(user.email + ",," + time)
