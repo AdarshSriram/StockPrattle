@@ -299,7 +299,7 @@ export const addPost = async (params) => {
     "username": user.displayName,
     "propic": pic ? pic : "",
     "likes": 0,
-    "id": user.email + "," + time
+    "id": user.email + "," + params[0] + ",," + time
   }
   var email = user.email
 
@@ -307,17 +307,18 @@ export const addPost = async (params) => {
 
   const stock_post_ref = firebase.firestore().collection("stockposts/" + params[0] + "/stockPosts");
 
-  stock_post_ref.doc(user.email + "," + time).set(post)
+  stock_post_ref.doc(user.email + "," + params[0] + ",," + time).set(post)
 
   return post_ref
-    .doc(user.email + "," + time).set(post).then((res) => post)
+    .doc(user.email + "," + params[0] + ",," + time).set(post).then(() => post)
     .catch((err) => { console.log(err) })
 }
 
 export const getStockPosts = async (stock) => {
   const snapshot = await firebase.firestore().collection("stockposts/" + stock + "/stockPosts")
     .orderBy("createdAt", "desc").get()
-  return snapshot.docs.map(doc => doc.data());
+  const id_arr = snapshot.docs.map(doc => doc.id);
+
 }
 
 export const likeUnlikePost = async (id, like = true, post = true) => {
@@ -335,6 +336,14 @@ export const likeUnlikePost = async (id, like = true, post = true) => {
     .update({ likes: fire.firestore.FieldValue.increment(incr) })
     .catch((err) => { console.log(err) })
 
+  if (post) {
+    const stock = id.substring(id.indexOf(",") + 1, id.indexOf(",,"))
+    const stock_post_ref = firebase.firestore().collection("stockposts/" + stock + "/stockPosts");
+    stock_post_ref
+      .doc(id)
+      .update({ likes: fire.firestore.FieldValue.increment(incr) })
+      .catch((err) => { console.log(err) })
+  }
   console.log("liked")
 
   var user = firebase.auth().currentUser;
