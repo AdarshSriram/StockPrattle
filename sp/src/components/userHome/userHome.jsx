@@ -38,7 +38,7 @@ export default class UserPage extends Component {
         get_follower_posts().then((res) => {
             getFollowing().then((restwo) => {
                 allUsers().then((resthree) => {
-                    func().then(res => console.log(res.data))
+                    func().then(res => console.log(res.data["EXCHANGESNAPSHOTITEMS"][0]["SNAPSHOTITEMS"]))
                     var data = require('./stock_sample_data/GetExchangeSnapshot_1Min_JSON/GetExchangeSnapshot_1Min_JSON.json')
                     this.setState({
                         mainFeedData: res.flat(), following: restwo, allUsers: resthree, marketSnapshot: getSnapshot(data), instruments: getInstruments(data)
