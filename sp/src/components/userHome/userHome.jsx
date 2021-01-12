@@ -10,7 +10,7 @@ import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
 import { getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers, setUserExtSignup } from '../../firebase_functions.js'
-import { getSnapshot, getInstruments, func } from './stock_functions.js'
+import { getSnapshot, getInstruments } from './stock_functions.js'
 
 export default class UserPage extends Component {
     constructor(props) {
@@ -38,10 +38,10 @@ export default class UserPage extends Component {
         get_follower_posts().then((res) => {
             getFollowing().then((restwo) => {
                 allUsers().then((resthree) => {
-                    func().then(res => console.log(res.data))
-                    var data = require('./stock_sample_data/GetExchangeSnapshot_1Min_JSON/GetExchangeSnapshot_1Min_JSON.json')
-                    this.setState({
-                        mainFeedData: res.flat(), following: restwo, allUsers: resthree, marketSnapshot: getSnapshot(data), instruments: getInstruments(data)
+                    getSnapshot().then(resfour => {
+                        this.setState({
+                            mainFeedData: res.flat(), following: restwo, allUsers: resthree, marketSnapshot: resfour, instruments: getInstruments(resfour)
+                        })
                     })
                 })
             })
