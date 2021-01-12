@@ -5,6 +5,7 @@ const test = "http://nimblerest.lisuns.com:4531/GetExchangeSnapshot/?accessKey=f
 export const getSnapshot = () => {
   console.log("sending request")
   return axios.get(test).then((res) => {
+      console.log(res)
     console.log("response recieved")
     return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
   }).catch(err => { console.log(err); return [] })
