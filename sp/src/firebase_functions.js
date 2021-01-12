@@ -312,16 +312,18 @@ export const likeUnlikePost = async (id, like = true, post = true) => {
   console.log(id)
   const delimitter = post ? "," : ",,"
   const email = id.substring(0, id.indexOf(delimitter))
-  const postId = post ? id.substring(id.indexOf(",") - 1, id.indexOf(",,")) : ""
-  const suffix = post ? "/userPosts" : "/postComments"
-  const prefix = post ? "posts/" : "comments/"
-  const ref = post ? prefix + email + suffix : prefix + postId + suffix
+  const non_email = id.substring(id.indexOf(delimitter) + 2, id.length)
+  const postId = post ? "" : non_email.substring(0, non_email.indexOf(",,"))
+  console.log(postId)
+  const ref = post ? "posts/" + email + "/userPosts" : "comments/" + postId + "/postComments"
   var post_ref = firebase.firestore().collection(ref);
   const incr = like ? 1 : -1
   post_ref
     .doc(id)
     .update({ likes: fire.firestore.FieldValue.increment(incr) })
     .catch((err) => { console.log(err) })
+
+  console.log("liked")
 
   var user = firebase.auth().currentUser;
   var like_ref = firebase.firestore().collection("likes/" + user.email + "/userLikes");
@@ -387,6 +389,17 @@ let getPostsByEmail = async (email) => {
   return snapshot.docs.map(doc => doc.data());
 }
 
+export const getUserPosts = async () => {
+  var user = firebase.auth().currentUser;
+  const email = user.email
+  const snapshot = await firebase.firestore().collection("posts/" + email + "/userPosts")
+    .orderBy("createdAt", "desc").get()
+  return snapshot.docs.map(doc => doc.data());
+}
+
+export const getStockPosts = async (stock) => {
+}
+
 export const get_follower_posts = async (following = true) => {
   var user = firebase.auth().currentUser;
   const suffix = following ? "/userFollowing" : "/userFollowers"
@@ -418,10 +431,10 @@ export const add_comment = async (postId, text) => {
     "text": text,
     "createdAt": time,
     "username": user.displayName,
-    "id": user.email + ',,' + postId + "," + time,
+    "id": user.email + ',,' + postId + ",," + time,
     "likes": 0
   }
-  comment_ref.doc(user.email + ",," + time)
+  comment_ref.doc(user.email + ',,' + postId + ",," + time)
     .set(comment)
     .catch((err) => { console.log(err) })
   return comment
