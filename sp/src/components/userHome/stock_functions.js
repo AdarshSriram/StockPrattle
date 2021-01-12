@@ -10,7 +10,7 @@ export const get_name_and_price = () => {
       return arr
     })
 }
-export const getSnapshot = () => {
+export const func = () => {
   return axios.get(test)
   /*.then((res) => {
     const jsonData = res.data
@@ -23,7 +23,7 @@ export const getSnapshot = () => {
   .catch(err => console.log(err))*/
 }
 
-export const get_snapshot = (jsonData) => {
+export const getSnapshot = (jsonData) => {
   const arr = jsonData["EXCHANGESNAPSHOTITEMS"][0]["SNAPSHOTITEMS"]
   return arr
 }
