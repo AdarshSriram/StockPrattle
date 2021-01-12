@@ -9,7 +9,7 @@ import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
-import { getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers, setUserExtSignup } from '../../firebase_functions.js'
+import { getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers, setUserExtSignup, getUserPosts } from '../../firebase_functions.js'
 import { getSnapshot, getInstruments } from './stock_functions.js'
 
 export default class UserPage extends Component {
@@ -35,12 +35,14 @@ export default class UserPage extends Component {
     }
 
     setData() {
-        get_follower_posts().then((res) => {
-            getFollowing().then((restwo) => {
-                allUsers().then((resthree) => {
-                    getSnapshot().then(resfour => {
-                        this.setState({
-                            mainFeedData: res.flat(), following: restwo, allUsers: resthree, marketSnapshot: resfour, instruments: getInstruments(resfour)
+        get_follower_posts().then(res => {
+            getFollowing().then(restwo => {
+                allUsers().then(resthree => {
+                    getUserPosts().then(resfour => {
+                        getSnapshot().then(resfive => {
+                            this.setState({
+                                mainFeedData: res.flat(), following: restwo, allUsers: resthree, marketSnapshot: resfive, instruments: getInstruments(resfive), userFeedData: resfour.flat()
+                            })
                         })
                     })
                 })
@@ -138,7 +140,8 @@ export default class UserPage extends Component {
     render() {
         var item;
         if (this.state.current == "profile") {
-            item = <UserProfile user={this.state.user} setUser={this.updateUserInfo} following={this.state.following} />
+            item = <UserProfile user={this.state.user} setUser={this.updateUserInfo} following={this.state.following}
+                    userFeedData={this.state.userFeedData}/>
         } else if (this.state.current == "explore") {
             item = <ExplorePage display={this.state.goTo} following={this.state.following} marketSnapshot={this.state.marketSnapshot} />
         } else if (this.state.current == "messages") {

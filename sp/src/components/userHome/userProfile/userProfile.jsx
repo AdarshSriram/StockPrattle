@@ -9,13 +9,13 @@ import SocialDetails from './socialDetails.jsx'
 export default class UserProfile extends Component {
     constructor(props) {
         super(props);
-        this.state = {user: props.user, setUser: props.setUser, following: props.following}
+        this.state = {user: props.user, setUser: props.setUser, following: props.following, data: props.userFeedData}
         this.updateProfile = this.updateProfile.bind(this)
     }
 
     componentDidUpdate(prevProps){
-        if (this.props.user.username != prevProps.user.username || this.props.following != prevProps.following){
-            this.setState({user: this.props.user, following: this.props.following})
+        if (this.props.user.username != prevProps.user.username || this.props.following != prevProps.following || this.props.userFeedData !== prevProps.userFeedData){
+            this.setState({user: this.props.user, following: this.props.following, data:this.props.userFeedData})
         }
     }
 
@@ -41,7 +41,7 @@ export default class UserProfile extends Component {
                     </div>
                     <SocialDetails />
                 </div>
-                <UserFeed user={this.state.user}/>
+                <UserFeed user={this.state.user} data={this.state.data}/>
             </div>
         )} else {
             return(
