@@ -40,7 +40,7 @@ export default class UserPage extends Component {
                 allUsers().then((resthree) => {
                     var data = require('./stock_sample_data/GetExchangeSnapshot_1Min_JSON/GetExchangeSnapshot_1Min_JSON.json')
                     this.setState({
-                        mainFeedData: res.flat(), following: restwo, allUsers: resthree, marketSnapshot: getSnapshot(), instruments: getInstruments(data)
+                        mainFeedData: res.flat(), following: restwo, allUsers: resthree, marketSnapshot: getSnapshot(data), instruments: getInstruments(data)
                     })
                 })
             })

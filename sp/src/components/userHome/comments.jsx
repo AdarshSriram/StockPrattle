@@ -82,6 +82,20 @@ class Comment extends Component {
         this.mouseOut = this.mouseOut.bind(this)
     }
 
+    componentDidMount() {
+        if (this.props.text != null){
+            hasUserLiked(this.props.id).then(res => {
+                if (res) {
+                    document.getElementById(this.props.id).style.fill = "#00B140"
+                    this.setState({liked:true})
+                } else {
+                    document.getElementById(this.props.id).style.fill = "black"
+                    this.setState({liked:false})
+                }
+            })
+        }
+    }
+
     like() {
         if (this.state.liked) {
             document.getElementById(this.props.id).style.fill = "black"
