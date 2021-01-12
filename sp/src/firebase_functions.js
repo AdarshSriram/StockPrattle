@@ -302,10 +302,22 @@ export const addPost = async (params) => {
     "id": user.email + "," + time
   }
   var email = user.email
+
   var post_ref = firebase.firestore().collection("posts/" + email + "/userPosts");
+
+  const stock_post_ref = firebase.firestore().collection("stockposts/" + params[0] + "/stockPosts");
+
+  stock_post_ref.doc(user.email + "," + time).set(post)
+
   return post_ref
     .doc(user.email + "," + time).set(post).then((res) => post)
     .catch((err) => { console.log(err) })
+}
+
+export const getStockPosts = async (stock) => {
+  const snapshot = await firebase.firestore().collection("stockposts/" + stock + "/stockPosts")
+    .orderBy("createdAt", "desc").get()
+  return snapshot.docs.map(doc => doc.data());
 }
 
 export const likeUnlikePost = async (id, like = true, post = true) => {
@@ -397,8 +409,6 @@ export const getUserPosts = async () => {
   return snapshot.docs.map(doc => doc.data());
 }
 
-export const getStockPosts = async (stock) => {
-}
 
 export const get_follower_posts = async (following = true) => {
   var user = firebase.auth().currentUser;
