@@ -5,12 +5,22 @@ import EditableText from './editableText.jsx';
 import UserFeed from '../userFeed.jsx';
 import ProfilePic from './profilePic.jsx';
 import SocialDetails from './socialDetails.jsx'
+import {getFollowing} from "./../../../firebase_functions"
 
 export default class UserProfile extends Component {
     constructor(props) {
         super(props);
-        this.state = {user: props.user, setUser: props.setUser, following: props.following, data: props.userFeedData}
+        this.state = {user: props.user, setUser: props.setUser, following: false, data: props.userFeedData}
         this.updateProfile = this.updateProfile.bind(this)
+    }
+
+    componentDidMount(){
+        if (this.state.setUser == null){
+            getFollowing().then(res=>{
+                console.log(res)
+                this.setState({following: res.includes(this.state.user.email)})
+            })
+        }
     }
 
     componentDidUpdate(prevProps){
@@ -39,7 +49,7 @@ export default class UserProfile extends Component {
                         <EditableText type={'Industry'} setUser={this.updateProfile} user={this.state.user}/>
                         <EditableText type={'Education'} setUser={this.updateProfile} user={this.state.user}/>
                     </div>
-                    <SocialDetails followingList={this.state.following}/>
+                    <SocialDetails />
                 </div>
                 <UserFeed user={this.state.user} type={"personal"}/>
             </div>
@@ -88,7 +98,7 @@ export default class UserProfile extends Component {
                             }</p>
                         </div>
                     </div>
-                    <SocialDetails user={this.props.user} name={this.state.user.fullname} following={this.state.following.includes(this.state.user.email)}/>
+                    <SocialDetails user={this.props.user} name={this.state.user.fullname} following={this.state.following}/>
                 </div>
                 <UserFeed user={this.state.user}/>
             </div>

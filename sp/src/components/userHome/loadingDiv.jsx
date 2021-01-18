@@ -18,6 +18,7 @@ export default class LoadingScreen extends Component{
 
     flicker(){
         var img = document.getElementById("loadingImage")
+        if (img==null){return}
         if(img.style.visibility == 'hidden'){
             img.style.visibility = 'visible';
         }else{

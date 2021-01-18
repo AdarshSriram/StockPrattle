@@ -19,17 +19,19 @@ export default class ExploreFeed extends Component{
 
     componentDidMount(){
         if (this.state.currentDisp != "default"){
-        getUserInfo(this.state.currentDisp).then((doc)=>{
-            if (!doc.exists){
-                this.setState({currentDisp: "default"})
-                alert("Invalid user.")
-                return
-            } else {
-                const user = doc.data()
-                this.setState({currentDisp: user, type: "user"})
-            }
-        })
-    }}
+            getUserInfo(this.state.currentDisp).then((doc)=>{
+                if (!doc.exists){
+                    this.setState({currentDisp: "default"})
+                    alert("Invalid user.")
+                    return
+                }
+                if (doc.data().email==this.props.user.email) this.props.goToProfile()
+                else this.setState({currentDisp: doc.data(), type: "user"})
+            })
+        } else {
+            this.setState({type: "default"})
+        }
+    }
 
     componentDidUpdate(prevProps) {
         if (this.props.display !== prevProps.display){
@@ -40,15 +42,10 @@ export default class ExploreFeed extends Component{
     }
 
     render(){
-        if (this.state.currentDisp == "default"){
-            return <InfiniteDeck onCardClick={this.goToProfile} data={this.state.marketSnapshot}/>
-        } else if (this.state.type=="loading"){
-            return (
-                <LoadingScreen />
-            )
-        } else {
-            return this.state.type == "user" ?  <UserProfile user={this.state.currentDisp} following={this.props.following}/> : <StockPage stock={this.state.currentDisp} following={false}/>
-        }
+        if (this.state.type=="loading") return <LoadingScreen />
+        if (this.state.currentDisp == "default") return (<InfiniteDeck onCardClick={this.goToProfile}   data={this.state.marketSnapshot}/>)
+
+        return (this.state.type == "user") ?  <UserProfile user={this.state.currentDisp}/> : <StockPage user={this.props.user} stock={this.state.currentDisp}/>
     }
 }
 
