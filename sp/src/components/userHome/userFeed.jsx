@@ -1,51 +1,110 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Post from "./post.jsx";
-import NewPostPopUp from "./newPost.jsx";
+import LoadingScreen from "./loadingDiv.jsx"
+import NewPostPopUp from './newPost.jsx'
+import {get_follower_posts, getUserPosts, addPost} from '../../firebase_functions.js'
 
+function buttonPress(type = null, instruments = null) {
+    var elem = document.getElementById("popUpContainer");
+    ReactDOM.render(<NewPostPopUp addPost={type} instruments={instruments}/>, elem);
+    document.getElementById("wholeScreen").addEventListener('click', reversePress);
+    document.getElementById("body").style.filter = "blur(4px)";
+    document.getElementById("header").style.filter = "blur(4px)";
+}
+
+function reversePress(event) {
+    const exclusions = ["stockInput", "popUpBox", "popUpForm",
+        "submitButton", "postText"];
+    if (exclusions.includes(event.target.id)) { return; }
+    ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
+    document.getElementById("wholeScreen").removeEventListener('click', reversePress);
+    document.getElementById("body").style.filter = "none";
+    document.getElementById("header").style.filter = "none";
+}
 
 export default class UserFeed extends Component {
     constructor(props) {
         super(props);
-        if (this.props.data == null) {
-            this.state = {items: [], over: true}
-        } else if (this.props.data.length < 10) {
-            this.state = {items: this.props.data, over: true}
-        } else {
-            this.state = {items: this.props.data.slice(0, 10), over: false}
-        }
+        this.state = {type: (props.type==null) ? "default" : props.type, instruments: props.instruments}
         this.checkAndFetch = this.checkAndFetch.bind(this)
+        this.addPostFront = this.addPostFront.bind(this)
+    }
+
+    componentDidMount(){
+        if (this.state.type=="default"){
+            get_follower_posts().then(res => {
+                if (res == null) {
+                    this.setState({data: [], items: [], over: true})
+                } else if (res.length < 10) {
+                    this.setState({data: res, items: res, over: true})
+                } else {
+                    this.state = {data: res, items: res.slice(0, 10), over: false}
+                }
+            })
+        } else if (this.state.type=="personal"){
+            getUserPosts().then(res => {
+                if (res == null) {
+                    this.setState({data: [], items: [], over: true})
+                } else if (res.length < 10) {
+                    this.setState({data: res, items: res, over: true})
+                } else {
+                    this.state = {data: res, items: res.slice(0, 10), over: false}
+                }
+            })
+        }
+    }
+
+    mouseIn(event) {
+        event.target.style.backgroundColor = "#00B140"
+        event.target.style.color = "#FFFFFF"
+    }
+
+    mouseOut(event) {
+        event.target.style.backgroundColor = "#FFFFFF"
+        event.target.style.color = "#00B140"
     }
 
     checkAndFetch(event) {
         var element = event.target;
         if (element.scrollHeight - element.scrollTop === element.clientHeight) {
             var i = this.state.items.length - 1
-            if (i + 10 >= this.props.data.length) {
-                this.setState({ items: this.props.data, over: true })
+            if (i + 10 >= this.state.data.length) {
+                this.setState({ items: this.state.data, over: true })
             } else {
-                this.setState({ items: this.state.items.concat(this.props.data.slice(i, i + 10)) })
+                this.setState({ items: this.state.items.concat(this.state.data.slice(i, i + 10)) })
             }
+        }
+    }
+
+    addPostFront(params) {
+        if (params[0] && params[1]) {
+            const time = Date.now()
+            addPost(params).then((res) => {
+                document.getElementById("wholeScreen").click()
+            }).catch((error) => console.log(error))
+        }
+        else {
+            alert("Associated stocks and post text caannot be empty")
         }
     }
 
     componentDidUpdate(prevProps){
-        if (prevProps.data != this.props.data){
-            if (this.props.data == null) {
-                this.setState({items: [], over: true})
-            } else if (this.props.data.length < 10) {
-                this.setState({items: this.props.data, over: true})
-            } else {
-                this.setState({items: this.props.data.slice(0, 10), over: false})
-            }
+        if (prevProps.type != this.props.type || prevProps.instruments != this.props.instruments){
+            this.setState({instruments: this.props.instruments}, this.componentDidMount)
         }
     }
 
     render() {
+        if (this.state.items==null) return <LoadingScreen/>
         return (
             <div id="usedFeedDiv" style={userFeedStyle.centerDiv} onScroll={this.checkAndFetch}>
-                {this.state.items.map((i, index) => (
-                    <Post curuser = {this.props.user} key={index} user={i.username} text={i.text} propic={i.propic} id={i.id}/>))}
+                {(this.state.type=="default") ? (
+                    <div style={userFeedStyle.topDiv}>
+                    <button style={userFeedStyle.newPostButton} onMouseOver={this.mouseIn}
+                        onMouseLeave={this.mouseOut} onClick={(event) => buttonPress(this.addPostFront, this.state.instruments)}>+</button>
+                    </div>) : null}
+                {this.state.items.map((i, index) => (<Post curuser = {this.props.user} key={index} user={i.username} text={i.text} propic={i.propic} id={i.id}/>))}
                 <p style={userFeedStyle.loading}>{(this.state.over) ? "You have reached the end of your feed!" : "Loading..."}</p>
             </div>
         )
@@ -75,6 +134,32 @@ const userFeedStyle = {
         // fontWeight: "bold",
         fontSize: "18px",
         outline: "none",
+        borderRadius: "10px"
+    }, newPostButton: {
+        background: "#FFFFFF",
+        width: "40px",
+        height: "40px",
+        marginRight: "10px",
+        borderRadius: "25px",
+        border: "1px dashed #00B140",
+        color: "#00B140",
+        fontFamily: "Arial",
+        fontStyle: "normal",
+        fontWeight: "600px",
+        fontSize: "30px",
+        outline: "none",
+        cursor: "pointer"
+    }, topDiv: {
+        height: "40px",
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        // border: "thick solid black",
+        boxSizing: "border-box",
+        background: "none",
+        overflow: "none",
         borderRadius: "10px"
     }
 }

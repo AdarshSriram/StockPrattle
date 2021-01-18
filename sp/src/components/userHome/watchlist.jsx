@@ -9,7 +9,7 @@ export default class Watchlist extends Component{
     render(){
     return (
         <div style={watchlistStyle.mainDiv}>
-            <p style={watchlistStyle.headingText}>Watchlist</p>
+            <p style={watchlistStyle.headingText}>Followed Stocks</p>
         </div>
         )
     }

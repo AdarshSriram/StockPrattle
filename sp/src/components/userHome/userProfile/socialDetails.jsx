@@ -99,8 +99,6 @@ export default class SocialDetails extends Component {
                 background: "none",
                 // overflow: "scroll"
             }}>
-                <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
-                >{(this.props.user == null) ? "Stocks You Follow" : "Stocks " + this.props.name.split(" ")[0] + " Follows"}</button>
                 <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut} onClick={()=>buttonPress(this.state.followingList)}>{(this.props.user == null) ? "People You Follow" : "People " + this.props.name.split(" ")[0] + " Follows"}</button>
                 <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
                 onClick={()=>buttonPress(this.state.followerList)}>{(this.props.user == null) ? "People Who Follow You" : "People Who Follow " + this.props.name.split(" ")[0]}</button>

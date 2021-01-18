@@ -35,10 +35,8 @@ export default class StockPage extends Component{
         const stock = this.state.stock
         if (this.state.following) { unfollowStock(stock).then(() => console.log("Unfollowed")) }
         else {
-            const uname = this.props.user.username
             followStock(stock).then(() => console.log("Followed"))
         }
-        this.set
         this.setState({ following: !this.state.following })
     }
 
@@ -71,7 +69,7 @@ export default class StockPage extends Component{
                         onMouseOver={this.followMouseIn} onMouseLeave={this.followMouseOut}>{(this.state.following) ? "Unfollow" : "Follow"}</button>
                 </div>
             </div>
-            <UserFeed user={null}/>
+            <UserFeed user={null} type={"stock"}/>
         </div>
         )
     }
