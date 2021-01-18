@@ -5,9 +5,9 @@ import LoadingScreen from "./loadingDiv.jsx"
 import NewPostPopUp from './newPost.jsx'
 import {getMainFeed, getFollowingFeed, getUserPosts, addPost, getStockPosts} from '../../firebase_functions.js'
 
-function buttonPress(type = null, instruments = null) {
+function buttonPress(type = null) {
     var elem = document.getElementById("popUpContainer");
-    ReactDOM.render(<NewPostPopUp addPost={type} instruments={instruments}/>, elem);
+    ReactDOM.render(<NewPostPopUp addPost={type}/>, elem);
     document.getElementById("wholeScreen").addEventListener('click', reversePress);
     document.getElementById("body").style.filter = "blur(4px)";
     document.getElementById("header").style.filter = "blur(4px)";
