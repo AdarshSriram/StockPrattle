@@ -32,7 +32,7 @@ export const getNifty = () => {
   }).catch(err => { console.log(err); return [] })
 }
 
-export const getStocksData = (symbols, lst) => {
+export const getStocksData = (symbols) => {
     console.log("sending request")
     return axios.get(test).then(arr => {
         console.log("response recieved")
@@ -41,7 +41,7 @@ export const getStocksData = (symbols, lst) => {
         arr = arr.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
         var res = []
         for (var obj of arr){
-            if (arr.INSTRUMENTIDENTIFIER in symbols) res.push(obj)
+            if (symbols.has(obj.INSTRUMENTIDENTIFIER)) res.push(obj)
         }
         return res
     }).catch(err => { console.log(err); return [] })

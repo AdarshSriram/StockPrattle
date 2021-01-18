@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {bellSvg, settingsSvg} from './svgs.jsx';
 import Ticker from 'react-ticker';
-import { getSnapshot } from './stock_functions.js';
+import { getStocksData } from './stock_functions.js';
 import { allUsers } from '../../firebase_functions.js'
 
 export default class NavBar extends Component{
@@ -13,7 +13,7 @@ export default class NavBar extends Component{
 
     componentDidMount(){
         allUsers().then(res => this.setState({users: res}))
-        getSnapshot().then(restwo => this.setState({sbItems: restwo}))
+        getStocksData(null).then(restwo => this.setState({sbItems: restwo}))
     }
 
     componentDidUpdate(prevProps){
