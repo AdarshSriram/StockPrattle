@@ -19,15 +19,19 @@ export default class ExploreFeed extends Component{
 
     componentDidMount(){
         if (this.state.currentDisp != "default"){
-            getUserInfo(this.state.currentDisp).then((doc)=>{
-                if (!doc.exists){
-                    this.setState({currentDisp: "default"})
-                    alert("Invalid user.")
-                    return
-                }
-                if (doc.data().email==this.props.user.email) this.props.goToProfile()
-                else this.setState({currentDisp: doc.data(), type: "user"})
-            })
+            if (this.props.isStock){
+                this.goToProfile(this.state.currentDisp)
+            } else {
+                getUserInfo(this.state.currentDisp).then((doc)=>{
+                    if (!doc.exists){
+                        this.setState({currentDisp: "default"})
+                        alert("Invalid user.")
+                        return
+                    }
+                    if (doc.data().email==this.props.user.email) this.props.goToProfile()
+                    else this.setState({currentDisp: doc.data(), type: "user"})
+                })
+            }
         } else {
             this.setState({type: "default"})
         }

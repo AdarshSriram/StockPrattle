@@ -65,8 +65,8 @@ export default class UserPage extends Component {
         }
     }
 
-    goTo(id) {
-        this.exploreButtonClick(null, id)
+    goTo(id, isStock) {
+        this.exploreButtonClick(null, id, isStock)
     }
 
     profileButtonClick() {
@@ -83,7 +83,7 @@ export default class UserPage extends Component {
         this.setState({ current: "profile" });
     }
 
-    exploreButtonClick(event, goTo = "default") {
+    exploreButtonClick(event, goTo = "default", isStock=false) {
         var ids = ["feedButton", "profileButton", "messagesButton"]
         var but;
         for (var id of ids) {
@@ -94,7 +94,7 @@ export default class UserPage extends Component {
         but = document.getElementById("exploreButton");
         but.style.background = '#00B140';
         but.style.color = '#FFFFFF';
-        this.setState({ current: "explore", goTo: goTo });
+        this.setState({ current: "explore", goTo: goTo, isStock: isStock });
     }
 
     feedButtonClick() {
@@ -132,7 +132,7 @@ export default class UserPage extends Component {
         } else if (this.state.current == "profile") {
             item = <UserProfile user={this.state.user} setUser={this.updateUserInfo}/>
         } else if (this.state.current == "explore") {
-            item = <ExplorePage user={this.state.user} goToProfile={this.profileButtonClick} display={this.state.goTo} />
+            item = <ExplorePage user={this.state.user} goToProfile={this.profileButtonClick} display={this.state.goTo} isStock={this.state.isStock}/>
         } else if (this.state.current == "messages") {
             item = <MessageBox />
         } else {
@@ -140,7 +140,7 @@ export default class UserPage extends Component {
         }
         return (
             <div id="wholeScreen" style={userHomeStyle.mainDiv}>
-                <NavBar goTo={this.goTo} />
+                <NavBar goTo={this.goTo} instruments={this.state.instruments}/>
                 <div id="body" style={userHomeStyle.body}>
                     <LeftMenu history={this.props.history} pageState={this.state.current}
                         buttonClickFunctions={[this.profileButtonClick, this.feedButtonClick,

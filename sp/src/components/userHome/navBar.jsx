@@ -8,25 +8,39 @@ import { allUsers } from '../../firebase_functions.js'
 export default class NavBar extends Component{
     constructor(props){
         super(props);
-        this.state = {sbItems: [], users: []}
+        this.state = {sbItems: [], searchItems: (props.instruments==null) ? [] : props.instruments}
     }
 
     componentDidMount(){
-        allUsers().then(res => this.setState({users: res}))
-        getStocksData(null).then(restwo => this.setState({sbItems: restwo}))
-    }
-
-    componentDidUpdate(prevProps){
-        if (prevProps.allUsers != this.props.allUsers || prevProps.marketSnapshot != this.props.marketSnapshot){
-            this.setState({users: this.props.allUsers, sbItems: this.props.marketSnapshot})
+        if (this.state.sbItems.length == 0){
+            getStocksData(null).then(restwo=>this.setState({sbItems: restwo}))
         }
+        allUsers().then(res => this.setState({searchItems: this.state.searchItems.concat(res)}))
     }
-
 
     goTo(){
         var elem= document.getElementById("searchBar")
-        this.props.goTo(elem.value)
+        const search = elem.value
+        var found = false
+        for (var obj of this.state.searchItems){
+            if (search==obj){
+                this.props.goTo(obj, true)
+                found = found || true
+            } else if (search==obj.username){
+                this.props.goTo(obj.email, false)
+                found = found || true
+            }
+        }
         elem.value= null
+        if (!found){
+            alert("No Such Page Exists!")
+        }
+    }
+
+    componentDidUpdate(prevProps){
+        if (prevProps.instruments != this.props.instruments){
+            this.setState({searchItems: this.props.instruments}, this.componentDidMount)
+        }
     }
 
     mouseIn(but){
@@ -52,9 +66,15 @@ export default class NavBar extends Component{
                             event.preventDefault();
                             this.goTo();
                         }}>
-                        <input id="searchBar" type="text" list="users" placeholder = "Go To" style={navBarStyle.searchInput}/>
-                            <datalist id= "users">
-                                {this.state.users.map(item => (<option id={item.username} value={item.email}/>))}
+                        <input id="searchBar" type="search" list="searchItems" placeholder = "Search by Username or Stock ID" style={navBarStyle.searchInput}/>
+                            <datalist id= "searchItems">
+                                {this.state.searchItems.map((item, index) => {
+                                    if (typeof item == 'string' || item instanceof String){
+                                        return (<option id={index} value={item}/>)
+                                    } else {
+                                        return (<option id={index} value={item.username}/>)
+                                    }
+                                })}
                             </datalist>
                         <input id="searchSubmit" type="submit" value= "→" style={navBarStyle.goButton}
                         onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}/>
