@@ -500,6 +500,7 @@ export const getMainFeed = () => {
       return getUserPosts().then(userPosts => {
         var arr = [...new Set(followPosts.concat(stockPosts.concat(userPosts)))]
         arr.sort(GetSortOrder("createdAt"))
+        console.log(arr)
         return arr
       }).catch((err) => console.log(err))
     }).catch(err => console.log(err))
