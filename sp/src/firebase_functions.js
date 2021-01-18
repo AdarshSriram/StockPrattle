@@ -143,6 +143,11 @@ export const getUserInfo = (email) => {
   return userCollection.doc(email).get()
 }
 
+export const getUname = async () => {
+  var user = await firebase.auth().currentUser;
+  return user.displayName
+}
+
 export const getCurrentUserInfo = () => {
   var user = firebase.auth().currentUser;
   if (user != null) {
