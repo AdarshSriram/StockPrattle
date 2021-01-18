@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import FollowPopUp from './followPopUp.jsx'
-import { followUser, unfollowUser } from "./../../../firebase_functions"
+import { followUser, unfollowUser, getFollowing } from "./../../../firebase_functions"
 
 function buttonPress(data) {
     var elem = document.getElementById("popUpContainer");
@@ -27,6 +27,18 @@ export default class SocialDetails extends Component {
         this.followMouseIn = this.followMouseIn.bind(this)
         this.followMouseOut = this.followMouseOut.bind(this)
         this.followUnfollow = this.followUnfollow.bind(this)
+    }
+
+    componentDidMount(){
+        if (this.props.user != null) {
+            getFollowing(this.props.user.email).then(res=>{
+                getFollowing(this.props.user.email, false).then(restwo=>{
+                    this.setState({followingList: res, followerList: restwo})
+                })
+            })
+        } else {
+            getFollowing(null, false).then(res=>this.setState({followerList: res}))
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -63,7 +75,6 @@ export default class SocialDetails extends Component {
 
     followUnfollow() {
         const email = this.props.user.email
-        console.log(this.state.following)
         if (this.state.following) { unfollowUser(email).then(() => console.log("Unfollowed")) }
         else {
             const uname = this.props.user.username
@@ -90,10 +101,9 @@ export default class SocialDetails extends Component {
             }}>
                 <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
                 >{(this.props.user == null) ? "Stocks You Follow" : "Stocks " + this.props.name.split(" ")[0] + " Follows"}</button>
-                <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut} onClick={()=>buttonPress(this.state.followingList)}
-                >{(this.props.user == null) ? "People You Follow" : "People " + this.props.name.split(" ")[0] + " Follows"}</button>
+                <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut} onClick={()=>buttonPress(this.state.followingList)}>{(this.props.user == null) ? "People You Follow" : "People " + this.props.name.split(" ")[0] + " Follows"}</button>
                 <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
-                >{(this.props.user == null) ? "People Who Follow You" : "People Who Follow " + this.props.name.split(" ")[0]}</button>
+                onClick={()=>buttonPress(this.state.followerList)}>{(this.props.user == null) ? "People Who Follow You" : "People Who Follow " + this.props.name.split(" ")[0]}</button>
                 {(this.props.user == null) ? null : <button style={{
                     background: (this.state.following) ? "#FFFFFF" : "#00B140",
                     width: "80px",

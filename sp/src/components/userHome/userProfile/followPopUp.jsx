@@ -27,6 +27,7 @@ class ListDisplay extends Component {
     }
 
     componentDidMount(){
+        console.log(this.state.email)
         getPhoto(this.state.email).then(res=>{
             getUname(this.state.email).then(restwo=>{
                 this.setState({username: restwo, img: res})

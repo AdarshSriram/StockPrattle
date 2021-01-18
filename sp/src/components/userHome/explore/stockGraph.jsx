@@ -344,7 +344,7 @@ export default class StockGraph extends Component{
             <div id="chart" style={chartStyle.mainDiv}>
                 <div style={chartStyle.topDiv}>
                     <div style={chartStyle.heading}>
-                        <p style={chartStyle.title}>SMPL ID</p>
+                        <p style={chartStyle.title}>{this.props.title}</p>
                         <p style={chartStyle.subtitle}>Sample Company Name</p>
                     </div>
                     <div style={chartStyle.legend}>
