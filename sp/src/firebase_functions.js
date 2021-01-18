@@ -169,6 +169,11 @@ export const setUserExtSignup = async (info) => {
     })
 }
 
+export const getUname = async () => {
+  var user = await firebase.auth().currentUser;
+  return user.displayName
+}
+
 export const setCurrentUserInfo = async (info) => {
   const user = firebase.auth().currentUser;
   if (info.username != user.displayName) {
@@ -317,8 +322,7 @@ export const addPost = async (params) => {
 export const getStockPosts = async (stock) => {
   const snapshot = await firebase.firestore().collection("stockposts/" + stock + "/stockPosts")
     .orderBy("createdAt", "desc").get()
-  const id_arr = snapshot.docs.map(doc => doc.id);
-
+  return snapshot.docs.map(doc => doc.data());
 }
 
 export const likeUnlikePost = async (id, like = true, post = true) => {
@@ -360,6 +364,43 @@ export const likeUnlikePost = async (id, like = true, post = true) => {
       .delete()
       .catch((err) => console.log(err))
   }
+}
+
+export const followStock = async (stock_name) => {
+  var user = firebase.auth().currentUser;
+  var follow_ref = firebase.firestore().collection("following/" + user.email + "/stockFollowing");
+  follow_ref
+    .doc(stock_name)
+    .set({})
+    .then(() => {
+      var following_ref = firebase.firestore().collection("stock/" + stock_name + "/stockFollowers");
+      following_ref
+        .doc(user.email)
+        .set({})
+    })
+    .catch((err) => { console.log(err) })
+}
+
+export const unfollowStock = async (stock_name) => {
+  var user = firebase.auth().currentUser;
+  var follow_ref = firebase.firestore().collection("following/" + user.email + "/stockFollowing");
+  follow_ref
+    .doc(stock_name)
+    .delete()
+    .then(() => {
+      var following_ref = firebase.firestore().collection("stock/" + stock_name + "/stockFollowers");
+      following_ref
+        .doc(user.email)
+        .delete()
+    })
+    .catch((err) => { console.log(err) })
+}
+
+export const getWatchList = async () => {
+  var user = firebase.auth().currentUser;
+  var follow_ref = firebase.firestore().collection("following/" + user.email + "/stockFollowing");
+  var snap = await follow_ref.get()
+  return snap.docs.map(doc => doc.id);
 }
 
 export const followUser = async (follower_email, follower_uname) => {
@@ -434,6 +475,23 @@ export const get_follower_posts = async (following = true) => {
       })
     .catch((err) => { console.log(err) })
 }
+
+export const get_Watchlist_posts = async () => {
+  var user = firebase.auth().currentUser;
+  const suffix = "/stockFollowing"
+  return firebase.firestore().collection("following/" + user.email + suffix).get()
+    .then(
+      (docRef) => {
+        var post_arr = [];
+        docRef.forEach((doc) => {
+          post_arr.push(getStockPosts(doc.id))
+        })
+        var res = Promise.all(post_arr)
+        return res
+      })
+    .catch((err) => { console.log(err) })
+}
+
 
 export const get_post_comments = async (id) => {
   const snapshot = await firebase.firestore().collection("comments/" + id + "/postComments")
