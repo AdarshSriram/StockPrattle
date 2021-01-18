@@ -26,8 +26,6 @@ export const getNifty = () => {
   console.log("sending request")
   return axios.get(niftySnap + nifty50.slice(0, 24).join('+')).then((res1) => {
     axios.get(niftySnap + nifty50.slice(25, 49).join('+')).then(res2 => {
-      console.log(res1.data)
-      console.log(res2.data)
       console.log("response recieved")
       return [res1.data, res2.data]
     })
@@ -35,7 +33,17 @@ export const getNifty = () => {
 }
 
 export const getStocksData = (symbols, lst) => {
-  return symbols.map(id =>
-    lst.find(item => item["INSTRUMENTIDENTIFIER"] === id)
-  )
+    console.log("sending request")
+    return axios.get(test).then(arr => {
+        console.log("response recieved")
+        if (symbols==null) symbols = nifty50
+        symbols = new Set(symbols)
+        arr = arr.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+        var res = []
+        for (var obj of arr){
+            if (arr.INSTRUMENTIDENTIFIER in symbols) res.push(obj)
+        }
+        return res
+    }).catch(err => { console.log(err); return [] })
+
 }
