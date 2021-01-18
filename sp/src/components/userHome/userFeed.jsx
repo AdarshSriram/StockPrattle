@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Post from "./post.jsx";
 import LoadingScreen from "./loadingDiv.jsx"
 import NewPostPopUp from './newPost.jsx'
-import {get_follower_posts, getUserPosts, addPost, getStockPosts} from '../../firebase_functions.js'
+import {getMainFeed, getFollowingFeed, getUserPosts, addPost, getStockPosts} from '../../firebase_functions.js'
 
 function buttonPress(type = null, instruments = null) {
     var elem = document.getElementById("popUpContainer");
@@ -33,40 +33,33 @@ export default class UserFeed extends Component {
 
     componentDidMount(){
         if (this.state.type=="default"){
-            get_follower_posts().then(res => {
+            getMainFeed().then(res => {
                 if (res == null) {
                     this.setState({data: [], items: [], over: true})
-                } else if (res.length < 10) {
-                    res = res.flat()
-                    this.setState({data: res, items: res, over: true})
-                } else {
-                    res = res.flat()
-                    this.setState({data: res, items: res.slice(0, 10), over: false})
+                    return
                 }
+                res = res.flat()
+                if (res.length < 10) this.setState({data: res, items: res, over: true})
+                else this.setState({data: res, items: res.slice(0, 10), over: false})
             })
         } else if (this.state.type=="personal"){
             getUserPosts().then(res => {
                 if (res == null) {
                     this.setState({data: [], items: [], over: true})
-                } else if (res.length < 10) {
-                    res = res.flat()
-                    this.setState({data: res, items: res, over: true})
-                } else {
-                    res = res.flat()
-                    this.setState({data: res.flat, items: res.slice(0, 10), over: false})
                 }
+                res = res.flat()
+                if (res.length < 10) this.setState({data: res, items: res, over: true})
+                else this.setState({data: res.flat, items: res.slice(0, 10), over: false})
             })
         } else if (this.state.type=="stock"){
             getStockPosts(this.props.stock).then(res => {
                 if (res == null) {
                     this.setState({data: [], items: [], over: true})
-                } else if (res.length < 10) {
-                    res = res.flat()
-                    this.setState({data: res, items: res, over: true})
-                } else {
-                    res = res.flat()
-                    this.setState({data: res, items: res.slice(0, 10), over: false})
+                    return
                 }
+                res = res.flat()
+                if (res.length < 10) this.setState({data: res, items: res, over: true})
+                else this.setState({data: res, items: res.slice(0, 10), over: false})
             })
         }
     }
