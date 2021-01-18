@@ -21,6 +21,7 @@ export default class ExploreFeed extends Component{
         if (this.state.currentDisp != "default"){
         getUserInfo(this.state.currentDisp).then((doc)=>{
             if (!doc.exists){
+                this.setState({currentDisp: "default"})
                 alert("Invalid user.")
                 return
             } else {
@@ -41,7 +42,7 @@ export default class ExploreFeed extends Component{
     render(){
         if (this.state.currentDisp == "default"){
             return <InfiniteDeck onCardClick={this.goToProfile} data={this.state.marketSnapshot}/>
-        } else if (this.state.loading){
+        } else if (this.state.type=="loading"){
             return (
                 <LoadingScreen />
             )

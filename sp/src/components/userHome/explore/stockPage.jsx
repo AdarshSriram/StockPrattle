@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import StockGraph from './stockGraph.jsx';
 import UserFeed from '../userFeed.jsx';
+import {followStock, unfollowStock} from '../../../firebase_functions.js'
 
 export default class StockPage extends Component{
     constructor(props){
         super(props);
-        this.state = {following: props.following}
+        this.state = {stock: props.stock, following: props.following}
         this.followMouseIn = this.followMouseIn.bind(this)
         this.followMouseOut = this.followMouseOut.bind(this)
         this.followUnfollow = this.followUnfollow.bind(this)
@@ -31,6 +32,13 @@ export default class StockPage extends Component{
     }
 
     followUnfollow() {
+        const stock = this.state.stock
+        if (this.state.following) { unfollowStock(stock).then(() => console.log("Unfollowed")) }
+        else {
+            const uname = this.props.user.username
+            followStock(stock).then(() => console.log("Followed"))
+        }
+        this.set
         this.setState({ following: !this.state.following })
     }
 
@@ -38,7 +46,7 @@ export default class StockPage extends Component{
     return (
         <div style={stockStyle.centerDiv}>
             <div style={stockStyle.topDiv}>
-                <StockGraph />
+                <StockGraph title={this.state.stock}/>
                 <div style={stockStyle.stockDetails}>
                     <p style = {stockStyle.text}><b>Previous Close:</b> $$$</p>
                     <p style = {stockStyle.text}><b>Open:</b> $$$</p>

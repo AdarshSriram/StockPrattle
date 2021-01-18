@@ -23,7 +23,7 @@ export default class Card extends Component{
     }
 
     cardClick(){
-        this.props.onCardClick("Sample Stock")
+        this.props.onCardClick(this.props.item.INSTRUMENTIDENTIFIER)
     }
 
     render(){
