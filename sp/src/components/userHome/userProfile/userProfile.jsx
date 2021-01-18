@@ -16,10 +16,7 @@ export default class UserProfile extends Component {
 
     componentDidMount(){
         if (this.state.setUser == null){
-            getFollowing().then(res=>{
-                console.log(res)
-                this.setState({following: res.includes(this.state.user.email)})
-            })
+            getFollowing().then(res=>this.setState({following: res.includes(this.state.user.email)}))
         }
     }
 

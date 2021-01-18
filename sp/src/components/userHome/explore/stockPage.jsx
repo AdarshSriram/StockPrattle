@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import StockGraph from './stockGraph.jsx';
 import UserFeed from '../userFeed.jsx';
-import {followStock, unfollowStock} from '../../../firebase_functions.js'
+import {followStock, unfollowStock, getWatchList} from '../../../firebase_functions.js'
 
 export default class StockPage extends Component{
     constructor(props){
@@ -11,6 +11,10 @@ export default class StockPage extends Component{
         this.followMouseIn = this.followMouseIn.bind(this)
         this.followMouseOut = this.followMouseOut.bind(this)
         this.followUnfollow = this.followUnfollow.bind(this)
+    }
+
+    componentDidMount(){
+        getWatchList().then(res=>this.setState({following: res.includes(this.state.stock)}))
     }
 
     followMouseIn(but) {
