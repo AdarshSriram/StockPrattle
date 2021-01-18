@@ -1,10 +1,8 @@
 import API_KEY from "./config_news";
 import axios from 'axios';
 
-const headlines_URL = "http://newsapi.org/v2/top-headlines?"
-
-export const getHeadlines = (country = "id", category = "business") => {
-  var url = headlines_URL + "country=" + country + "&category=" + category + "&q=" + "stocks" + "&apiKey=" + API_KEY
+export const getHeadlines = () => {
+  var url = "http://newsapi.org/v2/top-headlines?country=in&category=business&q=stocks&apiKey=cbe3c25cbb644c3ebf9685437f23f292"
   return axios.get(url)
     .then(res => {
       var data = res.data
