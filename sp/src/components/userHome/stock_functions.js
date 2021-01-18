@@ -35,7 +35,7 @@ export const getNifty = () => {
 }
 
 export const getStocksData = (symbols, lst) => {
-  return symbols.map((id) =>
+  return symbols.map(id =>
     lst.find(item => item["INSTRUMENTIDENTIFIER"] === id)
   )
 }
