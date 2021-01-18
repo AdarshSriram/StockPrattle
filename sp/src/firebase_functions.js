@@ -493,8 +493,11 @@ export const get_follower_posts = async (following = true) => {
         var res = Promise.all(post_arr)
         res.then(follow_posts => {
           get_Watchlist_posts().then(stock_posts => {
+            console.log(stock_posts)
+            console.log(post_arr)
             var arr = [...new Set(follow_posts.concat(stock_posts))]
             arr.sort(GetSortOrder("createdAt"))
+            console.log(arr)
             return arr
           })
         })
