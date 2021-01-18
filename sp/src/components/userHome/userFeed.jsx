@@ -145,7 +145,8 @@ const userFeedStyle = {
         // border: "thick solid black",
         boxSizing: "border-box",
         background: "rgba(229, 229, 229, 0.3)",
-        overflow: "scroll",
+        overflowY: "scroll",
+        overflowX: "hidden",
         borderRadius: "10px"
     }, loading: {
         margin: "0px",

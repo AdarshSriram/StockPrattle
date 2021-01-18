@@ -73,7 +73,8 @@ const deckStyle= { deckDiv: {
         // border: "thick solid black",
         boxSizing: "border-box",
         background: "rgba(229, 229, 229, 0.3)",
-        overflow: "scroll",
+        overflowY: "scroll",
+        overflowX: "hidden",
         margin: "10px",
         borderRadius: "10px"
     }, packDiv: {

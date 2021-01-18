@@ -29,6 +29,9 @@ export default class NavBar extends Component{
             } else if (search==obj.username){
                 this.props.goTo(obj.email, false)
                 found = found || true
+            } else if (search==obj.fullname){
+                this.props.goTo(obj.email, false)
+                found = found || true
             }
         }
         elem.value= null
@@ -54,6 +57,16 @@ export default class NavBar extends Component{
     }
 
     render(){
+        var optList = []; var item;
+        for (var i=0; i<this.state.searchItems.length; i++){
+            item = this.state.searchItems[i]
+            if (typeof item == 'string' || item instanceof String){
+                optList.push(<option id={i} value={item}/>)
+            } else {
+                optList.push(<option id={i} value={item.username}/>)
+                optList.push(<option id={i.email} value={item.fullname}/>)
+            }
+        }
     return (
         <div id="header" style={navBarStyle.header}>
         <div id="logoDiv" style={navBarStyle.logoDiv}>
@@ -66,15 +79,9 @@ export default class NavBar extends Component{
                             event.preventDefault();
                             this.goTo();
                         }}>
-                        <input id="searchBar" type="search" list="searchItems" placeholder = "Search by Username or Stock ID" style={navBarStyle.searchInput}/>
+                        <input id="searchBar" type="search" list="searchItems" placeholder = "Search People or Stocks" style={navBarStyle.searchInput}/>
                             <datalist id= "searchItems">
-                                {this.state.searchItems.map((item, index) => {
-                                    if (typeof item == 'string' || item instanceof String){
-                                        return (<option id={index} value={item}/>)
-                                    } else {
-                                        return (<option id={index} value={item.username}/>)
-                                    }
-                                })}
+                                {optList}
                             </datalist>
                         <input id="searchSubmit" type="submit" value= "→" style={navBarStyle.goButton}
                         onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}/>
