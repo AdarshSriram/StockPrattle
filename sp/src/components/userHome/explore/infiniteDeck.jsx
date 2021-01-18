@@ -21,7 +21,7 @@ export default class InfiniteDeck extends Component{
 
     checkAndFetch(event){
         var element = event.target;
-        if (element.scrollHeight - element.scrollTop< element.clientHeight+1 && 
+        if (element.scrollHeight - element.scrollTop< element.clientHeight+1 &&
         element.scrollHeight - element.scrollTop> element.clientHeight-1) {
             var i = this.state.items.length - 1
             if (i + 10 >= this.state.data.length) this.setState({ items: this.state.data, over: true })
@@ -30,8 +30,6 @@ export default class InfiniteDeck extends Component{
     }
 
     render(){
-        console.log("rendering")
-        console.log(this.state.items)
         if (this.state.items==null) return (<LoadingScreen/>)
         var ls = []
         for (var ind =0;  ind<this.state.items.length-4; ind+=4){
