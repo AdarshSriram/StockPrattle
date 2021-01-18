@@ -1,4 +1,5 @@
-import API_KEY from "./config_news"
+import API_KEY from "./config_news";
+import axios from 'axios';
 
 const headlines_URL = "http://newsapi.org/v2/top-headlines?"
 
