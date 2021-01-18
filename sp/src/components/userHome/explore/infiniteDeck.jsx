@@ -1,60 +1,67 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Card from './card.jsx';
+import { getSnapshot } from '../stock_functions.js';
+import LoadingScreen from "../loadingDiv.jsx"
 
 export default class InfiniteDeck extends Component{
     constructor(props){
         super(props);
-        if (this.props.data == null) {
-            this.state = {items: [], over: true}
-        } else if (this.props.data.length < 10) {
-            this.state = {items: this.props.data, over: true}
-        } else {
-            this.state = {items: this.props.data.slice(0, 10), over: false}
-        }
+        this.state = {data: null, items: null}
         this.checkAndFetch = this.checkAndFetch.bind(this)
+    }
+
+    componentDidMount(event){
+        getSnapshot().then(res => {
+            if (res == null) this.setState({data: [], items: [], over: true})
+            else if (res.length < 10) this.setState({data: res, items: res, over: true})
+            else this.setState({data: res, items: res.slice(0, 10), over: false})
+        })
     }
 
     checkAndFetch(event){
         var element = event.target;
         if (element.scrollHeight - element.scrollTop === element.clientHeight) {
             var i = this.state.items.length - 1
-            if (i + 10 >= this.props.data.length) {
-                this.setState({ items: this.props.data, over: true })
+            if (i + 10 >= this.state.data.length) {
+                this.setState({ items: this.state.data, over: true })
             } else {
-                this.setState({ items: this.state.items.concat(this.props.data.slice(i, i + 10)) })
+                this.setState({ items: this.state.items.concat(this.state.data.slice(i, i + 10)) })
             }
         }
     }
 
     render(){
-    var ls = []
-    for (var ind =0;  ind<this.state.items.length-4; ind+=4){
+        console.log("rendering")
+        console.log(this.state.items)
+        if (this.state.items==null) return (<LoadingScreen/>)
+        var ls = []
+        for (var ind =0;  ind<this.state.items.length-4; ind+=4){
+            ls.push(
+                <div name="pack" id={ind} style={deckStyle.packDiv}>
+                    <Card item={this.state.items[ind]} onCardClick={this.props.onCardClick}/>
+                    <Card item={this.state.items[ind+1]} onCardClick={this.props.onCardClick}/>
+                    <Card item={this.state.items[ind+2]} onCardClick={this.props.onCardClick}/>
+                    <Card item={this.state.items[ind+3]} onCardClick={this.props.onCardClick}/>
+                </div>
+            )
+        }
+        var subls = []
+        for (var subind =ind;  subind<this.state.items.length; subind++){
+            subls.push(
+                <Card item={this.state.items[subind]} onCardClick={this.props.onCardClick}/>
+            )
+        }
         ls.push(
             <div name="pack" id={ind} style={deckStyle.packDiv}>
-                <Card item={this.state.items[ind]} onCardClick={this.props.onCardClick}/>
-                <Card item={this.state.items[ind+1]} onCardClick={this.props.onCardClick}/>
-                <Card item={this.state.items[ind+2]} onCardClick={this.props.onCardClick}/>
-                <Card item={this.state.items[ind+3]} onCardClick={this.props.onCardClick}/>
+                {subls}
             </div>
         )
-    }
-    var subls = []
-    for (var subind =ind;  subind<this.state.items.length; subind++){
-        subls.push(
-            <Card item={this.state.items[subind]} onCardClick={this.props.onCardClick}/>
-        )
-    }
-    ls.push(
-        <div name="pack" id={ind} style={deckStyle.packDiv}>
-            {subls}
-        </div>
-    )
-    return (
-        <div style={deckStyle.deckDiv} onScroll={this.checkAndFetch}>
-            {ls}
-            <p style={deckStyle.loading}>{(this.state.over) ? "You have reached the end of your explore!" : "Loading..."}</p>
-        </div>
+        return (
+            <div style={deckStyle.deckDiv} onScroll={this.checkAndFetch}>
+                {ls}
+                <p style={deckStyle.loading}>{(this.state.over) ? "You have reached the end of your explore!" : "Loading..."}</p>
+            </div>
         )
     }
 }

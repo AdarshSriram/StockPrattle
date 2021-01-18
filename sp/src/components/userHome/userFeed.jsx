@@ -41,7 +41,7 @@ export default class UserFeed extends Component {
                     this.setState({data: res, items: res, over: true})
                 } else {
                     res = res.flat()
-                    this.state = {data: res, items: res.slice(0, 10), over: false}
+                    this.setState({data: res, items: res.slice(0, 10), over: false})
                 }
             })
         } else if (this.state.type=="personal"){
@@ -53,7 +53,7 @@ export default class UserFeed extends Component {
                     this.setState({data: res, items: res, over: true})
                 } else {
                     res = res.flat()
-                    this.state = {data: res.flat, items: res.slice(0, 10), over: false}
+                    this.setState({data: res.flat, items: res.slice(0, 10), over: false})
                 }
             })
         } else if (this.state.type=="stock"){
@@ -65,7 +65,7 @@ export default class UserFeed extends Component {
                     this.setState({data: res, items: res, over: true})
                 } else {
                     res = res.flat()
-                    this.state = {data: res, items: res.slice(0, 10), over: false}
+                    this.setState({data: res, items: res.slice(0, 10), over: false})
                 }
             })
         }
