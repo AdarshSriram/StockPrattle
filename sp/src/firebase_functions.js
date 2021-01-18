@@ -495,23 +495,23 @@ export const getFollowingFeed = () => {
 }
 
 export const getMainFeed = () => {
-    return getFollowingFeed().then(async (followPosts) => {
-        return getWatchlistPosts().then(stockPosts => {
-            return getUserPosts().then(userPosts => {
-                var ids = new Set()
-                var arr = followPosts.flat().concat(stockPosts.flat().concat(userPosts.flat()))
-                var res = []
-                for (var obj of arr) {
-                    if (!ids.has(obj.id)){
-                        res.push(obj)
-                        ids.add(obj.id)
-                    }
-                }
-                res.sort((a,b)=>b.createdAt - a.createdAt)
-                return res
-            }).catch((err) => console.log(err))
-        }).catch(err => console.log(err))
+  return getFollowingFeed().then(async (followPosts) => {
+    return getWatchlistPosts().then(stockPosts => {
+      return getUserPosts().then(userPosts => {
+        var ids = new Set()
+        var arr = followPosts.flat().concat(stockPosts.flat().concat(userPosts.flat()))
+        var res = []
+        for (var obj of arr) {
+          if (!ids.has(obj.id)) {
+            res.push(obj)
+            ids.add(obj.id)
+          }
+        }
+        res.sort((a, b) => b.createdAt - a.createdAt)
+        return res
+      }).catch((err) => console.log(err))
     }).catch(err => console.log(err))
+  }).catch(err => console.log(err))
 }
 
 
