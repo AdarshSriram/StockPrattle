@@ -495,10 +495,13 @@ export const get_follower_posts = async (following = true) => {
           get_Watchlist_posts().then(stock_posts => {
             console.log(stock_posts)
             console.log(post_arr)
-            var arr = [...new Set(follow_posts.concat(stock_posts))]
-            arr.sort(GetSortOrder("createdAt"))
-            console.log(arr)
-            return arr
+
+            getUserPosts().then(user_posts => {
+              var arr = [...new Set(follow_posts.concat(stock_posts.concat(user_posts)))]
+              arr.sort(GetSortOrder("createdAt"))
+              console.log(arr)
+              return arr
+            })
           })
         })
       })
