@@ -481,16 +481,16 @@ function GetSortOrder(prop) {
 }
 
 export const getFollowingFeed = () => {
-    const suffix = "/userFollowing"
-    var user = firebase.auth().currentUser;
-    return firebase.firestore().collection("following/" + user.email + suffix).get()
+  const suffix = "/userFollowing"
+  var user = firebase.auth().currentUser;
+  return firebase.firestore().collection("following/" + user.email + suffix).get()
     .then((docRef) => {
-        var post_arr = [];
-        docRef.forEach((doc) => {
-            post_arr.push(getPostsByEmail(doc.id))
-        })
-        var res = Promise.all(post_arr)
-        return res
+      var post_arr = [];
+      docRef.forEach((doc) => {
+        post_arr.push(getPostsByEmail(doc.id))
+      })
+      var res = Promise.all(post_arr)
+      return res
     })
 }
 
@@ -512,7 +512,9 @@ export const getMainFeed = () => {
             }).catch((err) => console.log(err))
         }).catch(err => console.log(err))
     }).catch(err => console.log(err))
+  }).catch(err => console.log(err))
 }
+
 
 export const getWatchlistPosts = () => {
   var user = firebase.auth().currentUser;
