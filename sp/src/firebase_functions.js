@@ -480,35 +480,33 @@ function GetSortOrder(prop) {
   }
 }
 
-export const get_follower_posts = async (following = true) => {
+export const getFollowingFeed = () => {
+  const suffix = "/userFollowing"
   var user = firebase.auth().currentUser;
-  const suffix = following ? "/userFollowing" : "/userFollowers"
   return firebase.firestore().collection("following/" + user.email + suffix).get()
-    .then(
-      (docRef) => {
-        var post_arr = [];
-        docRef.forEach((doc) => {
-          post_arr.push(getPostsByEmail(doc.id))
-        })
-        var res = Promise.all(post_arr)
-        res.then(follow_posts => {
-          get_Watchlist_posts().then(stock_posts => {
-            console.log(stock_posts)
-            console.log(post_arr)
-
-            getUserPosts().then(user_posts => {
-              var arr = [...new Set(follow_posts.concat(stock_posts.concat(user_posts)))]
-              arr.sort(GetSortOrder("createdAt"))
-              console.log(arr)
-              return arr
-            })
-          })
-        })
+    .then((docRef) => {
+      var post_arr = [];
+      docRef.forEach((doc) => {
+        post_arr.push(getPostsByEmail(doc.id))
       })
-    .catch((err) => { console.log(err) })
+      var res = Promise.all(post_arr)
+      return res
+    })
 }
 
-export const get_Watchlist_posts = async () => {
+export const getMainFeed = () => {
+  return getFollowingFeed().then(async (followPosts) => {
+    return getWatchlistPosts().then(stockPosts => {
+      return getUserPosts().then(userPosts => {
+        var arr = [...new Set(followPosts.concat(stockPosts.concat(userPosts)))]
+        arr.sort(GetSortOrder("createdAt"))
+        return arr
+      }).catch((err) => console.log(err))
+    }).catch(err => console.log(err))
+  }).catch(err => console.log(err))
+}
+
+export const getWatchlistPosts = () => {
   var user = firebase.auth().currentUser;
   const suffix = "/stockFollowing"
   return firebase.firestore().collection("following/" + user.email + suffix).get()

@@ -23,11 +23,8 @@ export default class InfiniteDeck extends Component{
         var element = event.target;
         if (element.scrollHeight - element.scrollTop === element.clientHeight) {
             var i = this.state.items.length - 1
-            if (i + 10 >= this.state.data.length) {
-                this.setState({ items: this.state.data, over: true })
-            } else {
-                this.setState({ items: this.state.items.concat(this.state.data.slice(i, i + 10)) })
-            }
+            if (i + 10 >= this.state.data.length) this.setState({ items: this.state.data, over: true })
+            else this.setState({ items: this.state.items.concat(this.state.data.slice(i, i + 10)) })
         }
     }
 
