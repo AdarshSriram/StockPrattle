@@ -1,11 +1,29 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import FollowPopUp from './followPopUp.jsx'
 import { followUser, unfollowUser } from "./../../../firebase_functions"
+
+function buttonPress(data) {
+    var elem = document.getElementById("popUpContainer");
+    ReactDOM.render(<FollowPopUp data={data}/>, elem);
+    document.getElementById("wholeScreen").addEventListener('click', reversePress);
+    document.getElementById("body").style.filter = "blur(4px)";
+    document.getElementById("header").style.filter = "blur(4px)";
+}
+
+function reversePress(event) {
+    const exclusions = ["popUpBox", "listUsername", "listImageDiv", "listDiv", "listProPic", "smallnopicSvg"];
+    if (exclusions.includes(event.target.id) || exclusions.includes(event.target.getAttribute('name'))) { return; }
+    ReactDOM.unmountComponentAtNode(document.getElementById("popUpContainer"))
+    document.getElementById("wholeScreen").removeEventListener('click', reversePress);
+    document.getElementById("body").style.filter = "none";
+    document.getElementById("header").style.filter = "none";
+}
 
 export default class SocialDetails extends Component {
     constructor(props) {
         super(props);
-        this.state = { following: props.following }
+        this.state = { following: props.following, followingList: props.followingList}
         this.followMouseIn = this.followMouseIn.bind(this)
         this.followMouseOut = this.followMouseOut.bind(this)
         this.followUnfollow = this.followUnfollow.bind(this)
@@ -72,7 +90,7 @@ export default class SocialDetails extends Component {
             }}>
                 <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
                 >{(this.props.user == null) ? "Stocks You Follow" : "Stocks " + this.props.name.split(" ")[0] + " Follows"}</button>
-                <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
+                <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut} onClick={()=>buttonPress(this.state.followingList)}
                 >{(this.props.user == null) ? "People You Follow" : "People " + this.props.name.split(" ")[0] + " Follows"}</button>
                 <button style={socialStyle.button} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
                 >{(this.props.user == null) ? "People Who Follow You" : "People Who Follow " + this.props.name.split(" ")[0]}</button>

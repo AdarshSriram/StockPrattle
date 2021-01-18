@@ -39,7 +39,7 @@ export default class UserProfile extends Component {
                         <EditableText type={'Industry'} setUser={this.updateProfile} user={this.state.user}/>
                         <EditableText type={'Education'} setUser={this.updateProfile} user={this.state.user}/>
                     </div>
-                    <SocialDetails />
+                    <SocialDetails followingList={this.state.following}/>
                 </div>
                 <UserFeed user={this.state.user} data={this.state.data}/>
             </div>
