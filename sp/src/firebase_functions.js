@@ -507,7 +507,7 @@ export const getMainFeed = () => {
                         ids.add(obj.id)
                     }
                 }
-                res.sort(GetSortOrder("createdAt"))
+                res.sort((a,b)=>b.createdAt - a.createdAt)
                 return res
             }).catch((err) => console.log(err))
         }).catch(err => console.log(err))

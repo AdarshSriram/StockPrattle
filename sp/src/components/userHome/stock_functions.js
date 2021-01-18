@@ -14,7 +14,7 @@ export const getInstruments = (arr) => {
     console.log("sending request")
     return axios.get(test).then((res) => {
         console.log("response recieved")
-        return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS.INSTRUMENTIDENTIFIER
+        return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS.map(obj=>obj.INSTRUMENTIDENTIFIER)
     }).catch(err => { console.log(err); return [] })
 }
 

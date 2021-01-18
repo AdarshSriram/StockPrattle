@@ -130,7 +130,7 @@ export default class UserPage extends Component {
         if (this.state.user==null){
             item = <LoadingScreen />
         } else if (this.state.current == "profile") {
-            item = <UserProfile user={this.state.user} setUser={this.updateUserInfo} />
+            item = <UserProfile user={this.state.user} setUser={this.updateUserInfo}/>
         } else if (this.state.current == "explore") {
             item = <ExplorePage user={this.state.user} goToProfile={this.profileButtonClick} display={this.state.goTo} />
         } else if (this.state.current == "messages") {

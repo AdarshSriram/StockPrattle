@@ -5,9 +5,9 @@ import LoadingScreen from "./loadingDiv.jsx"
 import NewPostPopUp from './newPost.jsx'
 import {getMainFeed, getFollowingFeed, getUserPosts, addPost, getStockPosts} from '../../firebase_functions.js'
 
-function buttonPress(type = null) {
+function buttonPress(type = null, instruments=[]) {
     var elem = document.getElementById("popUpContainer");
-    ReactDOM.render(<NewPostPopUp addPost={type}/>, elem);
+    ReactDOM.render(<NewPostPopUp addPost={type} instruments={instruments}/>, elem);
     document.getElementById("wholeScreen").addEventListener('click', reversePress);
     document.getElementById("body").style.filter = "blur(4px)";
     document.getElementById("header").style.filter = "blur(4px)";
@@ -29,6 +29,7 @@ export default class UserFeed extends Component {
         this.state = {type: (props.type==null) ? "default" : props.type, instruments: props.instruments}
         this.checkAndFetch = this.checkAndFetch.bind(this)
         this.addPostFront = this.addPostFront.bind(this)
+        this.newPost = this.newPost.bind(this)
     }
 
     componentDidMount(){
@@ -86,11 +87,21 @@ export default class UserFeed extends Component {
         }
     }
 
+    newPost(event){
+        buttonPress(this.addPostFront, this.state.instruments)
+    }
+
+
     addPostFront(params) {
         if (params[0] && params[1]) {
             const time = Date.now()
             addPost(params).then((res) => {
                 document.getElementById("wholeScreen").click()
+                if (this.state.data[0]==this.state.items[0]){
+                    this.setState({data: [res].concat(this.state.data), items: [res].concat(this.state.items)})
+                } else {
+                    this.setState({data: [res].concat(this.state.data)})
+                }
             }).catch((error) => console.log(error))
         }
         else {
@@ -111,7 +122,7 @@ export default class UserFeed extends Component {
                 {(this.state.type=="default") ? (
                     <div style={userFeedStyle.topDiv}>
                     <button style={userFeedStyle.newPostButton} onMouseOver={this.mouseIn}
-                        onMouseLeave={this.mouseOut} onClick={(event) => buttonPress(this.addPostFront, this.state.instruments)}>+</button>
+                        onMouseLeave={this.mouseOut} onClick={this.newPost}>+</button>
                     </div>) : null}
                 {this.state.items.map((i, index) => (<Post curuser = {this.props.user} key={index} user={i.username} text={i.text} propic={i.propic} id={i.id}/>))}
                 <p style={userFeedStyle.loading}>{(this.state.over) ? "You have reached the end of your feed!" : "Loading..."}</p>
