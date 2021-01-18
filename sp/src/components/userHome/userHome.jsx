@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Link, useHistory } from "react-router-dom";
 import PopUp from '../popUp.jsx';
 import NavBar from './navBar.jsx';
-import Feed from './feed.jsx';
+import UserFeed from './userFeed.jsx';
 import MessageBox from './messages/messageBox.jsx';
 import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';
@@ -15,7 +15,7 @@ import { getSnapshot, getInstruments } from './stock_functions.js'
 export default class UserPage extends Component {
     constructor(props) {
         super(props);
-        this.state = { current: "feed", user: null, goTo: "default", mainFeedData: null, following: null, allUsers: null }
+        this.state = { current: "feed", user: null, goTo: "default"}
         this.profileButtonClick = this.profileButtonClick.bind(this);
         this.feedButtonClick = this.feedButtonClick.bind(this);
         this.messagesButtonClick = this.messagesButtonClick.bind(this);
@@ -35,15 +35,11 @@ export default class UserPage extends Component {
     }
 
     setData() {
-        get_follower_posts().then(res => {
-            getFollowing().then(restwo => {
-                allUsers().then(resthree => {
-                    getUserPosts().then(resfour => {
-                        getSnapshot().then(resfive => {
-                            this.setState({
-                                mainFeedData: res.flat(), following: restwo, allUsers: resthree, marketSnapshot: resfive, instruments: getInstruments(resfive), userFeedData: resfour.flat()
-                            })
-                        })
+        getFollowing().then(restwo => {
+            allUsers().then(resthree => {
+                getSnapshot().then(resfive => {
+                    this.setState({
+                        following: restwo, allUsers: resthree, marketSnapshot: resfive, instruments: getInstruments(resfive)
                     })
                 })
             })
@@ -61,7 +57,6 @@ export default class UserPage extends Component {
                     ReactDOM.render(<PopUp type={"Set Password"} user={user} func={this.updateUserInfo} />, elem);
                     document.getElementById("header").style.filter = "blur(4px)";
                     document.getElementById("body").style.filter = "blur(4px)";
-                    console.log(doc.data())
                 }
                 this.setState({ user: user })
             }
@@ -147,7 +142,7 @@ export default class UserPage extends Component {
         } else if (this.state.current == "messages") {
             item = <MessageBox />
         } else {
-            item = <Feed user={this.state.user} data={this.state.mainFeedData} instruments={this.state.instruments} />
+            item = <UserFeed user={this.state.user} instruments={this.state.instruments}/>
         }
         return (
             <div id="wholeScreen" style={userHomeStyle.mainDiv}>

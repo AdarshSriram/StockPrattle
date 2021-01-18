@@ -41,7 +41,7 @@ export default class UserProfile extends Component {
                     </div>
                     <SocialDetails followingList={this.state.following}/>
                 </div>
-                <UserFeed user={this.state.user} data={this.state.data}/>
+                <UserFeed user={this.state.user} type={"personal"}/>
             </div>
         )} else {
             return(

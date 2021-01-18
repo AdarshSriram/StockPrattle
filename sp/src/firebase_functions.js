@@ -169,11 +169,6 @@ export const setUserExtSignup = async (info) => {
     })
 }
 
-export const getUname = async () => {
-  var user = await firebase.auth().currentUser;
-  return user.displayName
-}
-
 export const setCurrentUserInfo = async (info) => {
   const user = firebase.auth().currentUser;
   if (info.username != user.displayName) {
