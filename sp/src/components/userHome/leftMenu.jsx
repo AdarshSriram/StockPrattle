@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import fire from '../../utils/config.js';
+import { getHeadlines } from './news.js'
 
 export default class LeftMenu extends Component {
     constructor(props) {
         super(props);
         this.logOut = this.logOut.bind(this);
         this.mouseOut = this.mouseOut.bind(this);
+    }
+
+    componentDidMount(){
+        getHeadlines().then(res=>console.log(res))
     }
 
     mouseIn(but) {
