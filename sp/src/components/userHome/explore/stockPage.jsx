@@ -69,7 +69,7 @@ export default class StockPage extends Component{
                         onMouseOver={this.followMouseIn} onMouseLeave={this.followMouseOut}>{(this.state.following) ? "Unfollow" : "Follow"}</button>
                 </div>
             </div>
-            <UserFeed user={null} type={"stock"}/>
+            <UserFeed stock={this.state.stock} user={this.props.user} type={"stock"}/>
         </div>
         )
     }

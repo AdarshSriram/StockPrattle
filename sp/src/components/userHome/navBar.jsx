@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {bellSvg, settingsSvg} from './svgs.jsx';
 import Ticker from 'react-ticker';
+import { getSnapshot } from './stock_functions.js';
+import { allUsers } from '../../firebase_functions.js'
 
 export default class NavBar extends Component{
     constructor(props){
         super(props);
-        this.state = {sbItems: (props.marketSnapshot == null) ? [] : props.marketSnapshot,
-             users: (props.allUsers == null) ? [] : props.allUsers}
+        this.state = {sbItems: [], users: []}
+    }
+
+    componentDidMount(){
+        allUsers().then(res => this.setState({users: res}))
+        getSnapshot().then(restwo => this.setState({sbItems: restwo}))
     }
 
     componentDidUpdate(prevProps){

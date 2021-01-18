@@ -37,11 +37,16 @@ export default class SocialDetails extends Component {
                 })
             })
         } else {
-            getFollowing(null, false).then(res=>this.setState({followerList: res}))
+            getFollowing().then(res=>{
+                getFollowing(null, false).then(restwo=>{
+                    this.setState({followingList: res, followerList: restwo})
+                })
+            })
         }
     }
 
     componentDidUpdate(prevProps) {
+        console.log(this.props.following)
         if (prevProps.following != this.props.following || prevProps.user != this.props.user) {
             this.setState({ following: this.props.following })
         }

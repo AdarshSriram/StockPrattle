@@ -9,8 +9,9 @@ import UserProfile from './userProfile/userProfile.jsx';
 import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
-import { getCurrentUserInfo, setCurrentUserInfo, get_follower_posts, getFollowing, allUsers, setUserExtSignup, getUserPosts } from '../../firebase_functions.js'
-import { getSnapshot, getInstruments } from './stock_functions.js'
+import LoadingScreen from "./loadingDiv.jsx";
+import { getCurrentUserInfo, setCurrentUserInfo, setUserExtSignup } from '../../firebase_functions.js'
+import { getInstruments } from './stock_functions.js'
 
 export default class UserPage extends Component {
     constructor(props) {
@@ -35,15 +36,7 @@ export default class UserPage extends Component {
     }
 
     setData() {
-        getFollowing().then(restwo => {
-            allUsers().then(resthree => {
-                getSnapshot().then(resfive => {
-                    this.setState({
-                        following: restwo, allUsers: resthree, marketSnapshot: resfive, instruments: getInstruments(resfive)
-                    })
-                })
-            })
-        })
+        getInstruments().then(resfive => this.setState({instruments: resfive}))
     }
 
     setStateUser() {
@@ -134,11 +127,12 @@ export default class UserPage extends Component {
 
     render() {
         var item;
-        if (this.state.current == "profile") {
-            item = <UserProfile user={this.state.user} setUser={this.updateUserInfo} following={this.state.following}
-                    userFeedData={this.state.userFeedData}/>
+        if (this.state.user==null){
+            item = <LoadingScreen />
+        } else if (this.state.current == "profile") {
+            item = <UserProfile user={this.state.user} setUser={this.updateUserInfo} />
         } else if (this.state.current == "explore") {
-            item = <ExplorePage display={this.state.goTo} following={this.state.following} marketSnapshot={this.state.marketSnapshot} />
+            item = <ExplorePage user={this.state.user} goToProfile={this.profileButtonClick} display={this.state.goTo} />
         } else if (this.state.current == "messages") {
             item = <MessageBox />
         } else {
@@ -146,7 +140,7 @@ export default class UserPage extends Component {
         }
         return (
             <div id="wholeScreen" style={userHomeStyle.mainDiv}>
-                <NavBar goTo={this.goTo} allUsers={this.state.allUsers} marketSnapshot={this.state.marketSnapshot} />
+                <NavBar goTo={this.goTo} />
                 <div id="body" style={userHomeStyle.body}>
                     <LeftMenu history={this.props.history} pageState={this.state.current}
                         buttonClickFunctions={[this.profileButtonClick, this.feedButtonClick,

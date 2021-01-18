@@ -166,6 +166,7 @@ class LoadingComments extends Component {
 
     flicker() {
         var img = document.getElementById("loadingCommentsImage")
+        if (img==null){return}
         if (img.style.visibility == 'hidden') {
             img.style.visibility = 'visible';
         } else {
