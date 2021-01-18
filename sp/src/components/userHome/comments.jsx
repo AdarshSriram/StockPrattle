@@ -255,7 +255,7 @@ const commentsStyle = {
         // border: "thick solid black",
     }, commentBody: {
         height: "100%",
-        width: "90%",
+        width: "80%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
