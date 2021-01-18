@@ -129,7 +129,7 @@ class Comment extends Component {
                 <div style={commentsStyle.comment}>
                     <div style={commentsStyle.commentBody}>
                         <p style={commentsStyle.usernameText}>{this.props.user}</p>
-                        <input id={this.props.id + "inp"} style={commentsStyle.commentInput} type="text" placeholder="Add Comment" minLength={1} />
+                        <textarea rows={1} id={this.props.id + "inp"} style={commentsStyle.commentInput} type="text" placeholder="Add Comment" minLength={1} />
                     </div>
                     <button style={commentsStyle.rightButton} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}
                         onClick={this.comment}>{replySvg(this.props.id)}</button>
@@ -221,13 +221,16 @@ const commentsStyle = {
         outline: "none",
         borderRadius: "10px"
     }, text: {
+        width: "100%",
+        // border: "thin solid black",
         margin: "0px",
         fontFamily: "Dosis",
         fontStyle: "normal",
         // fontWeight: "bold",
         fontSize: "14px",
         outline: "none",
-        borderRadius: "10px"
+        borderRadius: "10px",
+        wordWrap: "break-word"
     }, commentInput: {
         width: "90%",
         margin: "0px",
@@ -238,7 +241,8 @@ const commentsStyle = {
         // fontWeight: "bold",
         fontSize: "14px",
         outline: "none",
-        borderRadius: "10px"
+        borderRadius: "10px",
+        resize: "none"
     }, comment: {
         width: "100%",
         display: "flex",
@@ -282,7 +286,6 @@ const commentsStyle = {
         boxSizing: "border-box",
         background: "none",
         overflow: "scroll",
-
         borderRadius: "10px"
     }
 }
