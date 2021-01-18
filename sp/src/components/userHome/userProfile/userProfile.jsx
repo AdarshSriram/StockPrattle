@@ -100,7 +100,7 @@ export default class UserProfile extends Component {
                     </div>
                     <SocialDetails user={this.props.user} name={this.state.user.fullname} following={this.state.following}/>
                 </div>
-                <UserFeed user={this.state.user}/>
+                <UserFeed user={this.state.user} type={"personal"}/>
             </div>
         )
         }
