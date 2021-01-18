@@ -25,7 +25,7 @@ export const getNifty = () => {
       console.log(res1.data)
       console.log(res2.data)
       console.log("response recieved")
-      return res.data
+      return [res1.data, res2.data]
     })
   }).catch(err => { console.log(err); return [] })
 }

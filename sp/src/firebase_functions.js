@@ -12,6 +12,11 @@ let getPostIdsByEmail = async (email) => {
   return snapshot.docs.map(doc => doc.id);
 }
 
+export const getUname = async () => {
+  var user = await firebase.auth().currentUser;
+  return user.displayName
+}
+
 export const updateProfile = (fieldName, detail) => {
   var user = firebase.auth().currentUser;
   if (user != null) {
@@ -454,13 +459,11 @@ export const getUserPosts = async () => {
   return snapshot.docs.map(doc => doc.data());
 }
 
-Array.prototype.unique = function () {
-  var a = this.concat();
+const arrayUnique = (a) => {
   for (var i = 0; i < a.length; ++i) {
     for (var j = i + 1; j < a.length; ++j) {
-      if (_.isEqual(a[i], a[j])) {
+      if (JSON.stringify(a[i]) === JSON.stringify(a[j]))
         a.splice(j--, 1);
-      }
     }
   }
   return a;
@@ -490,7 +493,7 @@ export const get_follower_posts = async (following = true) => {
         var res = Promise.all(post_arr)
         res.then(follow_posts => {
           get_Watchlist_posts().then(stock_posts => {
-            var arr = follow_posts.concat(stock_posts).unique();
+            var arr = [...new Set(follow_posts.concat(stock_posts))]
             arr.sort(GetSortOrder("createdAt"))
             return arr
           })
