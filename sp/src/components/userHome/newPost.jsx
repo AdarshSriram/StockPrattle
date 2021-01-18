@@ -102,7 +102,8 @@ const newPostStyle = {
         fontStyle: "normal",
         fontWeight: "600px",
         fontSize: "18px",
-        outline: "none"
+        outline: "none",
+        resize: "none"
     }, submitButton: {
         width: "150px",
         height: "50px",

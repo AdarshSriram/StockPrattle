@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Post from "./post.jsx";
 import LoadingScreen from "./loadingDiv.jsx"
 import NewPostPopUp from './newPost.jsx'
-import {getMainFeed, getFollowingFeed, getUserPosts, addPost, getStockPosts} from '../../firebase_functions.js'
+import {getMainFeed, getFollowingFeed, getPostsByEmail, addPost, getStockPosts} from '../../firebase_functions.js'
 
 function buttonPress(type = null, instruments=[]) {
     var elem = document.getElementById("popUpContainer");
@@ -44,7 +44,7 @@ export default class UserFeed extends Component {
                 else this.setState({data: res, items: res.slice(0, 10), over: false})
             })
         } else if (this.state.type=="personal"){
-            getUserPosts().then(res => {
+            getPostsByEmail(this.props.user.email).then(res => {
                 if (res == null) {
                     this.setState({data: [], items: [], over: true})
                 }
