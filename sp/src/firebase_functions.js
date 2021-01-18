@@ -12,6 +12,11 @@ let getPostIdsByEmail = async (email) => {
   return snapshot.docs.map(doc => doc.id);
 }
 
+export const getUname = async () => {
+  var user = await firebase.auth().currentUser;
+  return user.displayName
+}
+
 export const updateProfile = (fieldName, detail) => {
   var user = firebase.auth().currentUser;
   if (user != null) {
@@ -141,11 +146,6 @@ export const SignIn = (params) => {
 
 export const getUserInfo = (email) => {
   return userCollection.doc(email).get()
-}
-
-export const getUname = async () => {
-  var user = await firebase.auth().currentUser;
-  return user.displayName
 }
 
 export const getCurrentUserInfo = () => {
@@ -459,6 +459,26 @@ export const getUserPosts = async () => {
   return snapshot.docs.map(doc => doc.data());
 }
 
+const arrayUnique = (a) => {
+  for (var i = 0; i < a.length; ++i) {
+    for (var j = i + 1; j < a.length; ++j) {
+      if (JSON.stringify(a[i]) === JSON.stringify(a[j]))
+        a.splice(j--, 1);
+    }
+  }
+  return a;
+}
+
+function GetSortOrder(prop) {
+  return function (a, b) {
+    if (a[prop] > b[prop]) {
+      return 1;
+    } else if (a[prop] < b[prop]) {
+      return -1;
+    }
+    return 0;
+  }
+}
 
 export const get_follower_posts = async (following = true) => {
   var user = firebase.auth().currentUser;
@@ -471,7 +491,16 @@ export const get_follower_posts = async (following = true) => {
           post_arr.push(getPostsByEmail(doc.id))
         })
         var res = Promise.all(post_arr)
-        return res
+        res.then(follow_posts => {
+          get_Watchlist_posts().then(stock_posts => {
+            console.log(stock_posts)
+            console.log(post_arr)
+            var arr = [...new Set(follow_posts.concat(stock_posts))]
+            arr.sort(GetSortOrder("createdAt"))
+            console.log(arr)
+            return arr
+          })
+        })
       })
     .catch((err) => { console.log(err) })
 }
