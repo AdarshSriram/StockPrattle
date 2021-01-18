@@ -30,8 +30,6 @@ export default class InfiniteDeck extends Component {
     }
 
     render() {
-        console.log("rendering")
-        console.log(this.state.items)
         if (this.state.items == null) return (<LoadingScreen />)
         var ls = []
         for (var ind = 0; ind < this.state.items.length - 4; ind += 4) {
