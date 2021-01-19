@@ -48,12 +48,10 @@ export default class NavBar extends Component{
 
     mouseIn(but){
         but.target.style.background = '#00B140';
-        but.target.style.color = '#FFFFFF';
     }
 
     mouseOut(but){
         but.target.style.background = 'none';
-        but.target.style.color = '#00B140';
     }
 
     render(){
@@ -83,7 +81,7 @@ export default class NavBar extends Component{
                             <datalist id= "searchItems">
                                 {optList}
                             </datalist>
-                        <input id="searchSubmit" type="submit" value= "→" style={navBarStyle.goButton}
+                        <input id="searchSubmit" type="submit" value="➥"  style={navBarStyle.goButton}
                         onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut}/>
                     </form>
                 </div>
@@ -250,12 +248,14 @@ const navBarStyle= { header: {
         height: "100%",
         borderRadius: "0 25px 25px 0",
         border: "0px dashed #00B140",
-        color: "#00B140",
-        fontFamily: "Arial",
+        color: "#FFFFFF",
+        textShadow: "0 0 1px #00B140, 0 0 1px #00B140",
         fontStyle: "normal",
-        fontWeight: "600px",
         fontSize: "30px",
         outline: "none",
-        cursor: "pointer"
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
     }
 }
