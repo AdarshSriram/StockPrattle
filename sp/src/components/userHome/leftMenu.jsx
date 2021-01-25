@@ -78,8 +78,8 @@ export default class LeftMenu extends Component {
                     <p style={leftMenuStyle.newsText}>Top News</p>
                     {(this.state.newsIndex<0) ? null :
                         <div onMouseOver={this.newsMouseOver} onMouseLeave={this.newsMouseOut} onClick={this.newsClick} style={leftMenuStyle.newsCard}>
-                            <p id="newsTitle" style={leftMenuStyle.headline}>{this.state.news[this.state.newsIndex].title}</p>
-                            <p style={leftMenuStyle.description}>{this.state.news[this.state.newsIndex].desc}</p>
+                            <p id="newsTitle" style={leftMenuStyle.headline}>{(this.state.news[this.state.newsIndex]) ? this.state.news[this.state.newsIndex].title : null}</p>
+                            <p style={leftMenuStyle.description}>{(this.state.news[this.state.newsIndex]) ? this.state.news[this.state.newsIndex].desc : null}</p>
                         </div>
                     }
                     {(this.state.newsIndex<0) ? null  : <div style={leftMenuStyle.newsButtonDiv}>

@@ -10,7 +10,7 @@ import ExplorePage from './explore/explorePage.jsx';
 import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
 import LoadingScreen from "./loadingDiv.jsx";
-import { getCurrentUserInfo, setCurrentUserInfo, setUserExtSignup } from '../../firebase_functions.js';
+import { getCurrentUserInfo, setCurrentUserInfo} from '../../firebase_functions.js';
 import { getInstruments } from './stock_functions.js';
 
 export default class UserPage extends Component {
