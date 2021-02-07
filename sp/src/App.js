@@ -21,6 +21,7 @@ class App extends Component {
     createProfile(){
         createProfile().then(res=>{
             if (res) {
+                window.location.href = window.location.href.substring(0, window.location.href.indexOf("/", 9))
                 this.setState({user: res, type: 'user'})
             } else {
                 window.location.href = window.location.href.substring(0, window.location.href.indexOf("/", 9))
