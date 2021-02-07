@@ -30,6 +30,7 @@ export default class StockGraph extends Component{
         //   }));
         // });
         const loadData = data => {
+            data.reverse()
           return data.map((item, index) => ({
             index: index,
             date: new Date(item.LASTTRADETIME),
@@ -182,7 +183,7 @@ export default class StockGraph extends Component{
             .data([data]) // binds data to the line
             .style('fill', 'none')
             .attr('id', 'priceChart')
-            .attr('stroke', '#E21010')
+            .attr('stroke', (data[0].open<data[data.length-1].close) ? "#00B140" : '#E21010')
             .attr('stroke-width', '3.5')
             .attr('d', line);
 
@@ -265,17 +266,9 @@ export default class StockGraph extends Component{
 
           /* Legends */
           const updateLegends = currentData => {
-              const items = document.getElementsByName("legendItems"); var item;
-              for (item of items){
-                  if (item.id == 'thatdate'){
-                      item.innerHTML = "Date: "+currentData['date'].toLocaleDateString()
-                  } else if (item.id == 'closeprice') {
-                      item.innerHTML = "Closing Price: "+ currentData['close'].toFixed(2)+" INR"
-                  } else if (item.id == 'volume') {
-                      item.innerHTML = "Volume: "+ currentData['volume']
-                  }
-              }
-
+              currentData.min = yMin
+              currentData.max = yMax
+              this.props.updateLegend(currentData)
               //     return `${d}: ${currentData[d].toLocaleDateString()}`;
               //   } else if (
               //     d === 'high' ||
@@ -347,12 +340,7 @@ export default class StockGraph extends Component{
                 <div style={chartStyle.topDiv}>
                     <div style={chartStyle.heading}>
                         <p style={chartStyle.title}>{this.props.title}</p>
-                        <p style={chartStyle.subtitle}>Sample Company Name</p>
-                    </div>
-                    <div style={chartStyle.legend}>
-                        <p name="legendItems" id="thatdate" style={chartStyle.legendItems}></p>
-                        <p name="legendItems" id="closeprice" style={chartStyle.legendItems}></p>
-                        <p name="legendItems" id="volume" style={chartStyle.legendItems}></p>
+                        <p style={chartStyle.subtitle}>Last Five Days</p>
                     </div>
                 </div>
             </div>
