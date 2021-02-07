@@ -67,3 +67,6 @@ node_modules/
 
 .sp/src/utils/config.js 
 
+/node_modules
+
+.env
