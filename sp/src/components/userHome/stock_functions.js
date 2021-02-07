@@ -44,14 +44,10 @@ export const getHistory = (stock, fromTime = -1) => {
     console.log("response recieved")
     console.log(res.data)
     return res.data["OHLC"]
-<<<<<<< HEAD
-  }).catch(err => { console.log(err); return false })
-=======
   }).catch(err => {
       console.log(err);
       return false
   })
->>>>>>> 1441a4bc9b04a24ad5eb521fe90ce28fbb8a0cd7
 }
 
 export const getInstruments = (arr) => {
