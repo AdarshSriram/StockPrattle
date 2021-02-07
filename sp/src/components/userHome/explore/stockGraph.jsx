@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { getHistory } from '../stock_functions.js';
 const d3 = require("d3");
 
 export default class StockGraph extends Component{
@@ -8,11 +9,10 @@ export default class StockGraph extends Component{
     }
 
     componentDidMount(){
-        this.drawChart();
+        getHistory(this.props.title).then(data=>this.drawChart(data));
     }
 
-    drawChart(){
-        var data = require('./sample-data.json')
+    drawChart(data){
         // const loadData = d3.json('sample-json.data').then(data => {
         //     console.log("trace")
         //   const chartResultsData = data['chart']['result'][0];

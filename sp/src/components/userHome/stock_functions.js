@@ -4,7 +4,6 @@ const key = process.env.REACT_APP_DATA_KEY
 
 const test = "http://nimblerest.lisuns.com:4531/GetExchangeSnapshot/?accessKey" + key + "&exchange=NSE&periodicity=Minute&period=15&from="
 
-
 const history1 = "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=" + key + "&exchange=NSE&instrumentIdentifier="
 
 const history2 = "&periodicity=Minute&period=15&FROM="
