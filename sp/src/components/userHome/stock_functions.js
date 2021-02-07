@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-const key = process.env.REACT_APP_DATA_KEY,
+const key = process.env.REACT_APP_DATA_KEY
 
-const test = "http://nimblerest.lisuns.com:4531/GetExchangeSnapshot/?accessKey" + key + "&exchange=NSE&periodicity=Minute&period=15&from=1610100000&to=1610110198"
+const test = "http://nimblerest.lisuns.com:4531/GetExchangeSnapshot/?accessKey" + key + "&exchange=NSE&periodicity=Minute&period=15&from="
 
 
 const history1 = "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=" + key + "&exchange=NSE&instrumentIdentifier="
