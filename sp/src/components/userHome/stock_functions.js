@@ -19,12 +19,44 @@ export const getSnapshot = () => {
   })
 }
 
+export const getSnapshot2 = () => {
+  console.log("sending request")
+  return axios.get(test).then((res) => {
+    console.log("request recieved")
+    const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+    return getCloses().then((res) => {
+      for (var i = 0; i < snap.length; i++) {
+        snap["INCR"] = res[i] > snap["CLOSE"]
+      }
+      console.log(snap)
+      return snap
+    })
+  }).catch(err => {
+    console.log(err);
+    return false
+  })
+}
+
+const getCloses = () => {
+  var now = Math.floor(Date.now() / 1000)
+  var midnight = now - now % 86400
+  var to = midnight - 48600 - 900
+  var from = to - 2000
+  console.log(test + "&from=" + from + "&to=" + to)
+  return axios.get(test + "&from=" + from + "&to=" + to).then((res) => {
+    var arr = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+    return arr.map((obj) => obj["CLOSE"])
+  })
+    .catch(err =>
+      console.log(err))
+}
+
 export const getHistory = (stock, fromTime = -1) => {
   console.log("sending request")
   const to = Math.floor(Date.now() / 1000)
   var from = fromTime
   if (fromTime === -1) {
-    from = to - 432000
+    /*from = to - 432000
     var toDate = new Date()
 
     var fromDate = new Date(from * 1000)
@@ -36,7 +68,9 @@ export const getHistory = (stock, fromTime = -1) => {
       from -= 86400 * 2
     }
     //const time = from % 86400
-    //from += time < 16200 ? 16250 - time : 0
+    //from += time < 16200 ? 16250 - time : 0*/
+
+    from = to - 7890000
 
   }
   console.log(history1 + stock + history2 + from + "&to=" + to)
