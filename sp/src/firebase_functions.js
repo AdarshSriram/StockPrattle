@@ -17,6 +17,26 @@ export const getUname = async () => {
   return user.displayName
 }
 
+export function createProfile() {
+    var user = fire.auth().currentUser
+    return fire.auth().signInWithEmailLink(user.email, window.location.href).then((result) => {
+        user = result.user
+        return userCollection.doc(user.email).set({
+            email: user.email,
+            passwordChange: true,
+        }).then(()=>{
+            console.log("Profile Creation Successful!")
+            return user
+        }).catch(()=>{
+            alert("Unable to verify. Please try again!")
+        })
+    }).catch((error) => {
+        console.log(error.code)
+        console.log(error.message)
+        alert("Unable to verify. Please try again!")
+    });
+}
+
 export const updateProfile = (fieldName, detail) => {
   var user = firebase.auth().currentUser;
   if (user != null) {
@@ -61,52 +81,25 @@ export const updateProfile = (fieldName, detail) => {
 }
 
 // SignUp User
-export const SignUp = (params) => {
-  const username = params[0]
-  const name = params[1]
-  const email = params[2]
-  const password = params[3]
-
-  if (params.includes(null)) { alert("Sign up unsuccessful. Please try again!"); return }
-  if (username.includes("@")) { alert("Username cannot include \"@\"."); return }
-
-  userCollection.doc(email).get().then((doc) => {
-    if (!doc.exists) {
-      userCollection.where('username', '==', username).get().then((snap) => {
-        if (snap.empty) {
-          firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(userCollection.doc(email).set({
-              username: username,
-              email: email,
-              fullname: name
-            }).then(() => {
-              alert(`Sign Up Successful!`)
-              firebase.auth().onAuthStateChanged(function (user) {
-                if (user) {
-                  user.updateProfile({
-                    displayName: username
-                  }).then(function () {
-                    console.log("User profile successfully created")
-                  }).catch(function (error) {
-                    console.log("User profile could not be created. Try again :(")
-                  });
-                }
-              });
-            }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
-            ).catch((err) => alert('Sign up unsuccessful. Please try again!'))
-        } else { alert("This username isn't available.") }
-      })
-    } else {
-      alert("A user with this email already exists.")
-    }
+export const SignUp = (email) => {
+  return userCollection.doc(email).get().then((doc) => {
+      if (!doc.exists) {
+          const actionCodeSettings = {url: window.location.href, handleCodeInApp: true};
+          return fire.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+          .then(() => {
+              return fire.auth().createUserWithEmailAndPassword(email, "12345678")
+              .then(()=>{
+                  console.log("Email Sent!");
+                  return true;
+              }).catch((err) => {alert('Sign up unsuccessful. Please try again!'); return;})
+          }).catch((error) => {
+              console.log(error.code)
+              console.log(error.message)
+          });
+      } else {
+          alert("A user with this email already exists.")
+      }
   }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
-
-  var follow_ref = firebase.firestore().collection("following/" + email + "/userFollowing");
-  follow_ref
-    .doc("stockprattle@gmail.com")
-    .set({ username: "stockprattleAdmin" })
-    .then(() => console.log("Following admin"))
-    .catch((err) => { console.log(err) })
 }
 
 export const SignIn = (params) => {
@@ -233,34 +226,31 @@ export const getPhoto = (email) => {
   return storageRef.child('profilePhoto/' + email).getDownloadURL()
 }
 
-export const signUpExt = (google) => {
-  console.log("sign up")
-  firebase.auth().signInWithPopup((google) ? providerG : providerF).then(function (result) {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    var cred = result.credential;
-    // The signed-in user info.
-    var user = firebase.auth().currentUser;
-    var credential = fire.auth.EmailAuthProvider.credential(user.email, "12345678");
-    user.linkWithCredential(credential);
-    user.updateProfile({ displayName: user.email.replace("@", ".") })
-    userCollection.doc(user.email).set({
-      email: user.email,
-      username: user.email.replace("@", "."),
-      passwordChange: true
+export function signUpExt(isGoogle){
+    fire.auth().signInWithPopup((isGoogle) ? providerG : providerF).then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const cred = result.credential;
+        // The signed-in user info.
+        const user = fire.auth().currentUser;
+        const credential = firebase.auth.EmailAuthProvider.credential(user.email, "12345678");
+        user.linkWithCredential(credential);
+        userCollection.doc(user.email).set({
+            email: user.email,
+            passwordChange: true,
+        })
+        console.log("User signed up externally")
+    }).catch((error)=>{
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(error)
+        console.log(errorMessage)
+        // The email of the user's account used.
+        const email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        const credential = error.credential;
+        // ...
     })
-    console.log("User signed up externally")
-  }).catch(function (error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    console.log(error)
-    console.log(errorMessage)
-    // The email of the user's account used.
-    var email = error.email;
-    // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
-    // ...
-  })
 }
 
 export const signInExt = (google) => {
