@@ -11,17 +11,14 @@ const history1 = "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=" + ke
 const history2 = "&periodicity=Minute&period=15&FROM="
 
 export const getSnapshot = () => {
-  console.log("sending request")
-  return axios.get(test).then((res) => {
-    console.log("response recieved")
-    try {
-      console.log(res.data.EXCHANGESNAPSHOTITEMS)
-      return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
-    }
-    catch {
-      getSnapshot()
-    }
-  }).catch(err => { console.log(err); return [] })
+    console.log("sending request")
+    return axios.get(test).then((res) => {
+        console.log("request recieved")
+        return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+    }).catch(err => {
+        console.log(err);
+        return false
+  })
 }
 
 export const getHistory = (stock, fromTime = -1) => {

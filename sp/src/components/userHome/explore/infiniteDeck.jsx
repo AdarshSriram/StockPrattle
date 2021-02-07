@@ -13,7 +13,7 @@ export default class InfiniteDeck extends Component {
 
     componentDidMount(event) {
         getSnapshot().then(res => {
-            if (res == null) this.setState({ data: [], items: [], over: true })
+            if (!res) this.setState({ data: [], items: [], over: true }, this.componentDidMount)
             else if (res.length < 10) this.setState({ data: res, items: res, over: true })
             else this.setState({ data: res, items: res.slice(0, 10), over: false })
         })
