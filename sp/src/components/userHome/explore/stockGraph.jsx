@@ -30,15 +30,13 @@ export default class StockGraph extends Component{
         //   }));
         // });
         const loadData = data => {
-          const chartResultsData = data['chart']['result'][0];
-          const quoteData = chartResultsData['indicators']['quote'][0];
-          return chartResultsData['timestamp'].map((time, index) => ({
-            date: new Date(time * 1000),
-            high: quoteData['high'][index],
-            low: quoteData['low'][index],
-            open: quoteData['open'][index],
-            close: quoteData['close'][index],
-            volume: quoteData['volume'][index]
+          return data.map((item) => ({
+            date: new Date(item.LASTTRADETIME),
+            high: item.HIGH,
+            low: item.LOW,
+            open: item.OPEN,
+            close: item.CLOSE,
+            volume: item.TRADEQUANTITY
           }));
         };
 
