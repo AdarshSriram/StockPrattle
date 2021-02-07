@@ -39,14 +39,14 @@ export const getHistory = (stock, fromTime = -1) => {
     }
     //const time = from % 86400
     //from += time < 16200 ? 16250 - time : 0
-    from *= 1000
+
   }
-
-
-  return axios.get(history1 + stock + history2 + from + "&to=" + to * 1000).then((res) => {
+  console.log(history1 + stock + history2 + from + "&to=" + to)
+  return axios.get(history1 + stock + history2 + from + "&to=" + to).then((res) => {
     console.log("response recieved")
+    console.log(res.data)
     return res.data["OHLC"]
-  }).catch(err => { console.log(err); getHistory(stock, fromTime) })
+  }).catch(err => { console.log(err); return false })
 }
 
 export const getInstruments = (arr) => {
