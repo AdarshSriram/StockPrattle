@@ -30,13 +30,15 @@ export default class StockGraph extends Component{
         //   }));
         // });
         const loadData = data => {
-          return data.map((item) => ({
+            data.reverse()
+          return data.map((item, index) => ({
+            index: index,
             date: new Date(item.LASTTRADETIME),
             high: item.HIGH,
             low: item.LOW,
             open: item.OPEN,
             close: item.CLOSE,
-            volume: item.TRADEQUANTITY
+            volume: item.TRADEDQTY
           }));
         };
 
@@ -50,7 +52,7 @@ export default class StockGraph extends Component{
             }, 0);
 
             return {
-              date: row['date'],
+              index: row['index'],
               average: sum / subset.length
             };
           });
@@ -90,14 +92,14 @@ export default class StockGraph extends Component{
             row => row['high'] && row['low'] && row['close'] && row['open']
           );
 
-          const thisYearStartDate = new Date(2018, 0, 1);
-
-          // filter out data based on time period
-          data = data.filter(row => {
-            if (row['date']) {
-              return row['date'] >= thisYearStartDate;
-            }
-          });
+          // // const thisYearStartDate = new Date(2018, 0, 1);
+          //
+          // // filter out data based on time period
+          // data = data.filter(row => {
+          //   if (row['date']) {
+          //     return row['date'] >= thisYearStartDate;
+          //   }
+          // });
 
           const margin = { top: 10, right: 20, bottom: 20, left: 30 };
           const width = 800; // Use the window's width
@@ -105,11 +107,11 @@ export default class StockGraph extends Component{
 
           // find data range
           const xMin = d3.min(data, d => {
-            return d['date'];
+            return d['index'];
           });
 
           const xMax = d3.max(data, d => {
-            return d['date'];
+            return d['index'];
           });
 
           const yMin = d3.min(data, d => {
@@ -160,7 +162,7 @@ export default class StockGraph extends Component{
           const line = d3
             .line()
             .x(d => {
-              return xScale(d['date']);
+              return xScale(d['index']);
             })
             .y(d => {
               return yScale(d['close']);
@@ -169,7 +171,7 @@ export default class StockGraph extends Component{
           const movingAverageLine = d3
             .line()
             .x(d => {
-              return xScale(d['date']);
+              return xScale(d['index']);
             })
             .y(d => {
               return yScale(d['average']);
@@ -181,7 +183,7 @@ export default class StockGraph extends Component{
             .data([data]) // binds data to the line
             .style('fill', 'none')
             .attr('id', 'priceChart')
-            .attr('stroke', '#E21010')
+            .attr('stroke', (data[0].open<data[data.length-1].close) ? "#00B140" : '#E21010')
             .attr('stroke-width', '3.5')
             .attr('d', line);
 
@@ -223,7 +225,7 @@ export default class StockGraph extends Component{
           d3.selectAll('.focus line').style('stroke-dasharray', '3 3');
 
           //returs insertion point
-          const bisectDate = d3.bisector(d => d.date).left;
+          const bisectDate = d3.bisector(d => d.index).left;
 
           /* mouseover function to generate crosshair */
           function generateCrosshair(event) {
@@ -236,10 +238,10 @@ export default class StockGraph extends Component{
             const d0 = data[i - 1];
             const d1 = data[i];
             const currentPoint =
-              correspondingDate - d0['date'] > d1['date'] - correspondingDate ? d1 : d0;
+              correspondingDate - d0['index'] > d1['index'] - correspondingDate ? d1 : d0;
             focus.attr(
               'transform',
-              `translate(${xScale(currentPoint['date'])}, ${yScale(
+              `translate(${xScale(currentPoint['index'])}, ${yScale(
                 currentPoint['close']
               )})`
             );
@@ -247,7 +249,7 @@ export default class StockGraph extends Component{
             focus
               .select('line.x')
               .attr('x1', 0)
-              .attr('x2', width - xScale(currentPoint['date']))
+              .attr('x2', width - xScale(currentPoint['index']))
               .attr('y1', 0)
               .attr('y2', 0);
 
@@ -264,17 +266,9 @@ export default class StockGraph extends Component{
 
           /* Legends */
           const updateLegends = currentData => {
-              const items = document.getElementsByName("legendItems"); var item;
-              for (item of items){
-                  if (item.id == 'thatdate'){
-                      item.innerHTML = "Date: "+currentData['date'].toLocaleDateString()
-                  } else if (item.id == 'closeprice') {
-                      item.innerHTML = "Closing Price: "+ currentData['close'].toFixed(2)+" INR"
-                  } else if (item.id == 'volume') {
-                      item.innerHTML = "Volume: "+ currentData['volume']
-                  }
-              }
-
+              currentData.min = yMin
+              currentData.max = yMax
+              this.props.updateLegend(currentData)
               //     return `${d}: ${currentData[d].toLocaleDateString()}`;
               //   } else if (
               //     d === 'high' ||
@@ -312,7 +306,7 @@ export default class StockGraph extends Component{
             .enter()
             .append('rect')
             .attr('x', d => {
-              return xScale(d['date']);
+              return xScale(d['index']);
             })
             .attr('y', d => {
               return yVolumeScale(d['volume']);
@@ -346,12 +340,7 @@ export default class StockGraph extends Component{
                 <div style={chartStyle.topDiv}>
                     <div style={chartStyle.heading}>
                         <p style={chartStyle.title}>{this.props.title}</p>
-                        <p style={chartStyle.subtitle}>Sample Company Name</p>
-                    </div>
-                    <div style={chartStyle.legend}>
-                        <p name="legendItems" id="thatdate" style={chartStyle.legendItems}></p>
-                        <p name="legendItems" id="closeprice" style={chartStyle.legendItems}></p>
-                        <p name="legendItems" id="volume" style={chartStyle.legendItems}></p>
+                        <p style={chartStyle.subtitle}>Last Five Days</p>
                     </div>
                 </div>
             </div>

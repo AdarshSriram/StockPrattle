@@ -7,14 +7,19 @@ import {followStock, unfollowStock, getWatchList} from '../../../firebase_functi
 export default class StockPage extends Component{
     constructor(props){
         super(props);
-        this.state = {stock: props.stock, following: props.following}
+        this.state = {stock: props.stock, following: props.following, stockObj: null}
         this.followMouseIn = this.followMouseIn.bind(this)
         this.followMouseOut = this.followMouseOut.bind(this)
         this.followUnfollow = this.followUnfollow.bind(this)
+        this.updateLegend = this.updateLegend.bind(this)
     }
 
     componentDidMount(){
         getWatchList().then(res=>this.setState({following: res.includes(this.state.stock)}))
+    }
+
+    updateLegend(obj){
+        this.setState({stockObj: obj})
     }
 
     followMouseIn(but) {
@@ -48,14 +53,14 @@ export default class StockPage extends Component{
     return (
         <div style={stockStyle.centerDiv}>
             <div style={stockStyle.topDiv}>
-                <StockGraph title={this.state.stock}/>
+                <StockGraph title={this.state.stock} updateLegend={this.updateLegend}/>
                 <div style={stockStyle.stockDetails}>
-                    <p style = {stockStyle.text}><b>Previous Close:</b> $$$</p>
-                    <p style = {stockStyle.text}><b>Open:</b> $$$</p>
-                    <p style = {stockStyle.text}><b>Low:</b> $$$</p>
-                    <p style = {stockStyle.text}><b>High:</b> $$$</p>
-                    <p style = {stockStyle.text}><b>Volume:</b> $$$</p>
-                    <p style = {stockStyle.text}><b>SP Predictor:</b> $$$</p>
+                    <p style = {stockStyle.text}><b>Date:</b>{this.state.stockObj ? this.state.stockObj.date.toLocaleDateString() : ""}</p>
+                    <p style = {stockStyle.text}><b>Time:</b> {this.state.stockObj ? this.state.stockObj.date.toLocaleTimeString() : ""}</p>
+                    <p style = {stockStyle.text}><b>Value:</b> {this.state.stockObj ? this.state.stockObj.close : ""}</p>
+                    <p style = {stockStyle.text}><b>Volume:</b> {this.state.stockObj ? this.state.stockObj.volume : ""}</p>
+                    <p style = {stockStyle.text}><b>5 Day Low:</b> {this.state.stockObj ? this.state.stockObj.min : ""}</p>
+                    <p style = {stockStyle.text}><b>5 Day High:</b> {this.state.stockObj ? this.state.stockObj.max : ""}</p>
                     <button style={{
                         background: (this.state.following) ? "#FFFFFF" : "#00B140",
                         width: "80px",
