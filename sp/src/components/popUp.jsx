@@ -42,19 +42,14 @@ export default class PopUp extends Component {
     }
 
     handleSignUp() {
-        var pass = String(document.getElementById("passwordField").value)
-        var cfm = String(document.getElementById("cfmPasswordField").value)
-        if (cfm !== pass) {
-            alert("Passwords do not match!");
-            return;
-        }
-        const inputs = document.getElementsByName("inputs"); var params = []; var val;
-        for (var obj of inputs) {
-            val = obj.value;
-            if (val === '') { val = null }
-            params.push(val);
-        }
-        SignUp(params)
+        this.setState({type: "verificationSending"})
+        SignUp(document.getElementById("emailField").value).then(res=>{
+            if (res) this.setState({type: "verificationSent"})
+            else {
+                alert("An error occured. Please try again")
+                this.setState({type: "Join Now"})
+            }
+        })
     }
 
     handleSignIn() {
@@ -105,6 +100,20 @@ export default class PopUp extends Component {
     }
 
     render() {
+        if (this.state.type=="verificationSending"){
+            return (<div style={popUpStyle.wholeScreen}>
+                    <div id="popUpBox" style={popUpStyle.popUpBox}>
+                        <p id={"orText"} style={popUpStyle.orText}>Sending verification email...</p>
+                    </div>
+                </div>)
+        }
+        if (this.state.type=="verificationSent"){
+            return (<div style={popUpStyle.wholeScreen}>
+                    <div id="popUpBox" style={popUpStyle.popUpBox}>
+                        <p id={"orText"} style={popUpStyle.orText}>A verification email has been sent to your account!</p>
+                    </div>
+                </div>)
+        }
         var ls = []; var txt;
         if (this.state.type === "Login") {
             ls.push(<input name="inputs" id="emailField" type="text" placeholder={"Username or Email"} style={popUpStyle.inputs} required />)
@@ -120,16 +129,8 @@ export default class PopUp extends Component {
             ls.push(<input name="inputs" id="cfmPasswordField" type="password" minLength={8}
                 placeholder={"Confirm Password"} style={popUpStyle.inputs} required />)
         } else {
-            ls.push(<input name="inputs" id="usernameField" type="text" placeholder={"Username"} style={popUpStyle.inputs}
-                required />)
-            ls.push(<input name="inputs" id="fullnameField" type="text" placeholder={"Full Name"} style={popUpStyle.inputs}
-                required />)
             ls.push(<input name="inputs" id="emailField" type="email" placeholder={"Email"} style={popUpStyle.inputs}
                 required />)
-            ls.push(<input name="inputs" id="passwordField" type="password" minLength={8}
-                placeholder={"Password"} style={popUpStyle.inputs} required />)
-            ls.push(<input name="inputs" id="cfmPasswordField" type="password" minLength={8}
-                placeholder={"Confirm Password"} style={popUpStyle.inputs} required />)
         }
         return (
             <div style={popUpStyle.wholeScreen}>
@@ -284,6 +285,7 @@ const popUpStyle = {
         fontStyle: "normal",
         fontWeight: "bold",
         fontSize: "30px",
+        textAlign: "center",
         margin: "0px"
     }, altText: {
         color: "black",
