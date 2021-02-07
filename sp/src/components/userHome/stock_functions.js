@@ -10,8 +10,13 @@ const history1 = "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=" + ke
 const history2 = "&periodicity=Minute&period=15&FROM="
 
 export const getSnapshot = () => {
+  var to = Math.floor(Date.now() / 1000)
+  if (to % 86400 >= 36000) {
+    to -= to % 86400 - 36050
+  }
+  var from = to -= 900
   console.log("sending request")
-  return axios.get(test).then((res) => {
+  return axios.get(test + from * 1000 + "&to=" + to * 1000).then((res) => {
     console.log("response recieved")
     return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
   }).catch(err => { console.log(err); return [] })
@@ -20,7 +25,7 @@ export const getSnapshot = () => {
 export const getHistory = (stock, fromTime = -1) => {
   console.log("sending request")
   const to = Math.floor(Date.now() / 1000)
-  if (fromTime != -1) {
+  if (fromTime === -1) {
     const from = to - 432000
     var toDate = new Date()
 
