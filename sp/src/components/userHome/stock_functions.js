@@ -2,8 +2,6 @@ import axios from 'axios'
 
 const key = process.env.REACT_APP_DATA_KEY
 
-console.log(key)
-
 const test = "http://nimblerest.lisuns.com:4531/GetExchangeSnapshot/?accessKey=" + key + "&exchange=NSE&periodicity=Minute&period=15"
 
 const history1 = "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=" + key + "&exchange=NSE&instrumentIdentifier="
@@ -46,7 +44,10 @@ export const getHistory = (stock, fromTime = -1) => {
   return axios.get(history1 + stock + history2 + from + "&to=" + to * 1000).then((res) => {
     console.log("response recieved")
     return res.data["OHLC"]
-  }).catch(err => { console.log(err); getHistory(stock, fromTime) })
+  }).catch(err => {
+      console.log(err);
+      return false
+  })
 }
 
 export const getInstruments = (arr) => {
@@ -75,6 +76,8 @@ export const getStocksData = (symbols) => {
       if (symbols.has(obj.INSTRUMENTIDENTIFIER)) res.push(obj)
     }
     return res
-  }).catch(err => { console.log(err); return getStocksData(symbols) })
-
+}).catch(err => {
+    console.log(err);
+    return false
+})
 }
