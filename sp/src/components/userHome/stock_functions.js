@@ -11,21 +11,22 @@ const history1 = "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=" + ke
 const history2 = "&periodicity=Minute&period=15&FROM="
 
 export const getSnapshot = () => {
-    console.log("sending request")
-    return axios.get(test).then((res) => {
-        console.log("request recieved")
-        return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
-    }).catch(err => {
-        console.log(err);
-        return false
+  console.log("sending request")
+  return axios.get(test).then((res) => {
+    console.log("request recieved")
+    return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+  }).catch(err => {
+    console.log(err);
+    return false
   })
 }
 
 export const getHistory = (stock, fromTime = -1) => {
   console.log("sending request")
   const to = Math.floor(Date.now() / 1000)
+  var from = fromTime
   if (fromTime === -1) {
-    const from = to - 432000
+    from = to - 432000
     var toDate = new Date()
 
     var fromDate = new Date(from * 1000)
@@ -41,12 +42,11 @@ export const getHistory = (stock, fromTime = -1) => {
     from *= 1000
   }
 
-  else { var from = fromTime }
 
   return axios.get(history1 + stock + history2 + from + "&to=" + to * 1000).then((res) => {
     console.log("response recieved")
     return res.data["OHLC"]
-  }).catch(err => { console.log(err); return [] })
+  }).catch(err => { console.log(err); getHistory(stock, fromTime) })
 }
 
 export const getInstruments = (arr) => {
@@ -69,9 +69,6 @@ export const getStocksData = (symbols) => {
     symbols = new Set(symbols)
 
     arr = arr.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
-
-
-
 
     var res = []
     for (var obj of arr) {
