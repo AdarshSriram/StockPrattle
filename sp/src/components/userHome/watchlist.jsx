@@ -11,7 +11,11 @@ export default class Watchlist extends Component{
 
     componentDidMount(){
         getWatchList().then(res=>{
-            getStocksData(res).then(restwo=>this.setState({ls: restwo}))
+            getStocksData(res).then(
+                restwo=>{
+                    if (!restwo) this.setState({ls: []}, this.componentDidMount)
+                    else this.setState({ls: restwo})
+                })
         })
     }
 

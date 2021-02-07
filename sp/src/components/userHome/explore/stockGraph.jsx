@@ -9,7 +9,10 @@ export default class StockGraph extends Component{
     }
 
     componentDidMount(){
-        getHistory(this.props.title).then(data=>this.drawChart(data));
+        getHistory(this.props.title).then(data=>{
+            if (!data) this.componentDidMount()
+            else this.drawChart(data)
+        });
     }
 
     drawChart(data){
