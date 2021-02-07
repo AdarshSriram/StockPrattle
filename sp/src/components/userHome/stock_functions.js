@@ -70,12 +70,17 @@ export const getStocksData = (symbols) => {
     console.log("response recieved")
     if (symbols == null) symbols = nifty50
     symbols = new Set(symbols)
+
     arr = arr.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+
+
+
+
     var res = []
     for (var obj of arr) {
       if (symbols.has(obj.INSTRUMENTIDENTIFIER)) res.push(obj)
     }
     return res
-  }).catch(err => { console.log(err); return [] })
+  }).catch(err => { console.log(err); return getStocksData(symbols) })
 
 }
