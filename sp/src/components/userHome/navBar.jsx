@@ -48,10 +48,12 @@ export default class NavBar extends Component{
 
     mouseIn(but){
         but.target.style.background = '#00B140';
+        but.target.style.color = '#FFFFFF';
     }
 
     mouseOut(but){
         but.target.style.background = 'none';
+        but.target.style.color = '#00B140';
     }
 
     render(){
@@ -247,9 +249,8 @@ const navBarStyle= { header: {
         width: "10%",
         height: "100%",
         borderRadius: "0 25px 25px 0",
-        border: "0px dashed #00B140",
-        color: "#FFFFFF",
-        textShadow: "0 0 1px #00B140, 0 0 1px #00B140",
+        border: "none",
+        color: "#00B140",
         fontStyle: "normal",
         fontSize: "30px",
         outline: "none",
