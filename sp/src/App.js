@@ -9,7 +9,7 @@ import {createProfile} from './firebase_functions.js';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {user: null, type: 'landing'};
+        this.state = {user: null, type: 'landing', allowedUsers: []};
         this.authListener = this.authListener.bind(this);
         this.createProfile = this.createProfile.bind(this);
     }
@@ -49,7 +49,18 @@ class App extends Component {
         if (this.state.type=='landing'){
             return <LandingPage/>
         } else if (this.state.type=='user'){
-            return (this.state.user.emailVerified) ? <UserPage /> : <LandingPage/>
+            var cmp = <UserPage />
+            if (!this.state.allowedUsers.includes(this.state.user.displayName)) cmp = <div style={{width: "100vw",
+                                height: "100vh",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                fontFamily: "Dosis",
+                                color: "#FFFFFF",
+                                fontWeight: "600px",
+                                fontSize: "70px",
+                                background: "#00B140"}}>Thank you for pre-registering for Stock Prattle!</div>
+            return (this.state.user.emailVerified) ? cmp : <LandingPage/>
         } else if (this.state.type=='verification'){
             return <div style={{width: "100vw",
                                 height: "100vh",
