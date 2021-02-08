@@ -18,6 +18,8 @@ export default class StockPage extends Component{
         getWatchList().then(res=>this.setState({following: res.includes(this.state.stock)}))
     }
 
+
+
     updateLegend(obj){
         this.setState({stockObj: obj})
     }
@@ -55,12 +57,12 @@ export default class StockPage extends Component{
             <div style={stockStyle.topDiv}>
                 <StockGraph title={this.state.stock} updateLegend={this.updateLegend}/>
                 <div style={stockStyle.stockDetails}>
-                    <p style = {stockStyle.text}><b>Date:</b>{this.state.stockObj ? this.state.stockObj.date.toLocaleDateString() : ""}</p>
-                    <p style = {stockStyle.text}><b>Time:</b> {this.state.stockObj ? this.state.stockObj.date.toLocaleTimeString() : ""}</p>
-                    <p style = {stockStyle.text}><b>Value:</b> {this.state.stockObj ? this.state.stockObj.close : ""}</p>
+                    <p style = {stockStyle.text}><b>Date:</b> {this.state.stockObj ? this.state.stockObj.date.getDay()+"/"+this.state.stockObj.date.getMonth()+"/"+this.state.stockObj.date.getFullYear() : ""}</p>
+                    <p style = {stockStyle.text}><b>Time:</b> {this.state.stockObj ? this.state.stockObj.date.toLocaleTimeString().replace(/(.*)\D\d+/, '$1') : ""}</p>
+                    <p style = {stockStyle.text}><b>Value:</b> ₹{this.state.stockObj ? this.state.stockObj.close : ""}</p>
                     <p style = {stockStyle.text}><b>Volume:</b> {this.state.stockObj ? this.state.stockObj.volume : ""}</p>
-                    <p style = {stockStyle.text}><b>5 Day Low:</b> {this.state.stockObj ? this.state.stockObj.min : ""}</p>
-                    <p style = {stockStyle.text}><b>5 Day High:</b> {this.state.stockObj ? this.state.stockObj.max : ""}</p>
+                    <p style = {stockStyle.text}><b>5 Day Low:</b> ₹{this.state.stockObj ? this.state.stockObj.min : ""}</p>
+                    <p style = {stockStyle.text}><b>5 Day High:</b> ₹{this.state.stockObj ? this.state.stockObj.max : ""}</p>
                     <button style={{
                         background: (this.state.following) ? "#FFFFFF" : "#00B140",
                         width: "80px",
