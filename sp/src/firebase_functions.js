@@ -50,7 +50,6 @@ export const updateProfile = (fieldName, detail) => {
       .catch((err) => console.log(err))
 
     if (fieldName === 'username') {
-      console.log("hi")
       userCollection.where('username', '==', detail).get().then(
         (snap) => {
           if (snap.empty) {

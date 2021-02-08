@@ -45,6 +45,22 @@ class App extends Component {
         });
     }
 
+    logOut() {
+        if (window.confirm("Are you sure you want to log out?")) {
+            fire.auth().signOut();
+        }
+    }
+
+    mouseIn(e){
+        e.target.style.color = "#00B140"
+        e.target.style.background = "gray"
+    }
+
+    mouseOut(e){
+        e.target.style.color = "gray"
+        e.target.style.background = "#FFFFFF"
+    }
+
     render() {
         if (this.state.type == 'landing') {
             return <LandingPage />
@@ -54,14 +70,33 @@ class App extends Component {
                 width: "100vw",
                 height: "100vh",
                 display: "flex",
+                flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                textAlign: "center",
                 fontFamily: "Dosis",
                 color: "#FFFFFF",
                 fontWeight: "600px",
                 fontSize: "70px",
-                background: "#00B140"
-            }}>Thank you for pre-registering for Stock Prattle!</div>
+                background: "#00B140",
+                gap: "10px"
+            }}>
+            Thank you for pre-registering for Stock Prattle! You will hear from us soon!
+            <button style={{
+                marginTop: "5px",
+                background: "#FFFFFF",
+                width: "100px",
+                height: "45px",
+                borderRadius: "30px",
+                borderWidth: "0px",
+                color: "gray",
+                fontFamily: "Dosis",
+                fontStyle: "normal",
+                fontWeight: "bold",
+                fontSize: "18px",
+                outline: "none",
+                cursor: "pointer"}} onMouseOver={this.mouseIn} onMouseLeave={this.mouseOut} onClick={this.logOut}>Log Out</button>
+            </div>
             return (this.state.user.emailVerified) ? cmp : <LandingPage />
         } else if (this.state.type == 'verification') {
             return <div style={{
