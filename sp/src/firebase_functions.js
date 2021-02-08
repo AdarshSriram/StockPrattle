@@ -18,23 +18,23 @@ export const getUname = async () => {
 }
 
 export function createProfile() {
-    var user = fire.auth().currentUser
-    return fire.auth().signInWithEmailLink(user.email, window.location.href).then((result) => {
-        user = result.user
-        return userCollection.doc(user.email).set({
-            email: user.email,
-            passwordChange: true,
-        }).then(()=>{
-            console.log("Profile Creation Successful!")
-            return user
-        }).catch(()=>{
-            alert("Unable to verify. Please try again!")
-        })
-    }).catch((error) => {
-        console.log(error.code)
-        console.log(error.message)
-        alert("Unable to verify. Please try again!")
-    });
+  var user = fire.auth().currentUser
+  return fire.auth().signInWithEmailLink(user.email, window.location.href).then((result) => {
+    user = result.user
+    return userCollection.doc(user.email).set({
+      email: user.email,
+      passwordChange: true,
+    }).then(() => {
+      console.log("Profile Creation Successful!")
+      return user
+    }).catch(() => {
+      alert("Unable to verify. Please try again!")
+    })
+  }).catch((error) => {
+    console.log(error.code)
+    console.log(error.message)
+    alert("Unable to verify. Please try again!")
+  });
 }
 
 export const updateProfile = (fieldName, detail) => {
@@ -83,22 +83,22 @@ export const updateProfile = (fieldName, detail) => {
 // SignUp User
 export const SignUp = (email) => {
   return userCollection.doc(email).get().then((doc) => {
-      if (!doc.exists) {
-          const actionCodeSettings = {url: window.location.href, handleCodeInApp: true};
-          return fire.auth().sendSignInLinkToEmail(email, actionCodeSettings)
-          .then(() => {
-              return fire.auth().createUserWithEmailAndPassword(email, "12345678")
-              .then(()=>{
-                  console.log("Email Sent!");
-                  return true;
-              }).catch((err) => {alert('Sign up unsuccessful. Please try again!'); return;})
-          }).catch((error) => {
-              console.log(error.code)
-              console.log(error.message)
-          });
-      } else {
-          alert("A user with this email already exists.")
-      }
+    if (!doc.exists) {
+      const actionCodeSettings = { url: window.location.href, handleCodeInApp: true };
+      return fire.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+        .then(() => {
+          return fire.auth().createUserWithEmailAndPassword(email, "12345678")
+            .then(() => {
+              console.log("Email Sent!");
+              return true;
+            }).catch((err) => { alert('Sign up unsuccessful. Please try again!'); return; })
+        }).catch((error) => {
+          console.log(error.code)
+          console.log(error.message)
+        });
+    } else {
+      alert("A user with this email already exists.")
+    }
   }).catch((err) => alert('Sign up unsuccessful. Please try again!'))
 }
 
@@ -191,6 +191,8 @@ export const setCurrentUserInfo = async (info) => {
             })
           })
 
+        updateCommentUname(user.email, info.username)
+
         return userCollection.doc(user.email).update(info)
       } else {
         alert("Username is already taken.")
@@ -226,31 +228,31 @@ export const getPhoto = (email) => {
   return storageRef.child('profilePhoto/' + email).getDownloadURL()
 }
 
-export function signUpExt(isGoogle){
-    fire.auth().signInWithPopup((isGoogle) ? providerG : providerF).then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const cred = result.credential;
-        // The signed-in user info.
-        const user = fire.auth().currentUser;
-        const credential = firebase.auth.EmailAuthProvider.credential(user.email, "12345678");
-        user.linkWithCredential(credential);
-        userCollection.doc(user.email).set({
-            email: user.email,
-            passwordChange: true,
-        })
-        console.log("User signed up externally")
-    }).catch((error)=>{
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(error)
-        console.log(errorMessage)
-        // The email of the user's account used.
-        const email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        const credential = error.credential;
-        // ...
+export function signUpExt(isGoogle) {
+  fire.auth().signInWithPopup((isGoogle) ? providerG : providerF).then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const cred = result.credential;
+    // The signed-in user info.
+    const user = fire.auth().currentUser;
+    const credential = firebase.auth.EmailAuthProvider.credential(user.email, "12345678");
+    user.linkWithCredential(credential);
+    userCollection.doc(user.email).set({
+      email: user.email,
+      passwordChange: true,
     })
+    console.log("User signed up externally")
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(error)
+    console.log(errorMessage)
+    // The email of the user's account used.
+    const email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    const credential = error.credential;
+    // ...
+  })
 }
 
 export const signInExt = (google) => {
@@ -313,6 +315,34 @@ export const getStockPosts = async (stock) => {
   const snapshot = await firebase.firestore().collection("stockposts/" + stock + "/stockPosts")
     .orderBy("createdAt", "desc").get()
   return snapshot.docs.map(doc => doc.data());
+}
+
+export const updateCommentUname = async (email, uname) => {
+  const userCommentRef = firebase.firestore().collection("userComments/" + email + "/comments")
+  const snap = await userCommentRef.get()
+  const ids = snap.docs.map(doc => doc.id)
+  const postIds = new Set()
+
+  ids.forEach(id => {
+    const postId = id.substring(id.indexOf(",," + 1), id.lastIndexOf(",,"))
+    //user.email + ',,' + postId + ",," + time
+    postIds.add(postId)
+    firebase.firestore().collection("posts/" + user.email + "/userPosts")
+      .doc(id)
+      .update({ username: uname })
+      .then(() => console.log("post updated"))
+  })
+  for (id of postIds) {
+    const comment_ref = firebase.firestore().collection("comments/" + id + "/postComments")
+    const snapshotComm = await comment_ref.get()
+    snapshotComm.docs.forEach(doc => {
+      if (doc.id.substring(0, doc.id.indexOf(",,")) === email) {
+        comment_ref.doc(doc.id).update({
+          username: uname
+        })
+      }
+    })
+  }
 }
 
 export const likeUnlikePost = async (id, like = true, post = true) => {
@@ -531,6 +561,7 @@ export const get_post_comments = async (id) => {
 export const add_comment = async (postId, text) => {
   var user = firebase.auth().currentUser;
   const comment_ref = firebase.firestore().collection("comments/" + postId + "/postComments")
+  const userCommentRef = firebase.firestore().collection("userComments/" + user.email + "/comments")
   const time = Date.now()
   const comment = {
     "postId": postId,
@@ -542,6 +573,9 @@ export const add_comment = async (postId, text) => {
   }
   comment_ref.doc(user.email + ',,' + postId + ",," + time)
     .set(comment)
+    .catch((err) => { console.log(err) })
+  userCommentRef.doc(user.email + ',,' + postId + ",," + time)
+    .set({})
     .catch((err) => { console.log(err) })
   return comment
 }
