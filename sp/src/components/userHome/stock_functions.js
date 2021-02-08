@@ -30,7 +30,8 @@ export const getSnapshot2 = () => {
       var obj;
       for (var i = 0; i < snap.length; i++) {
         obj = snap[i]
-        obj.INCR = res[obj.INSTRUMENTIDENTIFIER] > obj.CLOSE
+        const prevClose = res[obj.INSTRUMENTIDENTIFIER]
+        obj.INCR = (obj.CLOSE - prevClose) / prevClose
       }
       console.log(snap.length)
       return snap
