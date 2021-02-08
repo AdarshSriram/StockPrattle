@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { getHistory } from '../stock_functions.js';
+import { getHistory, companyNames } from '../stock_functions.js';
 const d3 = require("d3");
 
 export default class StockGraph extends Component{
@@ -399,7 +399,7 @@ export default class StockGraph extends Component{
                             textDecoration: "none",
                             color: this.props.isGreen ? "#00B140" : "#E21010",
                             margin: "0"}}>{this.props.title}</p>
-                        <p style={chartStyle.subtitle}>Company Name</p>
+                        <p style={chartStyle.subtitle}>{companyNames[this.props.title]}</p>
                     </div>
                     <div style={chartStyle.buttonDiv}>
                         <button id="1d" name="stockGraphButtons" onClick={this.buttonPress} style={chartStyle.button}>1d</button>
@@ -446,15 +446,16 @@ const chartStyle = { mainDiv: {
     }, buttonDiv: {
         background: "none",
         height: "100%",
-        width: "85%",
+        width: "100%",
         display: "flex",
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "flex-end",
+        alignItems: "center",
         gap: "10px"
         // border: "thin solid black"
     }, heading:{
         background: "none",
-        width: "15%",
+        width: "100%",
         height: "100%",
         display: "flex",
         flexDirection: "column",

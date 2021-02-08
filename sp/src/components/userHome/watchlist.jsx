@@ -24,7 +24,7 @@ export default class Watchlist extends Component{
         <div style={watchlistStyle.mainDiv}>
             <p style={watchlistStyle.headingText}>Followed Stocks</p>
             {this.state.ls.map((i, index) =>
-                <p key={index} style={watchlistStyle.instrumentIdentifier}>{i.INSTRUMENTIDENTIFIER}<p style={{color: (index%2==0) ? '#00B140':"#E21010", margin: 0}}>{i.OPEN}</p></p>
+                <p key={index} style={watchlistStyle.instrumentIdentifier}>{i.INSTRUMENTIDENTIFIER}<p style={{color: (i.INCR==0) ? "#F09000" : (i.INCR > 0) ? "#00B140" : "#E21010"}}>{i.OPEN}</p></p>
             )}
         </div>
         )
