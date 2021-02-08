@@ -391,7 +391,14 @@ export default class StockGraph extends Component{
             <div id="chartArea" style={chartStyle.mainDiv}>
                 <div style={chartStyle.topDiv}>
                     <div style={chartStyle.heading}>
-                        <p style={chartStyle.title}>{this.props.title}</p>
+                        <p style={{
+                            fontFamily: "Dosis",
+                            fontStyle: "normal",
+                            fontWeight: "bold",
+                            fontSize: "28px",
+                            textDecoration: "none",
+                            color: this.props.isGreen ? "#00B140" : "#E21010",
+                            margin: "0"}}>{this.props.title}</p>
                         <p style={chartStyle.subtitle}>Company Name</p>
                     </div>
                     <div style={chartStyle.buttonDiv}>
@@ -454,14 +461,6 @@ const chartStyle = { mainDiv: {
         justifyContent: "center",
         // margin: "10 0 0 10",
         // border: "thin solid black"
-    }, title: {
-        fontFamily: "Dosis",
-        fontStyle: "normal",
-        fontWeight: "bold",
-        fontSize: "28px",
-        textDecoration: "none",
-        color: "#E21010",
-        margin: "0",
     }, subtitle: {
         fontFamily: "Dosis",
         fontStyle: "normal",

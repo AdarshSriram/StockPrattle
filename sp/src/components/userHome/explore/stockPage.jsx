@@ -15,7 +15,7 @@ export default class StockPage extends Component{
     }
 
     componentDidMount(){
-        getWatchList().then(res=>this.setState({following: res.includes(this.state.stock)}))
+        getWatchList().then(res=>this.setState({following: res.includes(this.state.stock.INSTRUMENTIDENTIFIER)}))
     }
 
     updateLegend(obj){
@@ -41,7 +41,7 @@ export default class StockPage extends Component{
     }
 
     followUnfollow() {
-        const stock = this.state.stock
+        const stock = this.state.stock.INSTRUMENTIDENTIFIER
         if (this.state.following) { unfollowStock(stock).then(() => console.log("Unfollowed")) }
         else {
             followStock(stock).then(() => console.log("Followed"))
@@ -53,7 +53,7 @@ export default class StockPage extends Component{
     return (
         <div style={stockStyle.centerDiv}>
             <div style={stockStyle.topDiv}>
-                <StockGraph title={this.state.stock} updateLegend={this.updateLegend}/>
+                <StockGraph title={this.state.stock.INSTRUMENTIDENTIFIER} isGreen={this.state.stock.INCR} updateLegend={this.updateLegend}/>
                 <div style={stockStyle.stockDetails}>
                     <p style = {stockStyle.text}><b>Date:</b> {this.state.stockObj ? this.state.stockObj.date.getDay()+"/"+(this.state.stockObj.date.getMonth()+1)+"/"+this.state.stockObj.date.getFullYear() : ""}</p>
                     <p style = {stockStyle.text}><b>Time:</b> {this.state.stockObj ? this.state.stockObj.date.toLocaleTimeString().replace(/(.*)\D\d+/, '$1') : ""}</p>
@@ -78,7 +78,7 @@ export default class StockPage extends Component{
                         onMouseOver={this.followMouseIn} onMouseLeave={this.followMouseOut}>{(this.state.following) ? "Unfollow" : "Follow"}</button>
                 </div>
             </div>
-            <UserFeed stock={this.state.stock} user={this.props.user} type={"stock"}/>
+            <UserFeed stock={this.state.stock.INSTRUMENTIDENTIFIER} user={this.props.user} type={"stock"}/>
         </div>
         )
     }
