@@ -9,53 +9,53 @@ const history1 = "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=" + ke
 const history2 = "&periodicity=Minute&period=15&FROM="
 
 export const getSnapshot = () => {
-    console.log("sending request")
-    return axios.get(test).then((res) => {
-        console.log("request recieved")
-        return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
-    }).catch(err => {
-        console.log(err);
-        return false
-    })
+  console.log("sending request")
+  return axios.get(test).then((res) => {
+    console.log("request recieved")
+    return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+  }).catch(err => {
+    console.log(err);
+    return false
+  })
 }
 
 export const getSnapshot2 = () => {
-    console.log("sending request")
-    return axios.get(test).then((res) => {
-        console.log("request recieved")
-        const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
-        return getCloses().then((res) => {
-            var obj;
-            for (var i = 0; i < snap.length; i++) {
-                obj = snap[i]
-                obj.INCR = res[obj.INSTRUMENTIDENTIFIER] > obj.CLOSE
-            }
-            console.log(snap)
-            return snap
-        })
-    }).catch(err => {
-        console.log(err);
-        return false
+  console.log("sending request")
+  return axios.get(test).then((res) => {
+    console.log("request recieved")
+    const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+    return getCloses().then((res) => {
+      var obj;
+      for (var i = 0; i < snap.length; i++) {
+        obj = snap[i]
+        obj.INCR = res[obj.INSTRUMENTIDENTIFIER] > obj.CLOSE
+      }
+      console.log(snap)
+      return snap
     })
+  }).catch(err => {
+    console.log(err);
+    return false
+  })
 }
 
 const getCloses = async () => {
-    var today = Math.floor(Date.now() / 1000)
-    var data = []
-    while (data.length==0){
-        var midnight = today - today % 86400
-        var to = midnight - 48600
-        var from = to - 960
-        await axios.get(test + "&from=" + from + "&to=" + to).then((res) => {
-            try {data= res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS}
-            catch {data= []}
-        })
-        today -= 86400
-    }
-    var res = {}
-    for (var obj of data) res[obj.INSTRUMENTIDENTIFIER] = obj.CLOSE
-    return res
- }
+  var today = Math.floor(Date.now() / 1000)
+  var data = []
+  while (data.length == 0) {
+    var midnight = today - today % 86400
+    var to = midnight - 48600
+    var from = to - 960
+    await axios.get(test + "&from=" + from + "&to=" + to).then((res) => {
+      try { data = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS }
+      catch { data = [] }
+    })
+    today -= 86400
+  }
+  var res = {}
+  for (var obj of data) res[obj.INSTRUMENTIDENTIFIER] = obj.CLOSE
+  return res
+}
 
 export const getHistory = (stock, fromTime = -1) => {
   console.log("sending request")
