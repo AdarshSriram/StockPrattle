@@ -30,7 +30,6 @@ export const getSnapshot2 = () => {
         obj = snap[i]
         obj.INCR = res[obj.INSTRUMENTIDENTIFIER] > obj.CLOSE
       }
-      console.log(snap)
       return snap
     })
   }).catch(err => {
@@ -103,6 +102,7 @@ const nifty50 = ['ADANIPORTS', 'ASIANPAINT', 'AXISBANK', 'BAJAJ-AUTO', 'BAJFINAN
 const niftySnap = "http://nimblerest.lisuns.com:4531/GetSnapshot/?accessKey=" + key + "&exchange=NSE&periodicity=Minute&period=1&&instrumentIdentifiers="
 
 export const getStocksData = (symbols) => {
+<<<<<<< HEAD
   console.log("sending request")
   return axios.get(test).then(arr => {
     console.log("response recieved")
@@ -121,3 +121,20 @@ export const getStocksData = (symbols) => {
     return false
   })
 }
+=======
+    console.log("sending request")
+    return getSnapshot2().then(arr => {
+        console.log("response recieved")
+        if (symbols == null) symbols = nifty50
+        symbols = new Set(symbols)
+        var res = []
+        for (var obj of arr) {
+            if (symbols.has(obj.INSTRUMENTIDENTIFIER)) res.push(obj)
+        }
+        return res
+    }).catch(err => {
+        console.log(err);
+        return false
+    })
+}
+>>>>>>> feee9a3d0114307e547e93fe2efc48a84ebd6db5
