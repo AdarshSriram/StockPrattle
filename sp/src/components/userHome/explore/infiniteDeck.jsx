@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Card from './card.jsx';
-import { getSnapshot } from '../stock_functions.js';
+import { getSnapshot2, getSnapshot } from '../stock_functions.js';
 import LoadingScreen from "../loadingDiv.jsx"
 
 export default class InfiniteDeck extends Component {
@@ -12,7 +12,7 @@ export default class InfiniteDeck extends Component {
     }
 
     componentDidMount(event) {
-        getSnapshot().then(res => {
+        getSnapshot2().then(res => {
             if (!res) this.setState({ data: null, items: null}, this.componentDidMount)
             else if (res.length < 10) this.setState({ data: res, items: res, over: true })
             else this.setState({ data: res, items: res.slice(0, 10), over: false })
