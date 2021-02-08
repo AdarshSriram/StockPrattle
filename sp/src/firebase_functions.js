@@ -324,19 +324,19 @@ export const updateCommentUname = async (email, uname) => {
   const postIds = new Set()
 
   ids.forEach(id => {
-    const postId = id.substring(id.indexOf(",," + 1), id.lastIndexOf(",,"))
+    const postId = id.substring(id.indexOf(",,") + 2, id.lastIndexOf(",,"))
     //user.email + ',,' + postId + ",," + time
+    console.log(postId)
     postIds.add(postId)
-    firebase.firestore().collection("posts/" + user.email + "/userPosts")
-      .doc(id)
-      .update({ username: uname })
-      .then(() => console.log("post updated"))
   })
-  for (id of postIds) {
+  for (var id of postIds) {
     const comment_ref = firebase.firestore().collection("comments/" + id + "/postComments")
     const snapshotComm = await comment_ref.get()
     snapshotComm.docs.forEach(doc => {
-      if (doc.id.substring(0, doc.id.indexOf(",,")) === email) {
+      const poster = doc.id.substring(0, doc.id.indexOf(",,"))
+      console.log(poster)
+      if (poster === email) {
+        console.log("comment updated!")
         comment_ref.doc(doc.id).update({
           username: uname
         })
