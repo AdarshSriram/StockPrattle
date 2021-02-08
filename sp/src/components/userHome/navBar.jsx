@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {bellSvg, settingsSvg} from './svgs.jsx';
 import Ticker from 'react-ticker';
-import { getStocksData } from './stock_functions.js';
+import { getStocksData, companyNames } from './stock_functions.js';
 import { allUsers } from '../../firebase_functions.js'
 
 export default class NavBar extends Component{
@@ -18,12 +18,15 @@ export default class NavBar extends Component{
                 else this.setState({sbItems: restwo})
             })
         }
-        allUsers().then(res => this.setState({searchItems: this.state.searchItems.concat(res)}))
+        allUsers().then(res => {
+            this.setState({searchItems: this.state.searchItems.concat(res)})
+        })
     }
 
     goTo(){
         var elem= document.getElementById("searchBar")
         const search = elem.value
+        if (search==null) return
         var found = false
         for (var obj of this.state.searchItems){
             if (search==obj){
@@ -39,7 +42,13 @@ export default class NavBar extends Component{
         }
         elem.value= null
         if (!found){
-            alert("No Such Page Exists!")
+            for (var i in companyNames){
+                if (companyNames[i]==search){
+                    this.props.goTo(i, true)
+                    found = found || true
+                }
+            }
+            if (!found) alert("No Such Page Exists!")
         }
     }
 
@@ -65,6 +74,7 @@ export default class NavBar extends Component{
             item = this.state.searchItems[i]
             if (typeof item == 'string' || item instanceof String){
                 optList.push(<option id={i} value={item}/>)
+                optList.push(<option id={i} value={companyNames[item]}/>)
             } else {
                 optList.push(<option id={i} value={item.username}/>)
                 optList.push(<option id={i.email} value={item.fullname}/>)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { getPhoto, getUname } from '../../../firebase_functions';
+import { getPhoto, getUserInfo } from '../../../firebase_functions';
 import { smallnopicSvg} from '../svgs.jsx';
 
 export default class FollowPopUp extends Component {
@@ -27,10 +27,13 @@ class ListDisplay extends Component {
     }
 
     componentDidMount(){
-        console.log(this.state.email)
         getPhoto(this.state.email).then(res=>{
-            getUname(this.state.email).then(restwo=>{
-                this.setState({username: restwo, img: res})
+            getUserInfo(this.state.email).then(restwo=>{
+                this.setState({username: restwo.data().username, img: res})
+            })
+        }).catch(()=>{
+            getUserInfo(this.state.email).then(restwo=>{
+                this.setState({username: restwo.data().username, img: null})
             })
         })
     }
