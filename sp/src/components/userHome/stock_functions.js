@@ -12,7 +12,9 @@ export const getSnapshot = () => {
   console.log("sending request")
   return axios.get(test).then((res) => {
     console.log("request recieved")
-    return res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+    const result = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+    console.log(result.length)
+    return result
   }).catch(err => {
     console.log(err);
     return false
@@ -30,6 +32,7 @@ export const getSnapshot2 = () => {
         obj = snap[i]
         obj.INCR = res[obj.INSTRUMENTIDENTIFIER] > obj.CLOSE
       }
+      console.log(snap.length)
       return snap
     })
   }).catch(err => {
@@ -43,14 +46,15 @@ const getCloses = async () => {
   var data = []
   while (data.length == 0) {
     var midnight = today - today % 86400
-    var to = midnight - 48600
-    var from = to - 960
+    var to = midnight - 48600 - 1800
+    var from = to - 960 - 1800
     await axios.get(test + "&from=" + from + "&to=" + to).then((res) => {
       try { data = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS }
       catch { data = [] }
     })
     today -= 86400
   }
+  console.log(data.length)
   var res = {}
   for (var obj of data) res[obj.INSTRUMENTIDENTIFIER] = obj.CLOSE
   return res
