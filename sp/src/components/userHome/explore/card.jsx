@@ -33,7 +33,7 @@ export default class Card extends Component{
         var imageStyle = {...cardStyle.image}
         if (this.props.item != null){
             img = require("../../../images/Logo.png")
-            topBarStyle.backgroundColor = this.props.item.INCR ? "#00B140" : "#E21010"
+            topBarStyle.backgroundColor = this.props.item.INCR == 0 ? "#F09000" : (this.props.item.INCR > 0) ? "#00B140" : "#E21010"
             imageStyle.maxWidth = "80%"
             imageStyle.maxHeight = "80%"
         }
@@ -45,7 +45,8 @@ export default class Card extends Component{
             </div>
             <div style={cardStyle.contentDiv}>
                 <p id={this.props.item.INSTRUMENTIDENTIFIER} style={cardStyle.headingStyle}>{companyNames[this.props.item.INSTRUMENTIDENTIFIER]}</p>
-                <p style={cardStyle.textStyle}>{this.props.item.OPEN}</p>
+                <p style={cardStyle.textStyle}><b>{this.props.item.INSTRUMENTIDENTIFIER + ": "}</b>₹{this.props.item.OPEN}</p>
+                <p style={cardStyle.textStyle}><b>{"Change: "}</b>{(this.props.item.INCR==0) ? "0.0% or Unknown" : (this.props.item.INCR+"%")}</p>
             </div>
         </div>
         )

@@ -105,7 +105,9 @@ export default class NavBar extends Component{
         <marquee style={navBarStyle.stockTicker}>
         <div id="stockBar" style={navBarStyle.stockBar}>
             {this.state.sbItems.map((i, index) => (
-                <p key={index} style={navBarStyle.sbTitle}>{i.INSTRUMENTIDENTIFIER}<p style={{color: (i.INCR) ? '#00B140':"#E21010", margin: 0}}>{i.OPEN}</p></p>
+                <p key={index} style={navBarStyle.sbTitle}>{i.INSTRUMENTIDENTIFIER}<p style={
+                    {color: i.INCR == 0 ? "#F09000" : (i.INCR > 0) ? "#00B140" : "#E21010",
+                    margin: 0}}>{i.OPEN}</p></p>
             ))}
         </div>
         </marquee>

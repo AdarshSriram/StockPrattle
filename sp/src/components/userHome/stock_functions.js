@@ -27,13 +27,16 @@ export const getSnapshot2 = () => {
     console.log("request recieved")
     const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
     return getCloses().then((res) => {
-      var obj;
+      var obj; var prevClose
       for (var i = 0; i < snap.length; i++) {
         obj = snap[i]
-        const prevClose = res[obj.INSTRUMENTIDENTIFIER] !== null ? res[obj.INSTRUMENTIDENTIFIER] : obj.CLOSE
-        obj.INCR = (obj.CLOSE - prevClose) * 100 / prevClose
+        prevClose = res[obj.INSTRUMENTIDENTIFIER]
+        if (prevClose == null) {
+          obj.INCR = 0
+        } else {
+          obj.INCR = ((obj.CLOSE - prevClose) / prevClose * 100).toPrecision(3)
+        }
       }
-      console.log(snap.length)
       return snap
     })
   }).catch(err => {
