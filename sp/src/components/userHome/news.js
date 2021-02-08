@@ -1,8 +1,7 @@
-import API_KEY from "./config_news";
 import axios from 'axios';
 
-export const getHeadlines = () => {
-  var url = "http://newsapi.org/v2/top-headlines?country=in&category=business&q=stocks&apiKey=cbe3c25cbb644c3ebf9685437f23f292"
+export const getHeadlines = async () => {
+  var url = "https://newsapi.org/v2/top-headlines?country=in&category=business&q=stocks&apiKey=" + process.env.REACT_APP_NEWS_KEY
   return axios.get(url)
     .then(res => {
       var data = res.data
@@ -14,5 +13,5 @@ export const getHeadlines = () => {
         }
       })
     })
-    .catch(err => console.log(err))
+    .catch(err => { console.log(err); return [] })
 }
