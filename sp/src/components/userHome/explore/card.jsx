@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {nopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg} from '../svgs.jsx'
+import {companyNames} from '../stock_functions.js'
 
 export default class Card extends Component{
     constructor(props){
@@ -43,7 +44,7 @@ export default class Card extends Component{
                 <img src={img} alt="Stock Prattle Logo" style={imageStyle}/>
             </div>
             <div style={cardStyle.contentDiv}>
-                <p id={this.props.item.INSTRUMENTIDENTIFIER} style={cardStyle.headingStyle}>{this.props.item.INSTRUMENTIDENTIFIER}</p>
+                <p id={this.props.item.INSTRUMENTIDENTIFIER} style={cardStyle.headingStyle}>{companyNames[this.props.item.INSTRUMENTIDENTIFIER]}</p>
                 <p style={cardStyle.textStyle}>{this.props.item.OPEN}</p>
             </div>
         </div>
