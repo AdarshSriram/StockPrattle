@@ -45,7 +45,8 @@ export default class Card extends Component{
             </div>
             <div style={cardStyle.contentDiv}>
                 <p id={this.props.item.INSTRUMENTIDENTIFIER} style={cardStyle.headingStyle}>{companyNames[this.props.item.INSTRUMENTIDENTIFIER]}</p>
-                <p style={cardStyle.textStyle}>{this.props.item.OPEN}</p>
+                <p style={cardStyle.textStyle}><b>{this.props.item.INSTRUMENTIDENTIFIER + ": "}</b>₹{this.props.item.OPEN}</p>
+                <p style={cardStyle.textStyle}><b>{"Change: "}</b>{(this.props.item.INCR==0) ? "0.0% or Unknown" : (this.props.item.INCR+"%")}</p>
             </div>
         </div>
         )
