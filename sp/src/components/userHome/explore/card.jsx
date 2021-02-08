@@ -23,7 +23,7 @@ export default class Card extends Component{
     }
 
     cardClick(){
-        this.props.onCardClick(this.props.item.INSTRUMENTIDENTIFIER)
+        this.props.onCardClick(this.props.item)
     }
 
     render(){
@@ -32,7 +32,7 @@ export default class Card extends Component{
         var imageStyle = {...cardStyle.image}
         if (this.props.item != null){
             img = require("../../../images/Logo.png")
-            topBarStyle.backgroundColor = "#00B140"
+            topBarStyle.backgroundColor = this.props.item.INCR ? "#00B140" : "#E21010"
             imageStyle.maxWidth = "80%"
             imageStyle.maxHeight = "80%"
         }

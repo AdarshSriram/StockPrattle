@@ -14,8 +14,8 @@ export default class InfiniteDeck extends Component {
     componentDidMount(event) {
         getSnapshot2().then(res => {
             if (!res) this.setState({ data: null, items: null}, this.componentDidMount)
-            else if (res.length < 10) this.setState({ data: res, items: res, over: true })
-            else this.setState({ data: res, items: res.slice(0, 10), over: false })
+            else if (res.length < 12) this.setState({ data: res, items: res, over: true })
+            else this.setState({ data: res, items: res.slice(0, 12), over: false })
         })
     }
 
@@ -24,8 +24,8 @@ export default class InfiniteDeck extends Component {
         if (element.scrollHeight - element.scrollTop < element.clientHeight + 1 &&
             element.scrollHeight - element.scrollTop > element.clientHeight - 1) {
             var i = this.state.items.length - 1
-            if (i + 10 >= this.state.data.length) this.setState({ items: this.state.data, over: true })
-            else this.setState({ items: this.state.items.concat(this.state.data.slice(i, i + 10)) })
+            if (i + 12 >= this.state.data.length) this.setState({ items: this.state.data, over: true })
+            else this.setState({ items: this.state.items.concat(this.state.data.slice(i, i + 12)) })
         }
     }
 
