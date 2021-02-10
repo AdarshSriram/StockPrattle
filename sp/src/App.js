@@ -9,7 +9,7 @@ import { createProfile } from './firebase_functions.js';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = { user: null, type: 'landing', allowedUsers: ["ac2447@cornell.edu", "adarshsriram10@gmail.com", "alakhotia@college.harvard.edu", "as4532@georgetown.edu"] };
+        this.state = { user: null, type: 'landing', allowedUsers: [ "adarshsriram10@gmail.com", "alakhotia@college.harvard.edu", "as4532@georgetown.edu"] };
         this.authListener = this.authListener.bind(this);
         this.createProfile = this.createProfile.bind(this);
     }
@@ -81,7 +81,7 @@ class App extends Component {
                 background: "#00B140",
                 gap: "10px"
             }}>
-            Thank you for pre-registering for Stock Prattle! You will hear from us soon!
+            Thank you for pre-registering for Stock Prattle, you will hear from us soon!
             <button style={{
                 marginTop: "5px",
                 background: "#FFFFFF",
