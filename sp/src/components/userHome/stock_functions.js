@@ -27,7 +27,7 @@ export const getSnapshot2 = () => {
     console.log("request recieved")
     const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
     return getCloses().then((res) => {
-      var obj; var prevClose
+      var obj; var prevClose;
       for (var i = 0; i < snap.length; i++) {
         obj = snap[i]
         prevClose = res[obj.INSTRUMENTIDENTIFIER]
