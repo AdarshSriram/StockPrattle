@@ -50,8 +50,8 @@ const getCloses = async () => {
   var data = []
   while (data.length == 0) {
     var midnight = today - today % 86400
-    var to = midnight - 48600 - 1800
-    var from = to - 960 - 1800
+    var to = midnight - 48600
+    var from = to - 960
     await axios.get(test + "&from=" + from + "&to=" + to).then((res) => {
       try { data = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS }
       catch { data = [] }
