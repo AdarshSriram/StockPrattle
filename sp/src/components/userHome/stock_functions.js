@@ -58,7 +58,6 @@ const getCloses = async () => {
     })
     today -= 86400
   }
-  console.log(data.length)
   var res = {}
   for (var obj of data) res[obj.INSTRUMENTIDENTIFIER] = obj.CLOSE
   return res

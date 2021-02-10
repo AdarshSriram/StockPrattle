@@ -40,6 +40,7 @@ export default class UserFeed extends Component {
                     return
                 }
                 res = res.flat()
+                // console.log(res[0])
                 if (res.length < 10) this.setState({data: res, items: res, over: true})
                 else this.setState({data: res, items: res.slice(0, 10), over: false})
             })
@@ -125,7 +126,7 @@ export default class UserFeed extends Component {
                     <button style={userFeedStyle.newPostButton} onMouseOver={this.mouseIn}
                         onMouseLeave={this.mouseOut} onClick={this.newPost}>+</button>
                     </div>) : null}
-                {this.state.items.map((i, index) => (<Post curuser = {this.props.user} key={index} user={i.username} text={i.text} propic={i.propic} id={i.id}/>))}
+                {this.state.items.map((i, index) => (<Post curuser = {this.props.user} key={index} user={i.username} text={i.text} propic={i.propic} id={i.id} stock={i.stocks}/>))}
                 <p style={userFeedStyle.loading}>{(this.state.over) ? "You have reached the end of your feed!" : "Loading..."}</p>
             </div>
         )
