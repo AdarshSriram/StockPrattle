@@ -135,6 +135,9 @@ export default class PopUp extends Component {
         return (
             <div style={popUpStyle.wholeScreen}>
                 <div id="popUpBox" style={popUpStyle.popUpBox}>
+                    {(this.state.type === "Set Password") ? null : <p id="subText" style={popUpStyle.topText}>
+                        {this.state.type === "Login" ? "For Beta Users Only" : "Pre-register to be part of the SP community now!"}
+                    </p>}
                     <form id="popUpForm" onSubmit={(event) => {
                         event.preventDefault();
                         if (this.state.type === 'Login') {
@@ -294,5 +297,17 @@ const popUpStyle = {
         fontWeight: "bold",
         fontSize: "24px",
         margin: "0px"
+    }, topText: {
+        width: "100%",
+        padding: "10px",
+        // color: "#00B140",
+        // background: "rgba(0, 177, 64, 0.08)",
+        background: "#00B140",
+        color: "#FFFFFF",
+        fontFamily: "Dosis",
+        fontStyle: "normal",
+        fontWeight: "bold",
+        fontSize: "22px",
+        textAlign: "center"
     }
 }

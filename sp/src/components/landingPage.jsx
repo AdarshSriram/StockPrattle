@@ -83,7 +83,7 @@ export default class LandingPage extends Component {
                         <div style={startStyle.textDiv}>
                             <p style={startStyle.text}>India’s Stock Community Platform</p>
                             <p style={startStyle.subText}>Invest Better. Every Rupee Counts.</p>
-                            <p style={startStyle.subText}>Pre-register Now!</p>
+                            <p style={startStyle.subText}>Pre-registration is open!</p>
                             <div style={{ width: "100%", marginTop: "20px" }}>
                                 <button style={startStyle.joinButton} onMouseOver={this.joinMouseIn}
                                     onMouseLeave={this.joinMouseOut} onClick={(event) => { buttonPress("Join Now") }}>Join Now</button>
@@ -96,9 +96,9 @@ export default class LandingPage extends Component {
                         <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
                             onMouseLeave={this.loginMouseOut}>About</button>
                         <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                            onMouseLeave={this.loginMouseOut}>Support</button>
+                            onMouseLeave={this.loginMouseOut}>Privacy</button>
                         <button style={startStyle.loginButton} onMouseOver={this.loginMouseIn}
-                            onMouseLeave={this.loginMouseOut}>Feedback</button>
+                            onMouseLeave={this.loginMouseOut}>Contact Us</button>
                     </div>
                     <div id="popUpContainer" style={{ top: "100%", left: "100%" }} />
                 </div>
