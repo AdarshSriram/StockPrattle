@@ -55,7 +55,7 @@ export default class StockPage extends Component{
             <div style={stockStyle.topDiv}>
                 <StockGraph title={this.state.stock.INSTRUMENTIDENTIFIER} isGreen={this.state.stock.INCR} updateLegend={this.updateLegend}/>
                 <div style={stockStyle.stockDetails}>
-                    <p style = {stockStyle.text}><b>Date:</b> {this.state.stockObj ? this.state.stockObj.date.getDay()+"/"+(this.state.stockObj.date.getMonth()+1)+"/"+this.state.stockObj.date.getFullYear() : ""}</p>
+                    <p style = {stockStyle.text}><b>Date:</b> {this.state.stockObj ? this.state.stockObj.date.toLocaleDateString('en-GB'): ""}</p>
                     <p style = {stockStyle.text}><b>Time:</b> {this.state.stockObj ? this.state.stockObj.date.toLocaleTimeString().replace(/(.*)\D\d+/, '$1') : ""}</p>
                     <p style = {stockStyle.text}><b>Value:</b> ₹{this.state.stockObj ? this.state.stockObj.close : ""}</p>
                     <p style = {stockStyle.text}><b>Volume:</b> {this.state.stockObj ? this.state.stockObj.volume : ""}</p>
