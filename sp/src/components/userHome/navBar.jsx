@@ -77,11 +77,11 @@ export default class NavBar extends Component{
         for (var i=0; i<this.state.searchItems.length; i++){
             item = this.state.searchItems[i]
             if (typeof item == 'string' || item instanceof String){
-                optList.push(<option id={i} value={item}/>)
-                optList.push(<option id={i} value={companyNames[item]}/>)
+                optList.push(<option id={i} value={companyNames[item]}>{item}</option>)
+                // optList.push(<option id={i} value={}/>)
             } else {
-                optList.push(<option id={i} value={item.username}/>)
-                optList.push(<option id={i.email} value={item.fullname}/>)
+                optList.push(<option id={i} value={item.fullname}>{item.username}</option>)
+                // optList.push(<option id={i.email} value={item.fullname}/>)
             }
         }
     return (
@@ -96,8 +96,8 @@ export default class NavBar extends Component{
                             event.preventDefault();
                             this.goTo();
                         }}>
-                        <input id="searchBar" type="search" list="searchItems" placeholder = "Search People or Stocks" style={navBarStyle.searchInput}/>
-                            <datalist id= "searchItems">
+                        <input id="searchBar" type="search" list="searchItems" placeholder = "Search People or Stocks" style={navBarStyle.searchInput} minLength={1}/>
+                            <datalist style={navBarStyle.optionStyle} id= "searchItems">
                                 {optList}
                             </datalist>
                         <input id="searchSubmit" type="submit" value="➥"  style={navBarStyle.goButton}
@@ -277,5 +277,8 @@ const navBarStyle= { header: {
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
+    }, optionStyle: {
+        width: "10",
+        background: "white"
     }
 }

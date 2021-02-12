@@ -53,7 +53,10 @@ export default class UserPage extends Component {
                 }
                 this.setState({ user: user })
             }
-        }).catch((err) => console.log(err))
+        }).catch((err) => {
+            console.log(err)
+            this.setState({user: {email: "ac2447@cornell.edu", username:"ac2447", fullname: "Aayush Chowdhry"}})
+        })
     }
 
     updateUserInfo(obj) {

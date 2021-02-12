@@ -24,7 +24,7 @@ export const getSnapshot = () => {
 export const getSnapshot2 = () => {
   console.log("sending request")
   return axios.get(test).then((res) => {
-    console.log("request recieved")
+    console.log("response recieved")
     const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
     return getCloses().then((res) => {
       var obj; var prevClose;
@@ -105,9 +105,7 @@ const nifty50 = ['ADANIPORTS', 'ASIANPAINT', 'AXISBANK', 'BAJAJ-AUTO', 'BAJFINAN
 //const niftySnap = "http://nimblerest.lisuns.com:4531/GetSnapshot/?accessKey=" + key + "&exchange=NSE&periodicity=Minute&period=1&&instrumentIdentifiers="
 
 export const getStocksData = (symbols) => {
-  console.log("sending request")
   return getSnapshot2().then(arr => {
-    console.log("response recieved")
     if (symbols == null) symbols = nifty50
     symbols = new Set(symbols)
     var res = []
