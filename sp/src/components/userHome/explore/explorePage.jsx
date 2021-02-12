@@ -46,7 +46,6 @@ export default class ExploreFeed extends Component{
     }
 
     render(){
-        if (this.state.type=="loading") return <LoadingScreen />
         if (this.state.currentDisp == "default") return (<InfiniteDeck onCardClick={this.goToProfile}/>)
 
         return (this.state.type == "user") ?  <UserProfile user={this.state.currentDisp}/> : <StockPage user={this.props.user} stock={this.state.currentDisp}/>
