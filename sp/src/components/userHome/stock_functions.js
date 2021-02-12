@@ -8,6 +8,22 @@ const history1 = "https://nimblerest.lisuns.com:4532/GetHistory/?accessKey=" + k
 
 const history2 = "&periodicity=Minute&period=15&FROM="
 
+function getLatestMarketDate(){
+    var today = new Date()
+    var now = Math.floor(Date.now()/1000)
+    const day = 86400
+    if (today.getDay()==0) now -= (day+now%day+1)
+    if (today.getDay()==6) now -= (now%day+1)
+    const sinceMid = now%day
+    const tenthirty = 36000
+    const four = 14400
+    var to;
+    if (sinceMid>tenthirty) to = now-sinceMid+tenthirty;
+    else if (sinceMid<=four)to -= now-sinceMid-day+tenthirty;
+    else to = now;
+    return to
+}
+
 export const getSnapshot = () => {
   console.log("sending request")
   return axios.get(test).then((res) => {
@@ -23,7 +39,9 @@ export const getSnapshot = () => {
 
 export const getSnapshot2 = () => {
   console.log("sending request")
-  return axios.get(test).then((res) => {
+  const to = getLatestMarketDate()
+  const url = test+"&from="+(to-901)+"&to="+to
+  return axios.get(url).then((res) => {
     console.log("response recieved")
     const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
     return getCloses().then(res => {
