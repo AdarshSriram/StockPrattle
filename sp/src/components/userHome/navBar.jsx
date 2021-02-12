@@ -12,15 +12,19 @@ export default class NavBar extends Component{
     }
 
     componentDidMount(){
-        if (this.state.sbItems.length == 0){
-            getStocksData(null).then(restwo=>{
-                if (!restwo) this.setState({sbItems: []}, this.componentDidMount)
-                else this.setState({sbItems: restwo})
-            })
-        }
         allUsers().then(res => {
             this.setState({searchItems: this.state.searchItems.concat(res)})
         })
+        this.setStockData()
+    }
+
+    setStockData(){
+        if (this.state.sbItems.length == 0){
+            getStocksData(null).then(restwo=>{
+                if (!restwo) this.setState({sbItems: []}, this.setStockData)
+                else this.setState({sbItems: restwo})
+            })
+        }
     }
 
     goTo(){

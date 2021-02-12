@@ -36,7 +36,7 @@ export default class UserPage extends Component {
     }
 
     setData() {
-        getInstruments().then(res => this.setState({instruments: res}))
+        this.setState({instruments: getInstruments()})
     }
 
     setStateUser() {
