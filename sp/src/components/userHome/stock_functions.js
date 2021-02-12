@@ -26,7 +26,7 @@ export const getSnapshot2 = () => {
   return axios.get(test).then((res) => {
     console.log("response recieved")
     const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
-    return getCloses().then((res) => {
+    return getCloses().then(res => {
       var obj; var prevClose;
       for (var i = 0; i < snap.length; i++) {
         obj = snap[i]
