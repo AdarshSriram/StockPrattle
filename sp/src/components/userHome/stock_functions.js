@@ -68,27 +68,10 @@ export const getHistory = (stock, fromTime = -1) => {
   const to = Math.floor(Date.now() / 1000)
   var from = fromTime
   if (fromTime === -1) {
-    /*from = to - 432000
-    var toDate = new Date()
-
-    var fromDate = new Date(from * 1000)
-
-    if (fromDate.getDay() == 6 || toDate.getDay() == 6) {
-      from -= 86400
-    }
-    else if (fromDate.getDay() == 0 || toDate.getDay() == 0) {
-      from -= 86400 * 2
-    }
-    //const time = from % 86400
-    //from += time < 16200 ? 16250 - time : 0*/
-
-    from = to - 7890000
-
+      from = to - 7890000
   }
   console.log(history1 + stock + history2 + from + "&to=" + to)
   return axios.get(history1 + stock + history2 + from + "&to=" + to).then((res) => {
-    console.log("response recieved")
-    console.log(res.data)
     return res.data["OHLC"]
   }).catch(err => {
     console.log(err);
