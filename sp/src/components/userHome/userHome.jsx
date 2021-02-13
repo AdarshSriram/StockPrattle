@@ -58,6 +58,7 @@ export default class UserPage extends Component {
             }
         }).catch((err) => {
             console.log(err)
+            // this.setState({ user: {email: "anonymous@anonymous.com", username: "anonymous", fullname: "Anonymous User"} })
         })
     }
 
