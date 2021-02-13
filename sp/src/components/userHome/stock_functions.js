@@ -13,7 +13,7 @@ function getLatestMarketDate(){
     var now = Math.floor(Date.now()/1000)
     const day = 86400
     if (today.getDay()==0) now -= (day+now%day+1)
-    if (today.getDay()==6) now -= (now%day+1)
+    else if (today.getDay()==6) now -= (now%day+1)
     const sinceMid = now%day
     const tenthirty = 36000
     const four = 14400
