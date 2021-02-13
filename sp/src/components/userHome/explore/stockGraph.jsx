@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { getHistory, companyNames } from '../stock_functions.js';
+import { getHistory, getNameByInstrument } from '../stock_functions.js';
 const d3 = require("d3");
 
 export default class StockGraph extends Component{
@@ -405,7 +405,7 @@ export default class StockGraph extends Component{
                             textDecoration: "none",
                             color: this.props.isGreen ? "#00B140" : "#E21010",
                             margin: "0"}}>{this.props.title}</p>
-                        <p style={chartStyle.subtitle}>{companyNames[this.props.title]}</p>
+                        <p style={chartStyle.subtitle}>{getNameByInstrument(this.props.title)}</p>
                     </div>
                     <div style={chartStyle.buttonDiv}>
                         <button id="1d" name="stockGraphButtons" onClick={this.buttonPress} style={chartStyle.button}>1d</button>
