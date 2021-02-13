@@ -12,13 +12,13 @@ export default class Card extends Component{
     }
 
     mouseIn(){
-        document.getElementById(this.props.item.INSTRUMENTIDENTIFIER).style.textDecoration = "underline"
+        document.getElementById(this.props.item.INSTRUMENTIDENTIFIER+"cardHead").style.textDecoration = "underline"
         // document.getElementById(this.props.text).style.width = "205px"
         // document.getElementById(this.props.text).style.height = "305px"
     }
 
     mouseOut(){
-        document.getElementById(this.props.item.INSTRUMENTIDENTIFIER).style.textDecoration = "none"
+        document.getElementById(this.props.item.INSTRUMENTIDENTIFIER+"cardHead").style.textDecoration = "none"
         // document.getElementById(this.props.text).style.width = "200px"
         // document.getElementById(this.props.text).style.height = "300px"
     }
@@ -44,7 +44,7 @@ export default class Card extends Component{
                 <img src={img} alt="Stock Prattle Logo" style={imageStyle}/>
             </div>
             <div style={cardStyle.contentDiv}>
-                <p id={this.props.item.INSTRUMENTIDENTIFIER} style={cardStyle.headingStyle}>{getNameByInstrument(this.props.item.INSTRUMENTIDENTIFIER)}</p>
+                <p id={this.props.item.INSTRUMENTIDENTIFIER+"cardHead"} style={cardStyle.headingStyle}>{getNameByInstrument(this.props.item.INSTRUMENTIDENTIFIER)}</p>
                 <p style={cardStyle.textStyle}><b>{this.props.item.INSTRUMENTIDENTIFIER + ": "}</b>₹{this.props.item.OPEN}</p>
                 <p style={cardStyle.textStyle}><b>{"Change: "}</b>{(this.props.item.INCR==0) ? "0.0% or Unknown" : (this.props.item.INCR+"%")}</p>
             </div>
