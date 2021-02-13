@@ -49,8 +49,8 @@ export function getSnapshot(){
     })
 }
 
-const getCloses = async () => {
-    var today = Math.floor(Date.now() / 1000)
+async function getCloses(){
+    var today = getLatestMarketDate()
     var data = []
     while (data.length == 0) {
         var midnight = today - today % 86400
