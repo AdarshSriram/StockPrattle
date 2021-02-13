@@ -1,22 +1,43 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {getWatchList} from '../../firebase_functions.js';
-import { getStocksData } from './stock_functions.js';
 
 export default class Watchlist extends Component{
     constructor(props){
         super(props);
-        this.state = {ls:[]}
+        this.state = {ls:[], watchlist: []}
+        this.filter = this.filter.bind(this)
     }
 
     componentDidMount(){
-        getWatchList().then(res=>{
-            getStocksData(res).then(
-                restwo=>{
-                    if (!restwo) this.setState({ls: []}, this.componentDidMount)
-                    else this.setState({ls: restwo})
-                })
-        })
+        getWatchList().then(res=>this.setState({watchlist: []}), this.filter)
+    }
+
+    componentDidUpdate(prevProps){
+        if (prevProps.snap != this.props.snap){
+            this.filter()
+        }
+    }
+
+    filter(){
+        if (this.props.snap) {
+            var res = []; var idx;
+            for (var i of this.state.watchlist){
+                for (var s of this.props.snap){
+                    idx = s.INSTRUMENTIDENTIFIER.indexOf(".")
+                    if (idx!=-1){
+                        if (i==s.INSTRUMENTIDENTIFIER.substring(0, idx)){
+                            res.push(s)
+                            break
+                        }
+                    } else if (i==s.INSTRUMENTIDENTIFIER) {
+                        res.push(s)
+                        break
+                    }
+                }
+            }
+            this.setState({ls: res})
+        }
     }
 
     render(){

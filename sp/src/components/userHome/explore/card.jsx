@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {nopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg} from '../svgs.jsx'
-import {companyNames} from '../stock_functions.js'
+import {getNameByInstrument} from '../stock_functions.js'
 
 export default class Card extends Component{
     constructor(props){
@@ -44,7 +44,7 @@ export default class Card extends Component{
                 <img src={img} alt="Stock Prattle Logo" style={imageStyle}/>
             </div>
             <div style={cardStyle.contentDiv}>
-                <p id={this.props.item.INSTRUMENTIDENTIFIER} style={cardStyle.headingStyle}>{companyNames[this.props.item.INSTRUMENTIDENTIFIER]}</p>
+                <p id={this.props.item.INSTRUMENTIDENTIFIER} style={cardStyle.headingStyle}>{getNameByInstrument(this.props.item.INSTRUMENTIDENTIFIER)}</p>
                 <p style={cardStyle.textStyle}><b>{this.props.item.INSTRUMENTIDENTIFIER + ": "}</b>₹{this.props.item.OPEN}</p>
                 <p style={cardStyle.textStyle}><b>{"Change: "}</b>{(this.props.item.INCR==0) ? "0.0% or Unknown" : (this.props.item.INCR+"%")}</p>
             </div>

@@ -9,7 +9,7 @@ import {getUserInfo} from '../../../firebase_functions.js'
 export default class ExploreFeed extends Component{
     constructor(props){
         super(props);
-        this.state = {currentDisp: props.display, type: "loading"}
+        this.state = {currentDisp: props.display, type: "default", snap: this.props.snap ? this.props.snap : []}
         this.goToProfile = this.goToProfile.bind(this)
     }
 
@@ -38,16 +38,12 @@ export default class ExploreFeed extends Component{
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.display !== prevProps.display){
-            this.setState({currentDisp: this.props.display},
-                this.componentDidMount
-            )
-        }
+        if (this.props.display !== prevProps.display) this.setState({currentDisp: this.props.display}, this.componentDidMount)
+        else if (this.props.snap !== prevProps.snap) this.setState({snap: this.props.snap})
     }
 
     render(){
-        if (this.state.currentDisp == "default") return (<InfiniteDeck onCardClick={this.goToProfile}/>)
-
+        if (this.state.currentDisp == "default") return (<InfiniteDeck onCardClick={this.goToProfile} snap={this.state.snap}/>)
         return (this.state.type == "user") ?  <UserProfile user={this.state.currentDisp}/> : <StockPage user={this.props.user} stock={this.state.currentDisp}/>
     }
 }

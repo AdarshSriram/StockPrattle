@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { getNameByInstrument, getInstrumentByName } from './stock_functions.js';
 
 export default class NewPostPopUp extends Component {
     constructor(props) {
@@ -16,13 +17,17 @@ export default class NewPostPopUp extends Component {
     }
 
     addPost() {
-        const inputs = document.getElementsByName("inputs"); var params = []; var val;
-        for (var obj of inputs) {
-            val = obj.value;
-            if (val === '') { val = null }
-            params.push(val);
+        const stock = getInstrumentByName(document.getElementById("stockInput").value)
+        const postText = document.getElementById("postText").value
+        if (stock==null){
+            alert("Please select a valid stock.")
+            return
         }
-        this.props.addPost(params)
+        if ([null, ""].includes(postText.trim())){
+            alert("Post text cannot be empty.")
+            return
+        }
+        this.props.addPost([stock, postText])
     }
 
     render() {
@@ -35,7 +40,7 @@ export default class NewPostPopUp extends Component {
                     }} style={newPostStyle.form}>
                         <input name="inputs" id="stockInput" placeholder="Select Stock" list="stocks" style={newPostStyle.inputs} required />
                         <datalist id="stocks">
-                            {this.state.stocks.map(item => (<option id={item} value={item} />))}
+                            {this.state.stocks.map(item => (<option id={item} value={getNameByInstrument(item)}>{item}</option>))}
                         </datalist>
                         <textarea name="inputs" id="postText" type="text" placeholder={"Write Something..."} style={newPostStyle.inputs2} rows={10} required/>
                         <input id="submitButton" type="submit" style={newPostStyle.submitButton} value="Create Post"

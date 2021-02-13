@@ -2,64 +2,60 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import {bellSvg, settingsSvg} from './svgs.jsx';
 import Ticker from 'react-ticker';
-import { getStocksData, companyNames } from './stock_functions.js';
+import { nifty50, getNameByInstrument, getInstrumentByName } from './stock_functions.js';
 import { allUsers } from '../../firebase_functions.js'
 
 export default class NavBar extends Component{
     constructor(props){
         super(props);
-        this.state = {sbItems: [], searchItems: (props.instruments==null) ? [] : props.instruments}
+        if (!this.props.snap) this.state = {sbItems: [], stocks: [], users: []}
+        else {
+            const symbols = new Set(nifty50)
+            var res = []
+            for (var obj of this.props.snap) {
+                if (symbols.has(obj.INSTRUMENTIDENTIFIER)) res.push(obj)
+            }
+            this.state = {sbItems: res, stocks: this.props.snap, users: []}
+        }
     }
 
     componentDidMount(){
         allUsers().then(res => {
-            this.setState({searchItems: this.state.searchItems.concat(res)})
+            this.setState({users: res})
         })
-        this.setStockData()
     }
 
-    setStockData(){
-        if (this.state.sbItems.length == 0){
-            getStocksData(null).then(restwo=>{
-                if (!restwo) this.setState({sbItems: []}, this.setStockData)
-                else this.setState({sbItems: restwo})
-            })
+    componentDidUpdate(prevProps){
+        if (prevProps.snap != this.props.snap){
+            const symbols = new Set(nifty50)
+            var res = []
+            for (var obj of this.props.snap) {
+                if (symbols.has(obj.INSTRUMENTIDENTIFIER)) res.push(obj)
+            }
+            this.setState({sbItems: res, stocks: this.props.snap})
         }
     }
 
     goTo(){
-        var elem= document.getElementById("searchBar")
+        const elem= document.getElementById("searchBar")
         const search = elem.value
         if (search==null) return
-        var found = false
-        for (var obj of this.state.searchItems){
-            if (search==obj){
+        for (var obj of this.state.stocks){
+            if (search==obj.INSTRUMENTIDENTIFIER || search==getNameByInstrument(obj.INSTRUMENTIDENTIFIER)){
                 this.props.goTo(obj, true)
-                found = found || true
-            } else if (search==obj.username){
-                this.props.goTo(obj.email, false)
-                found = found || true
-            } else if (search==obj.fullname){
-                this.props.goTo(obj.email, false)
-                found = found || true
+                elem.value = null
+                return
             }
         }
+        for (var user of this.state.users){
+            if (search==obj.username || search==obj.fullname){
+                this.props.goTo(obj.email, false)
+                elem.value = null
+                return
+            }
+        }
+        alert("No Such Page Exists!")
         elem.value= null
-        if (!found){
-            for (var i in companyNames){
-                if (companyNames[i]==search){
-                    this.props.goTo(i, true)
-                    found = found || true
-                }
-            }
-            if (!found) alert("No Such Page Exists!")
-        }
-    }
-
-    componentDidUpdate(prevProps){
-        if (prevProps.instruments != this.props.instruments){
-            this.setState({searchItems: this.props.instruments}, this.componentDidMount)
-        }
     }
 
     mouseIn(but){
@@ -74,15 +70,13 @@ export default class NavBar extends Component{
 
     render(){
         var optList = []; var item;
-        for (var i=0; i<this.state.searchItems.length; i++){
-            item = this.state.searchItems[i]
-            if (typeof item == 'string' || item instanceof String){
-                optList.push(<option id={i} value={companyNames[item]}>{item}</option>)
-                // optList.push(<option id={i} value={}/>)
-            } else {
-                optList.push(<option id={i} value={item.fullname}>{item.username}</option>)
-                // optList.push(<option id={i.email} value={item.fullname}/>)
-            }
+        var id;
+        for (var i of this.state.stocks){
+            id = i.INSTRUMENTIDENTIFIER
+            optList.push(<option id={id} value={getNameByInstrument(id)}>{id}</option>)
+        }
+        for (var j of this.state.users){
+            optList.push(<option id={j.email} value={j.fullname}>{j.username}</option>)
         }
     return (
         <div id="header" style={navBarStyle.header}>

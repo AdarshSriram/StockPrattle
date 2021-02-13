@@ -11,7 +11,7 @@ import Watchlist from './watchlist.jsx';
 import LeftMenu from './leftMenu.jsx';
 import LoadingScreen from "./loadingDiv.jsx";
 import { getCurrentUserInfo, setCurrentUserInfo} from '../../firebase_functions.js';
-import { getInstruments } from './stock_functions.js';
+import { getInstruments, getSnapshot } from './stock_functions.js';
 
 export default class UserPage extends Component {
     constructor(props) {
@@ -36,7 +36,10 @@ export default class UserPage extends Component {
     }
 
     setData() {
-        this.setState({instruments: getInstruments()})
+        getSnapshot().then(res=>{
+            if (res) this.setState({snap: res, instruments: getInstruments()})
+            else this.setData()
+        })
     }
 
     setStateUser() {
@@ -130,12 +133,12 @@ export default class UserPage extends Component {
 
     render() {
         var item;
-        if (this.state.user==null){
+        if (this.state.user==null || this.state.snap==null){
             item = <LoadingScreen />
         } else if (this.state.current == "profile") {
             item = <UserProfile user={this.state.user} setUser={this.updateUserInfo}/>
         } else if (this.state.current == "explore") {
-            item = <ExplorePage user={this.state.user} goToProfile={this.profileButtonClick} display={this.state.goTo} isStock={this.state.isStock}/>
+            item = <ExplorePage user={this.state.user} goToProfile={this.profileButtonClick} display={this.state.goTo} isStock={this.state.isStock} snap={this.state.snap}/>
         } else if (this.state.current == "messages") {
             item = <MessageBox />
         } else {
@@ -143,11 +146,11 @@ export default class UserPage extends Component {
         }
         return (
             <div id="wholeScreen" style={userHomeStyle.mainDiv}>
-                <NavBar goTo={this.goTo} instruments={this.state.instruments}/>
+                <NavBar goTo={this.goTo} instruments={this.state.instruments} snap={this.state.snap}/>
                 <div id="body" style={userHomeStyle.body}>
                     <LeftMenu history={this.props.history} pageState={this.state.current}
                         buttonClickFunctions={[this.profileButtonClick, this.feedButtonClick,
-                        this.exploreButtonClick, this.messagesButtonClick]} />
+                        this.exploreButtonClick, this.messagesButtonClick]} snap={this.state.snap}/>
                     {item}
                     <Watchlist />
                 </div>

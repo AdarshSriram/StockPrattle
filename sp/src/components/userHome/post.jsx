@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { smallnopicSvg, thumbsupSvg, sendSvg, replySvg, shareSvg } from './svgs.jsx';
 import { getPhoto, likeUnlikePost, hasUserLiked} from '../../firebase_functions';
+import { getNameByInstrument} from './stock_functions.js';
 import CommentScroll from './comments.jsx';
 
 export default class Post extends Component {
@@ -55,7 +56,7 @@ export default class Post extends Component {
                             {disp}
                         </div>
                         <p style={postStyle.textStyle}>
-                            {((this.props.user == null) ? "@stockprattle" : "@" + this.props.user)+" on "+this.props.stock}
+                            {((this.props.user == null) ? "@anonymous" : "@" + this.props.user)+" on "+getNameByInstrument(this.props.stock)}
                         </p>
                     </div>
                     <div style={postStyle.contentDiv}>

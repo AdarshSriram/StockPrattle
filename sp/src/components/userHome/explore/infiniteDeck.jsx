@@ -7,16 +7,19 @@ import LoadingScreen from "../loadingDiv.jsx"
 export default class InfiniteDeck extends Component {
     constructor(props) {
         super(props);
-        this.state = { data: null, items: null }
+        this.state = { data: this.props.snap, items: null }
         this.checkAndFetch = this.checkAndFetch.bind(this)
     }
 
     componentDidMount(event) {
-        getSnapshot2().then(res => {
-            if (!res) this.setState({ data: null, items: null}, this.componentDidMount)
-            else if (res.length < 12) this.setState({ data: res, items: res, over: true })
-            else this.setState({ data: res, items: res.slice(0, 12), over: false })
-        })
+        if (this.state.data!=null){
+            if (this.state.data.length < 12) this.setState({items: this.state.data, over: true })
+            else this.setState({items: this.state.data.slice(0, 12), over: false })
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.snap != this.props.snap) this.setState({data: this.props.snap}, this.componentDidMount)
     }
 
     checkAndFetch(event) {

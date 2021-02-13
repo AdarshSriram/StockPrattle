@@ -18,6 +18,10 @@ export default class StockPage extends Component{
         getWatchList().then(res=>this.setState({following: res.includes(this.state.stock.INSTRUMENTIDENTIFIER)}))
     }
 
+    componentDidUpdate(prevProps){
+        if (this.props.stock != prevProps.stock) this.setState({stock:this.props.stock}, this.componentDidMount)
+    }
+
     updateLegend(obj){
         this.setState({stockObj: obj})
     }

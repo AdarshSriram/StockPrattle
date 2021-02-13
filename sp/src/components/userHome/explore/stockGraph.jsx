@@ -21,6 +21,12 @@ export default class StockGraph extends Component{
         });
     }
 
+    componentDidUpdate(prevProps){
+        if (this.props.title != prevProps.title){
+            this.setState({data: null, type: null}, this.componentDidMount)
+        }
+    }
+
     handleData(ty){
         document.getElementById(ty).style.color = "#FFFFFF"
         document.getElementById(ty).style.background = "#00B140"

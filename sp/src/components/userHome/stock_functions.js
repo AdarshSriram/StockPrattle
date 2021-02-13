@@ -19,106 +19,89 @@ function getLatestMarketDate(){
     const four = 14400
     var to;
     if (sinceMid>tenthirty) to = now-sinceMid+tenthirty;
-    else if (sinceMid<=four)to -= now-sinceMid-day+tenthirty;
+    else if (sinceMid<=four) to = now-sinceMid-day+tenthirty;
     else to = now;
     return to
 }
 
-export const getSnapshot = () => {
-  console.log("sending request")
-  return axios.get(test).then((res) => {
-    console.log("request recieved")
-    const result = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
-    console.log(result.length)
-    return result
-  }).catch(err => {
-    console.log(err);
-    return false
-  })
-}
-
-export const getSnapshot2 = () => {
-  console.log("sending request")
-  const to = getLatestMarketDate()
-  const url = test+"&from="+(to-901)+"&to="+to
-  return axios.get(url).then((res) => {
-    console.log("response recieved")
-    const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
-    return getCloses().then(res => {
-      var obj; var prevClose;
-      for (var i = 0; i < snap.length; i++) {
-        obj = snap[i]
-        prevClose = res[obj.INSTRUMENTIDENTIFIER]
-        if (prevClose == null) {
-          obj.INCR = 0
-        } else {
-          obj.INCR = ((obj.CLOSE - prevClose) / prevClose * 100).toPrecision(3)
-        }
-      }
-      return snap
+export function getSnapshot(){
+    console.log("sending request")
+    const to = getLatestMarketDate()
+    const url = test+"&from="+(to-901)+"&to="+to
+    return axios.get(url).then((res) => {
+        console.log("response recieved")
+        const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
+        return getCloses().then(res => {
+            var obj; var prevClose;
+            for (var i = 0; i < snap.length; i++) {
+                obj = snap[i]
+                prevClose = res[obj.INSTRUMENTIDENTIFIER]
+                if (prevClose == null) {
+                    obj.INCR = 0
+                } else {
+                    obj.INCR = ((obj.CLOSE - prevClose) / prevClose * 100).toPrecision(3)
+                }
+            }
+            return snap
+        })
+    }).catch(err => {
+        console.log(err);
     })
-  }).catch(err => {
-    console.log(err);
-    return false
-  })
 }
 
 const getCloses = async () => {
-  var today = Math.floor(Date.now() / 1000)
-  var data = []
-  while (data.length == 0) {
-    var midnight = today - today % 86400
-    var to = midnight - 48600
-    var from = to - 960
-    await axios.get(test + "&from=" + from + "&to=" + to).then((res) => {
-      try { data = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS }
-      catch { data = [] }
+    var today = Math.floor(Date.now() / 1000)
+    var data = []
+    while (data.length == 0) {
+        var midnight = today - today % 86400
+        var to = midnight - 48600
+        var from = to - 960
+        await axios.get(test + "&from=" + from + "&to=" + to).then((res) => {
+            try { data = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS }
+            catch { data = [] }
+        })
+        today -= 86400
+    }
+    var res = {}
+    for (var obj of data) res[obj.INSTRUMENTIDENTIFIER] = obj.CLOSE
+    return res
+}
+
+export function getHistory(stock, fromTime = -1){
+    console.log("sending request")
+    const to = Math.floor(Date.now() / 1000)
+    var from = fromTime
+    if (fromTime === -1) {
+        from = to - 7890000
+    }
+    console.log(history1 + stock + history2 + from + "&to=" + to)
+    return axios.get(history1 + stock + history2 + from + "&to=" + to).then(res => res.data["OHLC"])
+    .catch(err => {
+        console.log(err);
+        return false
     })
-    today -= 86400
-  }
-  var res = {}
-  for (var obj of data) res[obj.INSTRUMENTIDENTIFIER] = obj.CLOSE
-  return res
 }
 
-export const getHistory = (stock, fromTime = -1) => {
-  console.log("sending request")
-  const to = Math.floor(Date.now() / 1000)
-  var from = fromTime
-  if (fromTime === -1) {
-      from = to - 7890000
-  }
-  console.log(history1 + stock + history2 + from + "&to=" + to)
-  return axios.get(history1 + stock + history2 + from + "&to=" + to).then((res) => {
-    return res.data["OHLC"]
-  }).catch(err => {
-    console.log(err);
-    return false
-  })
-}
-
-export const getInstruments = (arr) => {
+export function getInstruments(arr){
     return Object.keys(companyNames)
 }
 
-const nifty50 = ['ADANIPORTS', 'ASIANPAINT', 'AXISBANK', 'BAJAJ-AUTO', 'BAJFINANCE', 'BAJAJFINSV', 'BPCL', 'BHARTIARTL', 'BRITANNIA', 'CIPLA', 'COALINDIA', 'DIVISLAB', 'DRREDDY', 'EICHERMOT', 'GAIL', 'GRASIM', 'HCLTECH', 'HDFCBANK', 'HDFCLIFE', 'HEROMOTOCO', 'HINDALCO', 'HINDUNILVR', 'HDFC', 'ICICIBANK', 'ITC', 'IOC', 'INDUSINDBK', 'INFY', 'JSWSTEEL', 'KOTAKBANK', 'LT', 'M&M', 'MARUTI', 'NTPC', 'NESTLEIND', 'ONGC', 'POWERGRID', 'RELIANCE', 'SBILIFE', 'SHREECEM', 'SBIN', 'SUNPHARMA', 'TCS', 'TATAMOTORS', 'TATASTEEL', 'TECHM', 'TITAN', 'UPL', 'ULTRACEMCO', 'WIPRO']
-
-//const niftySnap = "http://nimblerest.lisuns.com:4531/GetSnapshot/?accessKey=" + key + "&exchange=NSE&periodicity=Minute&period=1&&instrumentIdentifiers="
-
-export const getStocksData = (symbols) => {
-  return getSnapshot2().then(arr => {
-    if (symbols == null) symbols = nifty50
-    symbols = new Set(symbols)
-    var res = []
-    for (var obj of arr) {
-      if (symbols.has(obj.INSTRUMENTIDENTIFIER)) res.push(obj)
+export function getNameByInstrument(instrument){
+    const idx = instrument.indexOf(".")
+    if (idx!=-1){
+        instrument = instrument.substring(0, idx)
     }
-    return res
-  }).catch(err => {
-    console.log(err);
-    return false
-  })
+    return companyNames[instrument]
 }
+
+export function getInstrumentByName(name){
+    for (var i in companyNames){
+        if (companyNames[i]==name) return i
+    }
+    return null
+}
+
+export const nifty50 = ['ADANIPORTS', 'ASIANPAINT', 'AXISBANK', 'BAJAJ-AUTO', 'BAJFINANCE', 'BAJAJFINSV', 'BPCL', 'BHARTIARTL', 'BRITANNIA', 'CIPLA', 'COALINDIA', 'DIVISLAB', 'DRREDDY', 'EICHERMOT', 'GAIL', 'GRASIM', 'HCLTECH', 'HDFCBANK', 'HDFCLIFE', 'HEROMOTOCO', 'HINDALCO', 'HINDUNILVR', 'HDFC', 'ICICIBANK', 'ITC', 'IOC', 'INDUSINDBK', 'INFY', 'JSWSTEEL', 'KOTAKBANK', 'LT', 'M&M', 'MARUTI', 'NTPC', 'NESTLEIND', 'ONGC', 'POWERGRID', 'RELIANCE', 'SBILIFE', 'SHREECEM', 'SBIN', 'SUNPHARMA', 'TCS', 'TATAMOTORS', 'TATASTEEL', 'TECHM', 'TITAN', 'UPL', 'ULTRACEMCO', 'WIPRO']
 
 export const companyNames = {
   "20MICRONS": "20 Microns Limited",
