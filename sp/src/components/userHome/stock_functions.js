@@ -12,9 +12,9 @@ function getLatestMarketDate(){
     var today = new Date()
     var now = Math.floor(Date.now()/1000)
     const day = 86400
-    if (today.getDay()==0) now -= (day+now%day+1)
-    else if (today.getDay()==6) now -= (now%day+1)
     const sinceMid = now%day
+    if (today.getUTCDay()==0) now = now - day - sinceMid - 1
+    else if (today.getUTCDay()==6) now = now - sinceMid - 1
     const tenthirty = 36000
     const four = 14400
     var to;
@@ -27,7 +27,7 @@ function getLatestMarketDate(){
 export function getSnapshot(){
     console.log("sending request")
     const to = getLatestMarketDate()
-    const url = test+"&from="+(to-901)+"&to="+to
+    const url = test+"&from="+(to-900)+"&to="+to
     return axios.get(url).then((res) => {
         console.log("response recieved")
         const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
