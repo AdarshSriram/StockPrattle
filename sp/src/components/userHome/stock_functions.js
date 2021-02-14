@@ -12,9 +12,10 @@ function getLatestMarketDate(){
     var today = new Date()
     var now = Math.floor(Date.now()/1000)
     const day = 86400
-    const sinceMid = now%day
+    var sinceMid = now%day
     if (today.getUTCDay()==0) now = now - day - sinceMid - 1
     else if (today.getUTCDay()==6) now = now - sinceMid - 1
+    sinceMid = now%day
     const tenthirty = 36000
     const four = 14400
     var to;
@@ -31,7 +32,7 @@ export function getSnapshot(){
     return axios.get(url).then((res) => {
         console.log("response recieved")
         const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
-        return getCloses().then(res => {
+        return getCloses(to).then(res => {
             var obj; var prevClose;
             for (var i = 0; i < snap.length; i++) {
                 obj = snap[i]
@@ -49,13 +50,12 @@ export function getSnapshot(){
     })
 }
 
-async function getCloses(){
-    var today = getLatestMarketDate()
+async function getCloses(today){
     var data = []
     while (data.length == 0) {
         var midnight = today - today % 86400
         var to = midnight - 48600
-        var from = to - 960
+        var from = to - 900
         await axios.get(test + "&from=" + from + "&to=" + to).then((res) => {
             try { data = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS }
             catch { data = [] }
