@@ -28,7 +28,7 @@ function getLatestMarketDate(){
 export function getSnapshot(){
     console.log("sending request")
     const to = getLatestMarketDate()
-    const url = test+"&from="+(to-900)+"&to="+to
+    const url = test+"&from="+(to-901)+"&to="+to
     return axios.get(url).then((res) => {
         console.log("response recieved")
         const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
@@ -55,7 +55,7 @@ async function getCloses(today){
     while (data.length == 0) {
         var midnight = today - today % 86400
         var to = midnight - 48600
-        var from = to - 900
+        var from = to - 901
         await axios.get(test + "&from=" + from + "&to=" + to).then((res) => {
             try { data = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS }
             catch { data = [] }
