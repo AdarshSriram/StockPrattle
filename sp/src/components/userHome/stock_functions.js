@@ -21,14 +21,18 @@ function getLatestMarketDate(){
     var to;
     if (sinceMid>tenthirty) to = now-sinceMid+tenthirty;
     else if (sinceMid<=four) to = now-sinceMid-day+tenthirty;
-    else to = now;
-    return to
+    else return [now, true]
+    return [to, false]
 }
 
 export function getSnapshot(){
     console.log("sending request")
-    const to = getLatestMarketDate()
-    const url = test+"&from="+(to-901)+"&to="+to
+    var to = getLatestMarketDate()
+    const isMarket = to[1]
+    to = to[0]
+    var url;
+    if (isMarket) url = test
+    else url = test+"&from="+(to-901)+"&to="+to
     return axios.get(url).then((res) => {
         console.log("response recieved")
         const snap = res.data.EXCHANGESNAPSHOTITEMS[0].SNAPSHOTITEMS
