@@ -1,5 +1,7 @@
 import Api from 'newsapi'
-const newsapi = new Api('cbe3c25cbb644c3ebf9685437f23f292');
+const KEY;
+
+const newsapi = new Api(KEY);
 // To query /v2/top-headlines
 // All options passed to topHeadlines are optional, but you need to include at least one of themcon
 var news
